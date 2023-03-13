@@ -14,11 +14,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
+        
+        
         guard let scene = scene as? UIWindowScene else {
             return
         }
-
-        let factory = AppFactory()
+        
+        let appConfiguration: AppConfiguration = AppConfiguration.allCases.randomElement() ?? AppConfiguration.filmsURL
+        let networkService = NetworkService()
+        networkService.request(for: appConfiguration)
+        let factory = AppFactory(networkService: networkService)
         let appCoordinator = AppCoordinator(factory: factory)
 
         self.window = UIWindow(windowScene: scene)
@@ -26,6 +31,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         window?.rootViewController = appCoordinator.start()
         window?.makeKeyAndVisible()
+        
         
     }
 
