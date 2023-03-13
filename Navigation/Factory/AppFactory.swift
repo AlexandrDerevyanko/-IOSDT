@@ -10,10 +10,16 @@ import UIKit
 
 final class AppFactory {
     
+    private let networkService: NetworkServiceProtocol
+
+    init(networkService: NetworkServiceProtocol) {
+        self.networkService = networkService
+    }
+    
     func makeModule(ofType moduleType: Module.ModuleType) -> Module {
         switch moduleType {
         case .feed:
-            let viewModel = FeedViewModel()
+            let viewModel = FeedViewModel(networkService: networkService)
             let view = UINavigationController(rootViewController: FeedViewController(viewModel: viewModel))
             return Module(moduleType: moduleType, viewModel: viewModel, view: view)
         case .profile:
