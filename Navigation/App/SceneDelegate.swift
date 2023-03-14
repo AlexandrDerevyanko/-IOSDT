@@ -20,9 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             return
         }
         
-        let appConfiguration: AppConfiguration = AppConfiguration.allCases.randomElement() ?? AppConfiguration.filmsURL
         let networkService = NetworkService()
-        networkService.request(for: appConfiguration)
         let factory = AppFactory(networkService: networkService)
         let appCoordinator = AppCoordinator(factory: factory)
 
