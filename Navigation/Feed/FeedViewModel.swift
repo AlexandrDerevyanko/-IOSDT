@@ -17,7 +17,12 @@ class FeedViewModel: FeedViewModelProtocol {
     }
     
     weak var coordinator: FeedCoordinator?
+    private let networkService: NetworkServiceProtocol
     var secretWord = "alpha"
+    
+    init(networkService: NetworkServiceProtocol) {
+        self.networkService = networkService
+    }
     
     func buttonPressed(viewInput: ViewInput) {
         switch viewInput {

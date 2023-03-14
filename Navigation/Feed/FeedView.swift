@@ -121,14 +121,14 @@ class FeedView: UIView {
     }
     
     func checkGuessButtonPressed() {
-        if let word = FeedViewModel().check(word: textField.text ?? "") {
-            label.backgroundColor = .green
-        } else {
-            self.label.backgroundColor = .red
-            let alert = UIAlertController(title: "Error", message: "Word entered incorrectly", preferredStyle: .actionSheet)
-                alert.addAction(UIAlertAction(title: "Ok", style: .default))
-            self.window?.rootViewController?.present(alert, animated: true)
-        }
+//        if let word = FeedViewModel().check(word: textField.text ?? "") {
+//            label.backgroundColor = .green
+//        } else {
+//            self.label.backgroundColor = .red
+//            let alert = UIAlertController(title: "Error", message: "Word entered incorrectly", preferredStyle: .actionSheet)
+//                alert.addAction(UIAlertAction(title: "Ok", style: .default))
+//            self.window?.rootViewController?.present(alert, animated: true)
+//        }
     }
     
 }
