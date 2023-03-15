@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FF25B1CA29C20F6E0031CB62 /* DataJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF25B1C929C20F6E0031CB62 /* DataJSON.swift */; };
 		FF31F41E29471712009C1461 /* ProfileTableHederView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF31F41D29471712009C1461 /* ProfileTableHederView.swift */; };
 		FF3BD3C92993FFCE00F4CE31 /* iOSIntPackage in Frameworks */ = {isa = PBXBuildFile; productRef = FF3BD3C82993FFCE00F4CE31 /* iOSIntPackage */; };
 		FF3EC6E6298B6729006D7A72 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3EC6E5298B6729006D7A72 /* UserService.swift */; };
@@ -21,7 +22,6 @@
 		FF8D39BC2983C220002995D1 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFEF825291FCFD80025FB74 /* Post.swift */; };
 		FF8FEDF32950679300D37BB9 /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8FEDF22950679300D37BB9 /* PostTableViewCell.swift */; };
 		FFB3108429B9D1E600D32055 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB3108329B9D1E600D32055 /* NetworkService.swift */; };
-		FFB3108729BF2B0800D32055 /* DataJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB3108629BF2B0800D32055 /* DataJSON.swift */; };
 		FFD2BB2C2943450A00EF3D5C /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD2BB2B2943450A00EF3D5C /* LogInViewController.swift */; };
 		FFD2BB2E29436EDD00EF3D5C /* Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD2BB2D29436EDD00EF3D5C /* Custom.swift */; };
 		FFD64C182916EC6E0015F6B3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD64C172916EC6E0015F6B3 /* AppDelegate.swift */; };
@@ -72,6 +72,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		FF25B1C929C20F6E0031CB62 /* DataJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataJSON.swift; sourceTree = "<group>"; };
 		FF31F41D29471712009C1461 /* ProfileTableHederView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableHederView.swift; sourceTree = "<group>"; };
 		FF3EC6E5298B6729006D7A72 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		FF3EC6E7298B678B006D7A72 /* FirstSectionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstSectionTableViewCell.swift; sourceTree = "<group>"; };
@@ -83,7 +84,6 @@
 		FF8D39B12983C19E002995D1 /* StorageService.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = StorageService.docc; sourceTree = "<group>"; };
 		FF8FEDF22950679300D37BB9 /* PostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
 		FFB3108329B9D1E600D32055 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
-		FFB3108629BF2B0800D32055 /* DataJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataJSON.swift; sourceTree = "<group>"; };
 		FFD2BB2B2943450A00EF3D5C /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		FFD2BB2D29436EDD00EF3D5C /* Custom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Custom.swift; sourceTree = "<group>"; };
 		FFD64C142916EC6E0015F6B3 /* Navigation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Navigation.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -193,7 +193,7 @@
 			isa = PBXGroup;
 			children = (
 				FFB3108329B9D1E600D32055 /* NetworkService.swift */,
-				FFB3108629BF2B0800D32055 /* DataJSON.swift */,
+				FF25B1C929C20F6E0031CB62 /* DataJSON.swift */,
 			);
 			path = "Network Service";
 			sourceTree = "<group>";
@@ -441,7 +441,7 @@
 				FFB3108429B9D1E600D32055 /* NetworkService.swift in Sources */,
 				FFE8D386299F590100FD9508 /* AppCoordinator.swift in Sources */,
 				FFE8D3AD299F9B6800FD9508 /* AppFactory.swift in Sources */,
-				FFB3108729BF2B0800D32055 /* DataJSON.swift in Sources */,
+				FF25B1CA29C20F6E0031CB62 /* DataJSON.swift in Sources */,
 				FFE8D3B8299FB11300FD9508 /* FeedCoordinator.swift in Sources */,
 				FFD64C4A2917DF090015F6B3 /* FeedViewController.swift in Sources */,
 				FF3EC6E8298B678B006D7A72 /* FirstSectionTableViewCell.swift in Sources */,
