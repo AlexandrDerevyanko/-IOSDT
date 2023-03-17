@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -14,11 +15,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
+        
+        
         guard let scene = scene as? UIWindowScene else {
             return
         }
-
-        let factory = AppFactory()
+        
+        let networkService = NetworkService()
+        let factory = AppFactory(networkService: networkService)
         let appCoordinator = AppCoordinator(factory: factory)
 
         self.window = UIWindow(windowScene: scene)
@@ -27,9 +31,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = appCoordinator.start()
         window?.makeKeyAndVisible()
         
+        
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
+        try? Auth.auth().signOut()
         // Called as the scene is being released by the system.
         // This occurs shortly after the scene enters the background, or when its session is discarded.
         // Release any resources associated with this scene that can be re-created the next time the scene connects.

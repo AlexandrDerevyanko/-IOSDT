@@ -35,7 +35,8 @@ final class FeedCoordinator: ModuleCoordinatable {
     }
     
     func pushInfoViewController() {
-        let viewControllerToPush = InfoViewController()
+        let networkService = NetworkService()
+        let viewControllerToPush = InfoViewController(networkService: networkService)
         (module?.view as? UINavigationController)?.pushViewController(viewControllerToPush, animated: true)
     }
 }
