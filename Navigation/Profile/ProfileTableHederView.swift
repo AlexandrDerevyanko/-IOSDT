@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class ProfileHeaderView: UIView {
     
@@ -91,9 +92,11 @@ class ProfileHeaderView: UIView {
         avatarImageView.image = user.avatar
     }
         
-    @objc private func setStatusButtonPressed() {
+    @objc
+    private func setStatusButtonPressed() {
         statusLabel.text = statusTextField.text ?? ""
     }
+
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
@@ -111,7 +114,6 @@ class ProfileHeaderView: UIView {
             setStatusButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -16),
             setStatusButton.heightAnchor.constraint(equalToConstant: 50),
             setStatusButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
-
             
             statusLabel.bottomAnchor.constraint(equalTo: setStatusButton.topAnchor, constant: -70),
             statusLabel.centerXAnchor.constraint(equalTo: centerXAnchor),

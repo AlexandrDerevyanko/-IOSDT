@@ -99,9 +99,7 @@ class InfoViewController: UIViewController {
         networkService.orbitalPeriodRequest { [weak self] title in
             self?.descriptionLabel.text = title
         }
-        networkService.peopleRequest { [weak self] title in
-            self?.peopleLabel.text = "\(title)"
-        }
+
     }
     
 }

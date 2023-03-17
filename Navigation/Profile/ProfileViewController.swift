@@ -2,6 +2,7 @@
 import UIKit
 import StorageService
 import iOSIntPackage
+import FirebaseAuth
 
 class ProfileViewController: UIViewController {
         
@@ -36,6 +37,10 @@ class ProfileViewController: UIViewController {
         setupView()
         tableView.reloadData()
         timer()
+        checkUserStatus()
+        
+        let signOutButton = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(pushSignOutButton))
+        navigationItem.leftBarButtonItem = signOutButton
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,12 +54,20 @@ class ProfileViewController: UIViewController {
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.compactAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        self.navigationController?.isNavigationBarHidden = true
+        self.navigationController?.isNavigationBarHidden = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         tableView.reloadData()
+    }
+    
+    func checkUserStatus() {
+//        if Auth.auth().currentUser == nil {
+//            
+//        } else {
+//            navigationController?.popViewController(animated: true)
+//        }
     }
     
     private func setupView() {
@@ -81,6 +94,12 @@ class ProfileViewController: UIViewController {
             alert.addAction(UIAlertAction(title: "Ok", style: .default))
             self.present(alert, animated: true)
         }
+    }
+    
+    @objc
+    private func pushSignOutButton() {
+        try? Auth.auth().signOut()
+        navigationController?.popViewController(animated: true)
     }
 }
 

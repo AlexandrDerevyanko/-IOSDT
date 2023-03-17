@@ -7,24 +7,44 @@
 
 import Foundation
 
-enum CustomError: Error {
+enum AutorizationError: Error {
+    case emptyPasswordOrEmail
     case invalidPassword
+    case weakPassword
+    case mismatchPassword
     case notFound
-    case unexpected(code: Int)
+    case emailAlreadyInUse
+    case invalidEmail
+    case unexpected
 }
 
-extension CustomError: LocalizedError {
+extension AutorizationError: LocalizedError {
     public var errorDescription: String? {
         switch self {
+        case .emptyPasswordOrEmail:
+            return NSLocalizedString("Похоже, вы оставили поле Email или Password пустым",
+                                     comment: "")
         case .invalidPassword:
-            return NSLocalizedString("The provided username or password is invalid",
-                                     comment: "Username or password is invalid")
+            return NSLocalizedString("Не верный email или пароль",
+                                     comment: "")
+        case .weakPassword:
+            return NSLocalizedString("Пароль состоит менее чем из 6 символов",
+                                     comment: "")
+        case .mismatchPassword:
+            return NSLocalizedString("Введенные пароли не совпадают",
+                                     comment: "")
         case .notFound:
             return NSLocalizedString("Error Description: The specified item could not be found.",
-                                     comment: "Resource Not Found")
-        case .unexpected(_):
-            return NSLocalizedString("An unexpected error occurred.",
-                                     comment: "Unexpected Error")
+                                     comment: "")
+        case .emailAlreadyInUse:
+            return NSLocalizedString("Такой email уже используется",
+                                     comment: "")
+        case .invalidEmail:
+            return NSLocalizedString("Неверно введен email",
+                                     comment: "")
+        case .unexpected:
+            return NSLocalizedString("Что то пошло не так",
+                                     comment: "")
         }
     }
 }
