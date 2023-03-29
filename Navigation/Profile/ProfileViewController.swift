@@ -2,7 +2,6 @@
 import UIKit
 import StorageService
 import iOSIntPackage
-import FirebaseAuth
 
 class ProfileViewController: UIViewController {
         

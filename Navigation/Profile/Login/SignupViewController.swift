@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import FirebaseAuth
 import SnapKit
 
 class SignupViewController: UIViewController {
@@ -138,43 +137,8 @@ class SignupViewController: UIViewController {
         let confirmPassword = confirmPasswordTextField.text
         
         signUpDelegate?.signUp(email: email, password: password, passwordConfirmation: confirmPassword, completion: { data, error in
-            if error != nil {
-                switch error {
-                case .emptyPasswordOrEmail:
-                    let alert = UIAlertController(title: "Ошибка", message: AutorizationError.emptyPasswordOrEmail.localizedDescription, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Ok", style: .default))
-                    self.present(alert, animated: true)
-                case .invalidPassword:
-                    let alert = UIAlertController(title: "Ошибка", message: AutorizationError.invalidPassword.localizedDescription, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Ok", style: .default))
-                    self.present(alert, animated: true)
-                case .weakPassword:
-                    let alert = UIAlertController(title: "Ошибка", message: AutorizationError.weakPassword.localizedDescription, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Ok", style: .default))
-                    self.present(alert, animated: true)
-                case .mismatchPassword:
-                    let alert = UIAlertController(title: "Ошибка", message: AutorizationError.mismatchPassword.localizedDescription, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Ok", style: .default))
-                    self.present(alert, animated: true)
-                case .notFound:
-                    let alert = UIAlertController(title: "Ошибка", message: AutorizationError.notFound.localizedDescription, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Ok", style: .default))
-                    self.present(alert, animated: true)
-                case .emailAlreadyInUse:
-                    let alert = UIAlertController(title: "Ошибка", message: AutorizationError.emailAlreadyInUse.localizedDescription, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Ok", style: .default))
-                    self.present(alert, animated: true)
-                case .invalidEmail:
-                    let alert = UIAlertController(title: "Ошибка", message: AutorizationError.invalidEmail.localizedDescription, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Ok", style: .default))
-                    self.present(alert, animated: true)
-                case .unexpected:
-                    let alert = UIAlertController(title: "Ошибка", message: AutorizationError.unexpected.localizedDescription, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Ok", style: .default))
-                    self.present(alert, animated: true)
-                default:
-                    return
-                }
+            if let error = error {
+                Alert.defaulAlert.errors(showIn: self, error: error)
             } else {
                 switch data {
                 case .logIn:

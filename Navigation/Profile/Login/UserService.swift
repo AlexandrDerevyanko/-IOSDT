@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import FirebaseAuth
 
 enum Autorization {
     case logIn
@@ -24,17 +23,17 @@ struct MyLoginFactory: LoginFactoryProtocol {
 }
 
 protocol LoginDelegateProtocol {
-    func logIn(logIn: String?, password: String?, completion: @escaping (_ autorizationData: Autorization?, _ autorizattionError: AutorizationError?) -> Void)
-    func signUp(email: String?, password: String?, passwordConfirmation: String?, completion: @escaping (_ autorizationData: Autorization?, _ autorizattionError: AutorizationError?) -> Void)
+    func logIn(logIn: String?, password: String?, completion: @escaping (_ autorizationData: Autorization?, _ autorizattionError: AutorizationErrors?) -> Void)
+    func signUp(email: String?, password: String?, passwordConfirmation: String?, completion: @escaping (_ autorizationData: Autorization?, _ autorizattionError: AutorizationErrors?) -> Void)
 }
 
 struct LoginInspector: LoginDelegateProtocol {
-    func logIn(logIn: String?, password: String?, completion: @escaping (_ autorizationData: Autorization?, _ autorizattionError: AutorizationError?) -> Void) {
+    func logIn(logIn: String?, password: String?, completion: @escaping (_ autorizationData: Autorization?, _ autorizattionError: AutorizationErrors?) -> Void) {
         CheckerService().checkCredentials(email: logIn, password: password) { autorizationData, autorizattionError in
             completion(autorizationData, autorizattionError)
         }
     }
-    func signUp(email: String?, password: String?, passwordConfirmation: String?, completion: @escaping (_ autorizationData: Autorization?, _ autorizattionError: AutorizationError?) -> Void) {
+    func signUp(email: String?, password: String?, passwordConfirmation: String?, completion: @escaping (_ autorizationData: Autorization?, _ autorizattionError: AutorizationErrors?) -> Void) {
         CheckerService().signUp(email: email, password: password, passwordConfirmation: passwordConfirmation) { autorizationData, autorizattionError in
             completion(autorizationData, autorizattionError)
         }
@@ -43,13 +42,13 @@ struct LoginInspector: LoginDelegateProtocol {
 
 
 protocol CheckerServiceProtocol {
-    func checkCredentials(email: String?, password: String?, completion: @escaping (_ autorizationData: Autorization?, _ autorizattionError: AutorizationError?) -> Void)
-    func signUp(email: String?, password: String?, passwordConfirmation: String?, completion: @escaping (_ autorizationData: Autorization?, _ autorizattionError: AutorizationError?) -> Void)
+    func checkCredentials(email: String?, password: String?, completion: @escaping (_ autorizationData: Autorization?, _ autorizattionError: AutorizationErrors?) -> Void)
+    func signUp(email: String?, password: String?, passwordConfirmation: String?, completion: @escaping (_ autorizationData: Autorization?, _ autorizattionError: AutorizationErrors?) -> Void)
 }
 
 class CheckerService: CheckerServiceProtocol {
     init() {}
-    func checkCredentials(email: String?, password: String?, completion: @escaping (_ autorizationData: Autorization?, _ autorizattionError: AutorizationError?) -> Void) {
+    func checkCredentials(email: String?, password: String?, completion: @escaping (_ autorizationData: Autorization?, _ autorizattionError: AutorizationErrors?) -> Void) {
         guard let mail = email, mail != "", let pass = password, pass != "" else {
             completion(nil, .emptyPasswordOrEmail)
             return
@@ -68,7 +67,7 @@ class CheckerService: CheckerServiceProtocol {
         }
     }
     
-    func signUp(email: String?, password: String?, passwordConfirmation: String?, completion: @escaping (_ autorizationData: Autorization?, _ autorizattionError: AutorizationError?) -> Void) {
+    func signUp(email: String?, password: String?, passwordConfirmation: String?, completion: @escaping (_ autorizationData: Autorization?, _ autorizattionError: AutorizationErrors?) -> Void) {
         guard let mail = email, mail != "", let pass = password, pass != "", let passConf = passwordConfirmation, passConf != "" else {
             completion(nil, .emptyPasswordOrEmail)
             return

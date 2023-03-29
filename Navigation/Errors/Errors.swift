@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum AutorizationError: Error {
+enum AutorizationErrors: Error {
     case emptyPasswordOrEmail
     case invalidPassword
     case weakPassword
@@ -18,7 +18,7 @@ enum AutorizationError: Error {
     case unexpected
 }
 
-extension AutorizationError: LocalizedError {
+extension AutorizationErrors: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .emptyPasswordOrEmail:
