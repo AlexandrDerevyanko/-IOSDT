@@ -27,6 +27,7 @@ class SignupViewController: UIViewController {
         textField.textColor = .black
         textField.font = UIFont.systemFont(ofSize: 16)
         textField.placeholder = "Email"
+        textField.text = "corgi@gmail.com"
         textField.autocapitalizationType = .none
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
@@ -37,6 +38,7 @@ class SignupViewController: UIViewController {
         textField.textColor = .black
         textField.font = UIFont.systemFont(ofSize: 16)
         textField.placeholder = "Password"
+        textField.text = "123456"
         textField.isSecureTextEntry = true
         textField.autocapitalizationType = .none
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -48,6 +50,7 @@ class SignupViewController: UIViewController {
         textField.textColor = .black
         textField.font = UIFont.systemFont(ofSize: 16)
         textField.placeholder = "Confirm password"
+        textField.text = "123456"
         textField.isSecureTextEntry = true
         textField.autocapitalizationType = .none
         textField.translatesAutoresizingMaskIntoConstraints = false

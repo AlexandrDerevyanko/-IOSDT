@@ -53,18 +53,32 @@ class CheckerService: CheckerServiceProtocol {
             completion(nil, .emptyPasswordOrEmail)
             return
         }
-        Auth.auth().signIn(withEmail: mail, password: pass) { authDataResult, error in
-            if error != nil {
-                completion(nil, .invalidPassword)
-                return
-            }
-            if authDataResult?.user != nil {
+        
+        let users = RealmManager.defaultManager.users
+        if users.isEmpty {
+            return
+        } else {
+            let user = users[0]
+            if user.email == mail, user.password == pass {
+                RealmManager.defaultManager.logIn(user: user)
                 completion(.logIn, nil)
             } else {
-                completion(nil, .unexpected)
-                return
+                completion(nil, .invalidPassword)
             }
         }
+        
+//        Auth.auth().signIn(withEmail: mail, password: pass) { authDataResult, error in
+//            if error != nil {
+//                completion(nil, .invalidPassword)
+//                return
+//            }
+//            if authDataResult?.user != nil {
+//                completion(.logIn, nil)
+//            } else {
+//                completion(nil, .unexpected)
+//                return
+//            }
+//        }
     }
     
     func signUp(email: String?, password: String?, passwordConfirmation: String?, completion: @escaping (_ autorizationData: Autorization?, _ autorizattionError: AutorizationErrors?) -> Void) {
@@ -78,25 +92,26 @@ class CheckerService: CheckerServiceProtocol {
             return
         }
         
-        Auth.auth().createUser(withEmail: mail, password: pass) { authDataResult, error in
-            if let error = error {
-                print(error.localizedDescription)
-                let err = error as NSError
-                
-                switch err.code {
-                case AuthErrorCode.emailAlreadyInUse.rawValue:
-                    completion(nil, .emailAlreadyInUse)
-                case AuthErrorCode.invalidEmail.rawValue:
-                    completion(nil, .invalidEmail)
-                case AuthErrorCode.weakPassword.rawValue:
-                    completion(nil, .weakPassword)
-                default:
-                    print(error.localizedDescription)
-                }
-            } else {
-                completion(.signUp, nil)
-            }
-        }
+        RealmManager.defaultManager.addUser(email: mail, password: pass, isLogIn: true)
+//        Auth.auth().createUser(withEmail: mail, password: pass) { authDataResult, error in
+//            if let error = error {
+//                print(error.localizedDescription)
+//                let err = error as NSError
+//                
+//                switch err.code {
+//                case AuthErrorCode.emailAlreadyInUse.rawValue:
+//                    completion(nil, .emailAlreadyInUse)
+//                case AuthErrorCode.invalidEmail.rawValue:
+//                    completion(nil, .invalidEmail)
+//                case AuthErrorCode.weakPassword.rawValue:
+//                    completion(nil, .weakPassword)
+//                default:
+//                    print(error.localizedDescription)
+//                }
+//            } else {
+//                completion(.signUp, nil)
+//            }
+//        }
     }
 }
 

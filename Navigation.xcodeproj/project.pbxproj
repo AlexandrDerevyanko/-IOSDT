@@ -16,6 +16,8 @@
 		FF5F226829D4294C0035F975 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = FF5F226729D4294C0035F975 /* Realm */; };
 		FF5F226A29D4294C0035F975 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FF5F226929D4294C0035F975 /* RealmSwift */; };
 		FF5F226D29D43AEE0035F975 /* Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5F226C29D43AEE0035F975 /* Alerts.swift */; };
+		FF5F227029D4405A0035F975 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5F226F29D4405A0035F975 /* Model.swift */; };
+		FF5F227229D440650035F975 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5F227129D440650035F975 /* RealmManager.swift */; };
 		FF7B457F29B6F5BC002C4369 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7B457E29B6F5BC002C4369 /* Errors.swift */; };
 		FF8395FF29C33C6500BA40D9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FF8395FE29C33C6500BA40D9 /* GoogleService-Info.plist */; };
 		FF83960229C343BE00BA40D9 /* DataJSON.swift 18-30-32-395.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF83960129C343BE00BA40D9 /* DataJSON.swift 18-30-32-395.swift */; };
@@ -83,6 +85,8 @@
 		FF3EC6E9298B67C3006D7A72 /* PhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosViewController.swift; sourceTree = "<group>"; };
 		FF3EC6EB298B68A1006D7A72 /* PhotosCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosCollectionViewCell.swift; sourceTree = "<group>"; };
 		FF5F226C29D43AEE0035F975 /* Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alerts.swift; sourceTree = "<group>"; };
+		FF5F226F29D4405A0035F975 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		FF5F227129D440650035F975 /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
 		FF7B457E29B6F5BC002C4369 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		FF8395FE29C33C6500BA40D9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FF83960129C343BE00BA40D9 /* DataJSON.swift 18-30-32-395.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DataJSON.swift 18-30-32-395.swift"; sourceTree = "<group>"; };
@@ -190,6 +194,15 @@
 			path = Alerts;
 			sourceTree = "<group>";
 		};
+		FF5F226E29D440440035F975 /* Realm */ = {
+			isa = PBXGroup;
+			children = (
+				FF5F226F29D4405A0035F975 /* Model.swift */,
+				FF5F227129D440650035F975 /* RealmManager.swift */,
+			);
+			path = Realm;
+			sourceTree = "<group>";
+		};
 		FF7B457D29B6F5B0002C4369 /* Errors */ = {
 			isa = PBXGroup;
 			children = (
@@ -258,6 +271,7 @@
 		FFD64C162916EC6E0015F6B3 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
+				FF5F226E29D440440035F975 /* Realm */,
 				FF5F226B29D43ADD0035F975 /* Alerts */,
 				FF83960029C33C8500BA40D9 /* Firebase */,
 				FFB3108529BF2AEA00D32055 /* Network Service */,
@@ -468,6 +482,7 @@
 			files = (
 				FFD64C522918C81C0015F6B3 /* PostViewController.swift in Sources */,
 				FFD64C4C2917DF250015F6B3 /* ProfileViewController.swift in Sources */,
+				FF5F227229D440650035F975 /* RealmManager.swift in Sources */,
 				FFE8D3C829A8A1CE00FD9508 /* ProfileCoordinator.swift in Sources */,
 				FFE8D384299F585A00FD9508 /* Coordinatable.swift in Sources */,
 				FFD2BB2C2943450A00EF3D5C /* LoginViewController.swift in Sources */,
@@ -489,6 +504,7 @@
 				FFE8D3C529A5217C00FD9508 /* ProfileViewModel.swift in Sources */,
 				FFD2BB2E29436EDD00EF3D5C /* Custom.swift in Sources */,
 				FF3EC6EA298B67C3006D7A72 /* PhotosViewController.swift in Sources */,
+				FF5F227029D4405A0035F975 /* Model.swift in Sources */,
 				FFD64C4E291833880015F6B3 /* Feed.swift in Sources */,
 				FFE8D3BC299FBC7B00FD9508 /* AppTabBarController.swift in Sources */,
 				FFE8D3B4299FAB6F00FD9508 /* FeedViewModel.swift in Sources */,

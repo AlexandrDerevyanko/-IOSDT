@@ -36,7 +36,15 @@ class ProfileViewController: UIViewController {
         setupView()
         tableView.reloadData()
         timer()
-        checkUserStatus()
+        let users = RealmManager.defaultManager.users
+        if users.isEmpty {
+
+        } else {
+            let user = RealmManager.defaultManager.users[0]
+            DispatchQueue.main.async {
+                self.checkUserStatus(user: user)
+            }
+        }
         
         let signOutButton = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(pushSignOutButton))
         navigationItem.leftBarButtonItem = signOutButton
@@ -61,12 +69,13 @@ class ProfileViewController: UIViewController {
         tableView.reloadData()
     }
     
-    func checkUserStatus() {
-//        if Auth.auth().currentUser == nil {
-//            
-//        } else {
-//            navigationController?.popViewController(animated: true)
-//        }
+    func checkUserStatus(user: RealmUser) {
+        
+        if user.isLogIn {
+            
+        } else {
+            navigationController?.popViewController(animated: true)
+        }
     }
     
     private func setupView() {
@@ -97,7 +106,7 @@ class ProfileViewController: UIViewController {
     
     @objc
     private func pushSignOutButton() {
-        try? Auth.auth().signOut()
+        RealmManager.defaultManager.logOut(user: RealmManager.defaultManager.users[0])
         navigationController?.popViewController(animated: true)
     }
 }

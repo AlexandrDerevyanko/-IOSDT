@@ -111,12 +111,17 @@ class LoginViewController: UIViewController {
         view.backgroundColor = .white
         setupUI()
         setupConstraints()
-        
-        Auth.auth().addStateDidChangeListener { auth, user in
+        let users = RealmManager.defaultManager.users
+        if users.isEmpty {
+
+        } else {
+            let user = RealmManager.defaultManager.users[0]
             DispatchQueue.main.async {
-                self.checkUserStatus()
+                self.checkUserStatus(user: user)
             }
         }
+        
+        
         
     }
     
@@ -126,11 +131,11 @@ class LoginViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(didHideKeyboard(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    func checkUserStatus() {
-        if Auth.auth().currentUser == nil {
-            
-        } else {
+    func checkUserStatus(user: RealmUser) {
+        if user.isLogIn {
             viewModel.pressed(viewInput: .logInButtonPressed)
+        } else {
+            
         }
     }
         
@@ -247,7 +252,7 @@ extension LoginViewController {
             } else {
                 switch data {
                 case .logIn:
-                    return
+                    self.viewModel.pressed(viewInput: .logInButtonPressed)
                 case .signUp:
                     return
                 default:
