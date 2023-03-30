@@ -1,9 +1,9 @@
 
 import UIKit
 
-class LogInViewController: UIViewController {
+class LoginViewController: UIViewController {
     
-    var loginDelegate: LoginViewControllerDelegate?
+    var logInDelegate: LoginDelegateProtocol?
     
     private let viewModel: LogInViewModelProtocol
     
@@ -39,18 +39,18 @@ class LogInViewController: UIViewController {
     private let stackView: UIStackView = {
         let view = UIStackView()
         view.axis = .vertical
-        view.layer.cornerRadius = 10
         view.clipsToBounds = true
+        view.layer.cornerRadius = 10
         view.layer.borderWidth = 0.5
         view.layer.borderColor = UIColor.lightGray.cgColor
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
         
-    private let logInTextFiled: TextFieldWithPadding = {
+    private let loginTextFiled: TextFieldWithPadding = {
         let logIn = TextFieldWithPadding()
         logIn.tag = 0
-        logIn.text = "Corgi"
+        logIn.text = "corgi@gmail.com"
         logIn.textColor = .black
         logIn.backgroundColor = .systemGray6
         logIn.font = UIFont.systemFont(ofSize: 16)
@@ -63,7 +63,7 @@ class LogInViewController: UIViewController {
     private let passwordTextFiled: TextFieldWithPadding = {
         let password = TextFieldWithPadding()
         password.tag = 1
-        password.text = "1234"
+        password.text = "123456"
         password.textColor = .black
         password.backgroundColor = .systemGray6
         password.font = UIFont.systemFont(ofSize: 16)
@@ -87,6 +87,20 @@ class LogInViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    
+    private let signUpButton: BlueButton = {
+        let button = BlueButton()
+        button.setTitle("Sign Up", for: .normal)
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.backgroundColor = UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1)
+        button.layer.cornerRadius = 10
+        button.layer.shadowOffset = CGSize(width: 4, height: 4)
+        button.layer.shadowRadius = 4
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOpacity = 0.7
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
         
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -97,6 +111,18 @@ class LogInViewController: UIViewController {
         view.backgroundColor = .white
         setupUI()
         setupConstraints()
+        let users = RealmManager.defaultManager.users
+        if users.isEmpty {
+
+        } else {
+            let user = RealmManager.defaultManager.users[0]
+            DispatchQueue.main.async {
+                self.checkUserStatus(user: user)
+            }
+        }
+        
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -104,13 +130,22 @@ class LogInViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(didShowKeyboard(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didHideKeyboard(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
+    
+    func checkUserStatus(user: RealmUser) {
+        if user.isLogIn {
+            viewModel.pressed(viewInput: .logInButtonPressed)
+        } else {
+            
+        }
+    }
         
     private func setupUI() {
         view.addSubview(scrollView)
         scrollView.addSubview(stackView)
         scrollView.addSubview(logo)
         scrollView.addSubview(logInButton)
-        stackView.addArrangedSubview(logInTextFiled)
+        scrollView.addSubview(signUpButton)
+        stackView.addArrangedSubview(loginTextFiled)
         stackView.addArrangedSubview(point)
         stackView.addArrangedSubview(passwordTextFiled)
         setupButton()
@@ -119,6 +154,7 @@ class LogInViewController: UIViewController {
         
     private func setupButton() {
         logInButton.addTarget(self, action: #selector(logInButtonPressed), for: .touchUpInside)
+        signUpButton.addTarget(self, action: #selector(signUpButtonPressed), for: .touchUpInside)
         }
         
     private func setupGestures() {
@@ -144,7 +180,7 @@ class LogInViewController: UIViewController {
             stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -16),
             stackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
             
-            logInTextFiled.heightAnchor.constraint(equalToConstant: 49),
+            loginTextFiled.heightAnchor.constraint(equalToConstant: 49),
             
             passwordTextFiled.heightAnchor.constraint(equalToConstant: 49),
             
@@ -156,11 +192,17 @@ class LogInViewController: UIViewController {
             logInButton.heightAnchor.constraint(equalToConstant: 50),
             logInButton.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 16),
             logInButton.rightAnchor.constraint(equalTo: scrollView.rightAnchor, constant: -16),
+            
+            signUpButton.topAnchor.constraint(equalTo: logInButton.bottomAnchor, constant: 16),
+            signUpButton.heightAnchor.constraint(equalToConstant: 50),
+            signUpButton.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 16),
+            signUpButton.rightAnchor.constraint(equalTo: scrollView.rightAnchor, constant: -16)
         
         ])
     }
         
-    @objc private func didShowKeyboard(_ notification: Notification) {
+    @objc
+    private func didShowKeyboard(_ notification: Notification) {
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboeardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboeardRectangle.height
@@ -174,49 +216,50 @@ class LogInViewController: UIViewController {
         }
     }
         
-    @objc private func didHideKeyboard (_ notification: Notification) {
+    @objc
+    private func didHideKeyboard (_ notification: Notification) {
         self.forcedHidingKeyboard()
     }
         
-    @objc private func logInButtonPressed() {
-        logInButttonPressedViewModel()
+    @objc
+    private func logInButtonPressed() {
+        logIn()
+    }
+    
+    @objc
+    private func signUpButtonPressed() {
+//        RealmManager.defaultManager.deleteUser(user: RealmManager.defaultManager.users[0])
+        let VC = SignupViewController()
+        VC.signUpDelegate = MyLoginFactory().makeCheckerService()
+        navigationController?.pushViewController(VC, animated: true)
     }
         
-    @objc private func forcedHidingKeyboard() {
+    @objc
+    private func forcedHidingKeyboard() {
         self.view.endEditing(true)
         self.scrollView.setContentOffset(.zero, animated: true)
     }
     
 }
 
-extension LogInViewController {
+extension LoginViewController {
     
-    func logInButttonPressedViewModel() {
-        
-        do {
-            try logIn()
-        }
-        catch CustomError.invalidPassword {
-            let alert = UIAlertController(title: "Unknown login or password", message: "Please, enter correct user login and password", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Ok", style: .default))
-                self.present(alert, animated: true)
-        }
-        catch {
-            let alert = UIAlertController(title: "Error", message: "Error", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Ok", style: .default))
-                self.present(alert, animated: true)
-        }
+    func logIn() {
+        let email = loginTextFiled.text
+        let password = passwordTextFiled.text
+        logInDelegate?.logIn(logIn: email, password: password, completion: { data, error  in
+            if let error = error {
+                Alert.defaulAlert.errors(showIn: self, error: error)
+            } else {
+                switch data {
+                case .logIn:
+                    self.viewModel.pressed(viewInput: .logInButtonPressed)
+                case .signUp:
+                    return
+                default:
+                    return
+                }
+            }
+        })
     }
-    
-    func logIn() throws {
-        let service = CurrentUserService()
-
-        if let logIn = loginDelegate?.check(logIn: logInTextFiled.text ?? "", password: passwordTextFiled.text ?? "") {
-            let user = service.checkUser(with: logIn)
-            viewModel.pressed(viewInput: .logInButtonPressed(user ?? User(logIn: "", fullName: "", avatar: UIImage(), status: "")))
-        } else {
-            throw CustomError.invalidPassword
-        }
-    }
-    
 }

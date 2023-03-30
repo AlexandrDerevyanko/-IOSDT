@@ -36,6 +36,18 @@ class ProfileViewController: UIViewController {
         setupView()
         tableView.reloadData()
         timer()
+        let users = RealmManager.defaultManager.users
+        if users.isEmpty {
+
+        } else {
+            let user = RealmManager.defaultManager.users[0]
+            DispatchQueue.main.async {
+                self.checkUserStatus(user: user)
+            }
+        }
+        
+        let signOutButton = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(pushSignOutButton))
+        navigationItem.leftBarButtonItem = signOutButton
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,12 +61,21 @@ class ProfileViewController: UIViewController {
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.compactAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        self.navigationController?.isNavigationBarHidden = true
+        self.navigationController?.isNavigationBarHidden = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         tableView.reloadData()
+    }
+    
+    func checkUserStatus(user: RealmUser) {
+        
+        if user.isLogIn {
+            
+        } else {
+            navigationController?.popViewController(animated: true)
+        }
     }
     
     private func setupView() {
@@ -81,6 +102,12 @@ class ProfileViewController: UIViewController {
             alert.addAction(UIAlertAction(title: "Ok", style: .default))
             self.present(alert, animated: true)
         }
+    }
+    
+    @objc
+    private func pushSignOutButton() {
+        RealmManager.defaultManager.logOut(user: RealmManager.defaultManager.users[0])
+        navigationController?.popViewController(animated: true)
     }
 }
 

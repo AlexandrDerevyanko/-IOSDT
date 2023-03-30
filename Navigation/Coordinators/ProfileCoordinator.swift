@@ -29,11 +29,11 @@ final class ProfileCoordinator: ModuleCoordinatable {
         return viewController
     }
     
-    func pushProfileViewController(forUser user: User) {
+    func pushProfileViewController() {
         
         let profileModule = { [self] in
             let viewModel = ProfileViewModel()
-            let view = ProfileViewController(viewModel: viewModel, user: user)
+            let view = ProfileViewController(viewModel: viewModel, user: User(logIn: "Corgi", fullName: "Corgi Kevin", avatar: UIImage(named: "1") ?? UIImage(), status: "I'm fine"))
             return Module(moduleType: moduleType, viewModel: viewModel, view: view)
         }
         let module = profileModule()

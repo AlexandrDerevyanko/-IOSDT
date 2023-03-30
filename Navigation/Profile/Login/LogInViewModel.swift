@@ -12,15 +12,15 @@ protocol LogInViewModelProtocol: ViewModelProtocol{
 class LogInViewModel: LogInViewModelProtocol {
     
     enum ViewInput {
-        case logInButtonPressed(User)
+        case logInButtonPressed
     }
     
     weak var coordinator: ProfileCoordinator?
     
     func pressed(viewInput: ViewInput) {
         switch viewInput {
-        case let .logInButtonPressed(user):
-            coordinator?.pushProfileViewController(forUser: user)
+        case .logInButtonPressed:
+            coordinator?.pushProfileViewController()
         }
     }
 
