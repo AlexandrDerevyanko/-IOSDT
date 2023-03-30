@@ -56,13 +56,15 @@ class CheckerService: CheckerServiceProtocol {
         
         let users = RealmManager.defaultManager.users
         if users.isEmpty {
-            return
+            completion(nil, .invalidPassword)
         } else {
             let user = users[0]
             if user.email == mail, user.password == pass {
+                print(456)
                 RealmManager.defaultManager.logIn(user: user)
                 completion(.logIn, nil)
             } else {
+                print(123)
                 completion(nil, .invalidPassword)
             }
         }
@@ -91,8 +93,9 @@ class CheckerService: CheckerServiceProtocol {
             completion(nil, .mismatchPassword)
             return
         }
-        
         RealmManager.defaultManager.addUser(email: mail, password: pass, isLogIn: true)
+        RealmManager.defaultManager.reloadFolders()
+        completion(.signUp, nil)
 //        Auth.auth().createUser(withEmail: mail, password: pass) { authDataResult, error in
 //            if let error = error {
 //                print(error.localizedDescription)

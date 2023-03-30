@@ -74,7 +74,7 @@ class LoginViewController: UIViewController {
         return password
         }()
         
-    private let loginButton: BlueButton = {
+    private let logInButton: BlueButton = {
         let button = BlueButton()
         button.setTitle("Log In", for: .normal)
         button.setTitleColor(UIColor.white, for: .normal)
@@ -88,7 +88,7 @@ class LoginViewController: UIViewController {
         return button
     }()
     
-    private let signupButton: BlueButton = {
+    private let signUpButton: BlueButton = {
         let button = BlueButton()
         button.setTitle("Sign Up", for: .normal)
         button.setTitleColor(UIColor.white, for: .normal)
@@ -143,8 +143,8 @@ class LoginViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(stackView)
         scrollView.addSubview(logo)
-        scrollView.addSubview(loginButton)
-        scrollView.addSubview(signupButton)
+        scrollView.addSubview(logInButton)
+        scrollView.addSubview(signUpButton)
         stackView.addArrangedSubview(loginTextFiled)
         stackView.addArrangedSubview(point)
         stackView.addArrangedSubview(passwordTextFiled)
@@ -153,8 +153,8 @@ class LoginViewController: UIViewController {
     }
         
     private func setupButton() {
-        loginButton.addTarget(self, action: #selector(loginButtonPressed), for: .touchUpInside)
-        signupButton.addTarget(self, action: #selector(signupButtonPressed), for: .touchUpInside)
+        logInButton.addTarget(self, action: #selector(logInButtonPressed), for: .touchUpInside)
+        signUpButton.addTarget(self, action: #selector(signUpButtonPressed), for: .touchUpInside)
         }
         
     private func setupGestures() {
@@ -188,15 +188,15 @@ class LoginViewController: UIViewController {
             point.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             point.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             
-            loginButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 16),
-            loginButton.heightAnchor.constraint(equalToConstant: 50),
-            loginButton.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 16),
-            loginButton.rightAnchor.constraint(equalTo: scrollView.rightAnchor, constant: -16),
+            logInButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 16),
+            logInButton.heightAnchor.constraint(equalToConstant: 50),
+            logInButton.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 16),
+            logInButton.rightAnchor.constraint(equalTo: scrollView.rightAnchor, constant: -16),
             
-            signupButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 16),
-            signupButton.heightAnchor.constraint(equalToConstant: 50),
-            signupButton.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 16),
-            signupButton.rightAnchor.constraint(equalTo: scrollView.rightAnchor, constant: -16)
+            signUpButton.topAnchor.constraint(equalTo: logInButton.bottomAnchor, constant: 16),
+            signUpButton.heightAnchor.constraint(equalToConstant: 50),
+            signUpButton.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 16),
+            signUpButton.rightAnchor.constraint(equalTo: scrollView.rightAnchor, constant: -16)
         
         ])
     }
@@ -207,20 +207,13 @@ class LoginViewController: UIViewController {
             let keyboeardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboeardRectangle.height
                 
-            let loginButtonBottomPointY = self.loginButton.frame.origin.y + self.loginButton.frame.height
+            let loginButtonBottomPointY = self.logInButton.frame.origin.y + self.logInButton.frame.height
             let keyboardOriginY = self.view.frame.height - keyboardHeight
                 
             let yOffset = keyboardOriginY < loginButtonBottomPointY ? loginButtonBottomPointY - keyboardOriginY + 16 : 0
                 
             self.scrollView.contentOffset = CGPoint(x: 0, y: yOffset)
         }
-    }
-    
-    @objc
-    private func signupButtonPressed() {
-        let VC = SignupViewController()
-        VC.signUpDelegate = MyLoginFactory().makeCheckerService()
-        navigationController?.pushViewController(VC, animated: true)
     }
         
     @objc
@@ -229,8 +222,16 @@ class LoginViewController: UIViewController {
     }
         
     @objc
-    private func loginButtonPressed() {
-        login()
+    private func logInButtonPressed() {
+        logIn()
+    }
+    
+    @objc
+    private func signUpButtonPressed() {
+//        RealmManager.defaultManager.deleteUser(user: RealmManager.defaultManager.users[0])
+        let VC = SignupViewController()
+        VC.signUpDelegate = MyLoginFactory().makeCheckerService()
+        navigationController?.pushViewController(VC, animated: true)
     }
         
     @objc
@@ -243,7 +244,7 @@ class LoginViewController: UIViewController {
 
 extension LoginViewController {
     
-    func login() {
+    func logIn() {
         let email = loginTextFiled.text
         let password = passwordTextFiled.text
         logInDelegate?.logIn(logIn: email, password: password, completion: { data, error  in
