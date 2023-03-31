@@ -10,28 +10,35 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    var appCoordinator: AppCoordinator?
+//    var appCoordinator: AppCoordinator?
+    var firstNavigationController = TabBarController()
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        
-        
-        
-        guard let scene = scene as? UIWindowScene else {
-            return
+        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
+        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
+        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        let window = UIWindow(windowScene: windowScene)
+        let users = RealmManager.defaultManager.users
+        if users.isEmpty {
+
+        } else {
+            let user = RealmManager.defaultManager.users[0]
+                if user.isLogIn {
+                    self.firstNavigationController.setupUILogInStatus()
+                    window.rootViewController = self.firstNavigationController
+                    window.makeKeyAndVisible()
+                    self.window = window
+                } else {
+                    self.firstNavigationController.setupUILogOutStatus()
+                    window.rootViewController = self.firstNavigationController
+                    window.makeKeyAndVisible()
+                    self.window = window
+                }
         }
         
-        let networkService = NetworkService()
-        let factory = AppFactory(networkService: networkService)
-        let appCoordinator = AppCoordinator(factory: factory)
-
-        self.window = UIWindow(windowScene: scene)
-        self.appCoordinator = appCoordinator
-
-        window?.rootViewController = appCoordinator.start()
-        window?.makeKeyAndVisible()
-        
-        
     }
+
 
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.

@@ -5,16 +5,16 @@ class LoginViewController: UIViewController {
     
     var logInDelegate: LoginDelegateProtocol?
     
-    private let viewModel: LogInViewModelProtocol
+//    private let viewModel: LogInViewModelProtocol
     
-    init(viewModel: LogInViewModelProtocol) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
+//    init(viewModel: LogInViewModelProtocol) {
+//        self.viewModel = viewModel
+//        super.init(nibName: nil, bundle: nil)
+//    }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
     
     private let point: UIView = {
         let point = UIView()
@@ -133,7 +133,8 @@ class LoginViewController: UIViewController {
     
     func checkUserStatus(user: RealmUser) {
         if user.isLogIn {
-            viewModel.pressed(viewInput: .logInButtonPressed)
+            let profileVC = ProfileViewController(user: User(logIn: "Corgi", fullName: "Corgi Kevin", avatar: UIImage(named: "1") ?? UIImage(), status: "I'm fine"))
+             navigationController?.pushViewController(profileVC, animated: true)
         } else {
             
         }
@@ -253,7 +254,8 @@ extension LoginViewController {
             } else {
                 switch data {
                 case .logIn:
-                    self.viewModel.pressed(viewInput: .logInButtonPressed)
+                    let profileVC = ProfileViewController(user: User(logIn: "Corgi", fullName: "Corgi Kevin", avatar: UIImage(named: "1") ?? UIImage(), status: "I'm fine"))
+                    self.navigationController?.pushViewController(profileVC, animated: true)
                 case .signUp:
                     return
                 default:

@@ -5,11 +5,11 @@ import iOSIntPackage
 
 class ProfileViewController: UIViewController {
         
-    private let viewModel: ProfileViewModelProtocol
+//    private let viewModel: ProfileViewModelProtocol
     var user: User
     
-    init(viewModel: ProfileViewModelProtocol, user: User) {
-        self.viewModel = viewModel
+    init(user: User) {
+//        self.viewModel = viewModel
         self.user = user
         super.init(nibName: nil, bundle: nil)
     }
@@ -196,7 +196,8 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
 extension ProfileViewController {
     
     func collectionViewPressed() {
-        viewModel.pressed(viewInput: .collectionViewPressed)
+        let photosVC = PhotosViewController()
+        navigationController?.pushViewController(photosVC, animated: true)
     }
     
 }

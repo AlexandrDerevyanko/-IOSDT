@@ -57,7 +57,6 @@ class FeedView: UIView {
     
     private lazy var infoButton = CustomButton(title: "Info", bgColor: .cyan, action: infoButtonPressed)
     private lazy var postButton = CustomButton(title: "Post", bgColor: .cyan, action: postButtonPressed)
-    private lazy var checkGuessButton = CustomButton(title: "Check", bgColor: .cyan, action: checkGuessButtonPressed)
     
     private let descriptionLabel: UILabel = {
         let label = UILabel()
@@ -72,7 +71,6 @@ class FeedView: UIView {
         addSubview(stackView)
         addSubview(textField)
         addSubview(label)
-        addSubview(checkGuessButton)
         stackView.addArrangedSubview(infoButton)
         stackView.addArrangedSubview(postButton)
         descriptionLabel.text = dataSource.description
@@ -89,13 +87,8 @@ class FeedView: UIView {
             textField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             textField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             textField.heightAnchor.constraint(equalToConstant: 40),
-        
-            checkGuessButton.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 16),
-            checkGuessButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            checkGuessButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            checkGuessButton.heightAnchor.constraint(equalToConstant: 50),
             
-            stackView.topAnchor.constraint(equalTo: checkGuessButton.bottomAnchor, constant: 16),
+            stackView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 16),
             stackView.centerXAnchor.constraint(equalTo: centerXAnchor),
             
             infoButton.widthAnchor.constraint(equalToConstant: 100),
@@ -118,17 +111,6 @@ class FeedView: UIView {
     
     func postButtonPressed() {
         delegate?.postButtonPressed()
-    }
-    
-    func checkGuessButtonPressed() {
-//        if let word = FeedViewModel().check(word: textField.text ?? "") {
-//            label.backgroundColor = .green
-//        } else {
-//            self.label.backgroundColor = .red
-//            let alert = UIAlertController(title: "Error", message: "Word entered incorrectly", preferredStyle: .actionSheet)
-//                alert.addAction(UIAlertAction(title: "Ok", style: .default))
-//            self.window?.rootViewController?.present(alert, animated: true)
-//        }
     }
     
 }
