@@ -7,73 +7,79 @@
 
 import UIKit
 
-protocol LoginFactory {
-    func makeLoginInspector() -> LoginInspector
+enum Autorization {
+    case logIn
+    case signUp
 }
 
-protocol UserService {
-    func checkUser (with : String) -> User?
+protocol LoginFactoryProtocol {
+    func makeCheckerService() -> LoginInspector
 }
 
-protocol LoginViewControllerDelegate {
-    func check(logIn: String, password: String) -> String?
-}
-
-struct LoginInspector: LoginViewControllerDelegate {
-    func check(logIn: String, password: String) -> String? {
-        return Checker.shared.check(logIn: logIn, password: password) == true ? logIn : nil
-    }
-}
-
-struct MyLoginFactory: LoginFactory {
-    func makeLoginInspector() -> LoginInspector {
+struct MyLoginFactory: LoginFactoryProtocol {
+    func makeCheckerService() -> LoginInspector {
         LoginInspector()
     }
 }
 
-class User {
-    var logIn: String
-    var fullName: String
-    var avatar: UIImage
-    var status: String
-    init(logIn: String, fullName: String, avatar: UIImage, status: String) {
-        self.logIn = logIn
-        self.fullName = fullName
-        self.avatar = avatar
-        self.status = status
+protocol LoginDelegateProtocol {
+    func logIn(logIn: String?, password: String?, completion: @escaping (_ autorizationData: Autorization?, _ autorizattionError: AutorizationErrors?, _ user: User?) -> Void)
+    func signUp(fullName: String?, email: String?, password: String?, passwordConfirmation: String?, completion: @escaping (_ autorizationData: Autorization?, _ autorizattionError: AutorizationErrors?) -> Void)
+}
+
+struct LoginInspector: LoginDelegateProtocol {
+    func logIn(logIn: String?, password: String?, completion: @escaping (_ autorizationData: Autorization?, _ autorizattionError: AutorizationErrors?, _ user: User?) -> Void) {
+        CheckerService().checkCredentials(email: logIn, password: password) { autorizationData, autorizattionError, user in
+            completion(autorizationData, autorizattionError, user)
+        }
+    }
+    func signUp(fullName: String?, email: String?, password: String?, passwordConfirmation: String?, completion: @escaping (_ autorizationData: Autorization?, _ autorizattionError: AutorizationErrors?) -> Void) {
+        CheckerService().signUp(fullName: fullName, email: email, password: password, passwordConfirmation: passwordConfirmation) { autorizationData, autorizattionError in
+            completion(autorizationData, autorizattionError)
+        }
     }
 }
 
-class CurrentUserService: UserService {
-    
-    var user: User = User(logIn: "Corgi", fullName: "Corgi Kevin", avatar: UIImage(named: "1") ?? UIImage(), status: "I'm fine")
-    
-    func checkUser(with logIn: String) -> User? {
-        return logIn == user.logIn ? user : nil
-    }
-    
+
+protocol CheckerServiceProtocol {
+    func checkCredentials(email: String?, password: String?, completion: @escaping (_ autorizationData: Autorization?, _ autorizattionError: AutorizationErrors?, _ user: User?) -> Void)
+    func signUp(fullName: String?, email: String?, password: String?, passwordConfirmation: String?, completion: @escaping (_ autorizationData: Autorization?, _ autorizattionError: AutorizationErrors?) -> Void)
 }
 
-class TestUserService: UserService {
-    
-    var user: User = User(logIn: "Tester", fullName: "Corgi Tester", avatar: UIImage(named: "sadCorgi") ?? UIImage(), status: "I'm not fine")
-    
-    func checkUser(with logIn: String) -> User? {
-        return logIn == user.logIn ? user : nil
-    }
-    
-}
+class CheckerService: CheckerServiceProtocol {
+    init() {}
+    func checkCredentials(email: String?, password: String?, completion: @escaping (_ autorizationData: Autorization?, _ autorizattionError: AutorizationErrors?, _ user: User?) -> Void) {
+        guard let mail = email, mail != "", let pass = password, pass != "" else {
+            completion(nil, .empty, nil)
+            return
+        }
+        
+        let users = CoreDataManeger.defaulManager.users
+        if users.isEmpty {
+            completion(nil, .invalidPassword, nil)
+            return
+        }
+        for i in users {
+            if mail == i.login, pass == i.password {
+                completion(nil, nil, i)
+                return
+            }
+        }
+        completion(nil, .invalidPassword, nil)
 
-class Checker {
-    
-    private let userLogIn: String = "Corgi"
-    private let userPassword: String = "1234"
-    static let shared = Checker()
-    
-    private init() {}
-    
-    func check(logIn: String, password: String) -> Bool {
-        return logIn == userLogIn && password == userPassword ? true : false
     }
     
+    func signUp(fullName: String?, email: String?, password: String?, passwordConfirmation: String?, completion: @escaping (_ autorizationData: Autorization?, _ autorizattionError: AutorizationErrors?) -> Void) {
+        guard let mail = email, mail != "", let pass = password, pass != "", let passConf = passwordConfirmation, passConf != "", let name = fullName, name != "" else {
+            completion(nil, .empty)
+            return
+        }
+        
+        if pass != passConf {
+            completion(nil, .mismatchPassword)
+            return
+        }
+        CoreDataManeger.defaulManager.addUser(logIn: mail, password: pass, fullName: name, avatar: nil)
+        completion(.signUp, nil)
+    }
 }

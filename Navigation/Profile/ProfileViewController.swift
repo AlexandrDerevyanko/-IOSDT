@@ -3,13 +3,15 @@ import UIKit
 import StorageService
 import iOSIntPackage
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: UIViewController, ProfileDelegate {
         
-    private let viewModel: ProfileViewModelProtocol
     var user: User
+    lazy var profileHeaderView = ProfileHeaderView()
+    var posts: [Post] {
+        return user.postsSorted
+    }
     
-    init(viewModel: ProfileViewModelProtocol, user: User) {
-        self.viewModel = viewModel
+    init(user: User) {
         self.user = user
         super.init(nibName: nil, bundle: nil)
     }
@@ -34,8 +36,9 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        tableView.reloadData()
-        timer()
+        
+        let signOutButton = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(pushSignOutButton))
+        navigationItem.leftBarButtonItem = signOutButton
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,7 +52,8 @@ class ProfileViewController: UIViewController {
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.compactAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        self.navigationController?.isNavigationBarHidden = true
+        self.navigationController?.isNavigationBarHidden = false
+        tableView.reloadData()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -82,6 +86,18 @@ class ProfileViewController: UIViewController {
             self.present(alert, animated: true)
         }
     }
+    
+    func pushNewPostViewController() {
+        let newPostVC = NewPostViewController(user: user)
+        navigationController?.pushViewController(newPostVC, animated: true)
+    }
+    
+    @objc
+    private func pushSignOutButton() {
+        CoreDataManeger.defaulManager.deauthorization(user: user)
+        navigationController?.popViewController(animated: true)
+    }
+    
 }
 
 
@@ -90,9 +106,10 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         if section == 0 {
-            let cell = ProfileHeaderView()
-            let post = user
-            cell.setup(with: post)
+            let cell = profileHeaderView
+            cell.user = user
+            cell.delegate = self
+            cell.setup()
             return cell
         }
         return nil
@@ -104,13 +121,13 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
+
         if section == 0 {
             return 1
         } else if section == 1 {
-            return arrayOfPublications.count
+            return posts.count
         }
-        
+
         return 0
     }
 
@@ -129,14 +146,11 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SecondSectionCell", for: indexPath) as? PostTableViewCell else {
                 preconditionFailure("Error")
             }
-            
-            let post = arrayOfPublications[indexPath.row]
-            let arrayOfPublications = PostTableViewCell.ViewModel(author: post.author, description: post.description, image: UIImage(named: post.image), likes: post.likes, views: post.views)
-            
-            cell.setup(with: arrayOfPublications)
-            
+            let postInCell = posts[indexPath.row]
+            cell.delegate = self
+            cell.post = postInCell
+            cell.setup()
             return cell
-            
         }
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "DefaultCell", for: indexPath)
@@ -157,10 +171,23 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.section == 0 {
             if indexPath.row == 0 {
                 collectionViewPressed()
             }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let postInCell = posts[indexPath.row]
+            CoreDataManeger.defaulManager.deletePost(post: postInCell)
+            tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
     
@@ -169,7 +196,16 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
 extension ProfileViewController {
     
     func collectionViewPressed() {
-        viewModel.pressed(viewInput: .collectionViewPressed)
+        let photosVC = PhotosViewController()
+        navigationController?.pushViewController(photosVC, animated: true)
     }
     
+    func changePost(post: Post) {
+        let postVC = NewPostViewController(post: post, user: user)
+        navigationController?.pushViewController(postVC, animated: true)
+    }
+    
+    func likePost(post: Post) {
+        CoreDataManeger.defaulManager.favoritePost(post: post, isFavorite: true)
+    }
 }

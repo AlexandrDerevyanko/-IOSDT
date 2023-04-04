@@ -1,7 +1,14 @@
+//
+//  FavoritePostTableViewCell.swift
+//  Navigation
+//
+//  Created by Aleksandr Derevyanko on 04.04.2023.
+//
 
 import UIKit
+import SnapKit
 
-class PostTableViewCell: UITableViewCell {
+class FavoritePostTableViewCell: UITableViewCell {
     
     var post: Post!
     var delegate: ProfileDelegate?
@@ -124,11 +131,11 @@ class PostTableViewCell: UITableViewCell {
         singleTapGesture.require(toFail: doubleTapGesture)
     }
 
-    @objc private func singleTap() {
+    @objc private func singleTap(_ tapGesture: UITapGestureRecognizer) {
         delegate?.changePost(post: post)
     }
 
-    @objc private func doubleTap() {
+    @objc private func doubleTap(_ tapGesture: UITapGestureRecognizer) {
         delegate?.likePost(post: post)
     }
     
