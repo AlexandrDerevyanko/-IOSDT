@@ -5,17 +5,6 @@ class LoginViewController: UIViewController {
     
     var logInDelegate: LoginDelegateProtocol?
     
-//    private let viewModel: LogInViewModelProtocol
-    
-//    init(viewModel: LogInViewModelProtocol) {
-//        self.viewModel = viewModel
-//        super.init(nibName: nil, bundle: nil)
-//    }
-    
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-    
     private let point: UIView = {
         let point = UIView()
         point.backgroundColor = .lightGray
@@ -111,32 +100,28 @@ class LoginViewController: UIViewController {
         view.backgroundColor = .white
         setupUI()
         setupConstraints()
-        let users = RealmManager.defaultManager.users
-        if users.isEmpty {
-
-        } else {
-            let user = RealmManager.defaultManager.users[0]
-            DispatchQueue.main.async {
-                self.checkUserStatus(user: user)
-            }
-        }
-        
-        
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         NotificationCenter.default.addObserver(self, selector: #selector(didShowKeyboard(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didHideKeyboard(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        self.navigationItem.setHidesBackButton(true, animated: true)
+        checkUserStatus()
     }
     
-    func checkUserStatus(user: RealmUser) {
-        if user.isLogIn {
-            let profileVC = ProfileViewController(user: User(logIn: "Corgi", fullName: "Corgi Kevin", avatar: UIImage(named: "1") ?? UIImage(), status: "I'm fine"))
-             navigationController?.pushViewController(profileVC, animated: true)
+    func checkUserStatus() {
+        let auth = CoreDataManeger.defaulManager.users
+        if auth.isEmpty {
+            return
         } else {
-            
+            guard let user = auth.last else { return }
+            if user.isLogIn {
+                DispatchQueue.main.async {
+                    let profileVC = ProfileViewController(user: user)
+                    self.navigationController?.pushViewController(profileVC, animated: true)
+                }
+            }
         }
     }
         
@@ -229,7 +214,6 @@ class LoginViewController: UIViewController {
     
     @objc
     private func signUpButtonPressed() {
-//        RealmManager.defaultManager.deleteUser(user: RealmManager.defaultManager.users[0])
         let VC = SignupViewController()
         VC.signUpDelegate = MyLoginFactory().makeCheckerService()
         navigationController?.pushViewController(VC, animated: true)
@@ -248,20 +232,17 @@ extension LoginViewController {
     func logIn() {
         let email = loginTextFiled.text
         let password = passwordTextFiled.text
-        logInDelegate?.logIn(logIn: email, password: password, completion: { data, error  in
+        logInDelegate?.logIn(logIn: email, password: password, completion: { data, error, user  in
             if let error = error {
                 Alert.defaulAlert.errors(showIn: self, error: error)
-            } else {
-                switch data {
-                case .logIn:
-                    let profileVC = ProfileViewController(user: User(logIn: "Corgi", fullName: "Corgi Kevin", avatar: UIImage(named: "1") ?? UIImage(), status: "I'm fine"))
-                    self.navigationController?.pushViewController(profileVC, animated: true)
-                case .signUp:
-                    return
-                default:
-                    return
-                }
             }
+            guard let user = user else {
+                Alert.defaulAlert.errors(showIn: self, error: .invalidPassword)
+                return
+            }
+            CoreDataManeger.defaulManager.authorization(user: user)
+            let profileVC = ProfileViewController(user: user)
+            self.navigationController?.pushViewController(profileVC, animated: true)
         })
     }
 }

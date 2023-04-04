@@ -22,6 +22,17 @@ class SignupViewController: UIViewController {
         return stackView
     }()
     
+    private let fullNameTextField: TextFieldWithPadding = {
+        let textField = TextFieldWithPadding()
+        textField.textColor = .black
+        textField.font = UIFont.systemFont(ofSize: 16)
+        textField.placeholder = "Full name"
+        textField.text = "Corgi Kevin"
+        textField.autocapitalizationType = .none
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        return textField
+    }()
+    
     private let loginTextField: TextFieldWithPadding = {
         let textField = TextFieldWithPadding()
         textField.textColor = .black
@@ -79,6 +90,7 @@ class SignupViewController: UIViewController {
     private func setupUI() {
         view.backgroundColor = .white
         view.addSubview(stackView)
+        stackView.addArrangedSubview(fullNameTextField)
         stackView.addArrangedSubview(loginTextField)
         stackView.addArrangedSubview(passwordTextField)
         stackView.addArrangedSubview(confirmPasswordTextField)
@@ -95,6 +107,9 @@ class SignupViewController: UIViewController {
             make.right.equalTo(view).offset(-20)
         }
         
+        fullNameTextField.snp.makeConstraints { make in
+            make.height.equalTo(40)
+        }
         loginTextField.snp.makeConstraints { make in
             make.height.equalTo(40)
         }
@@ -131,15 +146,17 @@ class SignupViewController: UIViewController {
     
     @objc
     private func pushCreateAccountButton() {
-        singUp()
+        signUp()
     }
     
-    private func singUp() {
+    private func signUp() {
+        
+        let fullName = fullNameTextField.text
         let email = loginTextField.text
         let password = passwordTextField.text
         let confirmPassword = confirmPasswordTextField.text
-        
-        signUpDelegate?.signUp(email: email, password: password, passwordConfirmation: confirmPassword, completion: { data, error in
+
+        signUpDelegate?.signUp(fullName: fullName, email: email, password: password, passwordConfirmation: confirmPassword, completion: { data, error in
             if let error = error {
                 Alert.defaulAlert.errors(showIn: self, error: error)
             } else {

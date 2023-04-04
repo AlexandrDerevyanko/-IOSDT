@@ -8,7 +8,7 @@
 import Foundation
 
 enum AutorizationErrors: Error {
-    case emptyPasswordOrEmail
+    case empty
     case invalidPassword
     case weakPassword
     case mismatchPassword
@@ -16,13 +16,14 @@ enum AutorizationErrors: Error {
     case emailAlreadyInUse
     case invalidEmail
     case unexpected
+    case autorization
 }
 
 extension AutorizationErrors: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .emptyPasswordOrEmail:
-            return NSLocalizedString("Похоже, вы оставили поле Email или Password пустым",
+        case .empty:
+            return NSLocalizedString("Похоже, вы оставили пустое поле",
                                      comment: "")
         case .invalidPassword:
             return NSLocalizedString("Не верный email или пароль",
@@ -45,6 +46,8 @@ extension AutorizationErrors: LocalizedError {
         case .unexpected:
             return NSLocalizedString("Что то пошло не так",
                                      comment: "")
+        case .autorization:
+            return NSLocalizedString("Пожалуйста авторизируйтесь", comment: "")
         }
     }
 }

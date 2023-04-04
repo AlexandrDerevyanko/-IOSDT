@@ -25,44 +25,27 @@ class TabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setup()
+        setupUI()
     }
     
-    private func setup() {
+    func setupUI() {
+        
         loginVC.logInDelegate = MyLoginFactory().makeCheckerService()
         feedTabNavigationController = UINavigationController.init(rootViewController: FeedViewController())
         logInTabNavigationController = UINavigationController.init(rootViewController: loginVC)
-        favoritesTabNavigationController = UINavigationController.init(rootViewController: PostViewController())
-    }
-    
-    func setupUILogOutStatus() {
+        favoritesTabNavigationController = UINavigationController.init(rootViewController: FavoritesViewController())
 
-        self.viewControllers = [feedTabNavigationController, logInTabNavigationController]
+        self.viewControllers = [feedTabNavigationController, logInTabNavigationController, favoritesTabNavigationController]
         
         let firstItem = UITabBarItem(title: "Feed",
-                                 image: UIImage(systemName: "square.and.arrow.up"), tag: 0)
-        let secondItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "tray.and.arrow.up"), tag: 1)
+                                 image: UIImage(systemName: "newspaper"), tag: 0)
+        let secondItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person"), tag: 1)
+        let thirdItem = UITabBarItem(title: "Favorites", image: UIImage(systemName: "star"), tag: 1)
         
         feedTabNavigationController.tabBarItem = firstItem
         logInTabNavigationController.tabBarItem = secondItem
+        favoritesTabNavigationController.tabBarItem = thirdItem
         
     }
-    
-    func setupUILogInStatus() {
-
-        self.viewControllers = [logInTabNavigationController, favoritesTabNavigationController]
-
-        let firstItem = UITabBarItem(title: "Profile",
-                                 image: UIImage(systemName: "square.and.arrow.up"), tag: 3)
-        let secondItem = UITabBarItem(title: "Favorites", image: UIImage(systemName: "tray.and.arrow.up"), tag: 4)
-
-        logInTabNavigationController.tabBarItem = firstItem
-        favoritesTabNavigationController.tabBarItem = secondItem
-        
-        UITabBar.appearance().tintColor = .black
-        UITabBar.appearance().backgroundColor = .systemGray6
-
-    }
-    
     
 }

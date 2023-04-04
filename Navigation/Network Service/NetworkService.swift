@@ -44,29 +44,29 @@ class NetworkService: NetworkServiceProtocol {
     
     func orbitalPeriodRequest(completion: @escaping (String) -> Void) {
         
-        guard let url = URL(string: "https://swapi.dev/api/planets/1") else {
-            completion("")
-            return
-        }
-        let request = URLRequest(url: url)
-        let task = URLSession.shared.dataTask(with: request) { data, _, _ in
-            guard let data = data else {
-                DispatchQueue.main.async {
-                    completion("")
-                }
-                return
-            }
-            do {
-                let period = try JSONDecoder().decode(Planet.self, from: data)
-                DispatchQueue.main.async {
-                    completion(period.orbitalPeriod)
-                }
-            }
-            catch {
-                print(error)
-            }
-        }
-        task.resume()
+//        guard let url = URL(string: "https://swapi.dev/api/planets/1") else {
+//            completion("")
+//            return
+//        }
+//        let request = URLRequest(url: url)
+//        let task = URLSession.shared.dataTask(with: request) { data, _, _ in
+//            guard let data = data else {
+//                DispatchQueue.main.async {
+//                    completion("")
+//                }
+//                return
+//            }
+//            do {
+//                let period = try JSONDecoder().decode(Planet.self, from: data)
+//                DispatchQueue.main.async {
+//                    completion(period.orbitalPeriod)
+//                }
+//            }
+//            catch {
+//                print(error)
+//            }
+//        }
+//        task.resume()
     }
 
 

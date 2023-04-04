@@ -15,11 +15,13 @@
 		FF3EC6E8298B678B006D7A72 /* FirstSectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3EC6E7298B678B006D7A72 /* FirstSectionTableViewCell.swift */; };
 		FF3EC6EA298B67C3006D7A72 /* PhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3EC6E9298B67C3006D7A72 /* PhotosViewController.swift */; };
 		FF3EC6EC298B68A1006D7A72 /* PhotosCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3EC6EB298B68A1006D7A72 /* PhotosCollectionViewCell.swift */; };
-		FF5F226829D4294C0035F975 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = FF5F226729D4294C0035F975 /* Realm */; };
-		FF5F226A29D4294C0035F975 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FF5F226929D4294C0035F975 /* RealmSwift */; };
 		FF5F226D29D43AEE0035F975 /* Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5F226C29D43AEE0035F975 /* Alerts.swift */; };
 		FF5F227029D4405A0035F975 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5F226F29D4405A0035F975 /* Model.swift */; };
 		FF5F227229D440650035F975 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5F227129D440650035F975 /* RealmManager.swift */; };
+		FF6D937129DAE2B1007AC94E /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6D937029DAE2B1007AC94E /* ImagePicker.swift */; };
+		FF6D937329DAEF2F007AC94E /* NewPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6D937229DAEF2F007AC94E /* NewPostViewController.swift */; };
+		FF6D937529DC2C36007AC94E /* ProfileDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6D937429DC2C36007AC94E /* ProfileDelegate.swift */; };
+		FF6D937729DC2E2B007AC94E /* FavoritePostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6D937629DC2E2B007AC94E /* FavoritePostTableViewCell.swift */; };
 		FF7B457F29B6F5BC002C4369 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7B457E29B6F5BC002C4369 /* Errors.swift */; };
 		FF8395FF29C33C6500BA40D9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FF8395FE29C33C6500BA40D9 /* GoogleService-Info.plist */; };
 		FF83960229C343BE00BA40D9 /* DataJSON.swift 18-30-32-395.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF83960129C343BE00BA40D9 /* DataJSON.swift 18-30-32-395.swift */; };
@@ -31,6 +33,7 @@
 		FF8D39BC2983C220002995D1 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFEF825291FCFD80025FB74 /* Post.swift */; };
 		FF8FEDF32950679300D37BB9 /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8FEDF22950679300D37BB9 /* PostTableViewCell.swift */; };
 		FFAA6BE829D73628001A3365 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAA6BE729D73628001A3365 /* TabBarController.swift */; };
+		FFAA6BF029D76780001A3365 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAA6BEF29D76780001A3365 /* FavoritesViewController.swift */; };
 		FFB3108429B9D1E600D32055 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB3108329B9D1E600D32055 /* NetworkService.swift */; };
 		FFD2BB2C2943450A00EF3D5C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD2BB2B2943450A00EF3D5C /* LoginViewController.swift */; };
 		FFD2BB2E29436EDD00EF3D5C /* Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD2BB2D29436EDD00EF3D5C /* Custom.swift */; };
@@ -82,6 +85,10 @@
 		FF5F226C29D43AEE0035F975 /* Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alerts.swift; sourceTree = "<group>"; };
 		FF5F226F29D4405A0035F975 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		FF5F227129D440650035F975 /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
+		FF6D937029DAE2B1007AC94E /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		FF6D937229DAEF2F007AC94E /* NewPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostViewController.swift; sourceTree = "<group>"; };
+		FF6D937429DC2C36007AC94E /* ProfileDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDelegate.swift; sourceTree = "<group>"; };
+		FF6D937629DC2E2B007AC94E /* FavoritePostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritePostTableViewCell.swift; sourceTree = "<group>"; };
 		FF7B457E29B6F5BC002C4369 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		FF8395FE29C33C6500BA40D9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FF83960129C343BE00BA40D9 /* DataJSON.swift 18-30-32-395.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DataJSON.swift 18-30-32-395.swift"; sourceTree = "<group>"; };
@@ -91,6 +98,7 @@
 		FF8D39B12983C19E002995D1 /* StorageService.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = StorageService.docc; sourceTree = "<group>"; };
 		FF8FEDF22950679300D37BB9 /* PostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
 		FFAA6BE729D73628001A3365 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		FFAA6BEF29D76780001A3365 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		FFB3108329B9D1E600D32055 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		FFD2BB2B2943450A00EF3D5C /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		FFD2BB2D29436EDD00EF3D5C /* Custom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Custom.swift; sourceTree = "<group>"; };
@@ -121,8 +129,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FF5F226A29D4294C0035F975 /* RealmSwift in Frameworks */,
-				FF5F226829D4294C0035F975 /* Realm in Frameworks */,
 				FFE8D380299D089600FD9508 /* SnapKit in Frameworks */,
 				FF8D39B62983C19E002995D1 /* StorageService.framework in Frameworks */,
 				FF3BD3C92993FFCE00F4CE31 /* iOSIntPackage in Frameworks */,
@@ -197,6 +203,14 @@
 			path = Realm;
 			sourceTree = "<group>";
 		};
+		FF6D936F29DAE28D007AC94E /* ImagePicker */ = {
+			isa = PBXGroup;
+			children = (
+				FF6D937029DAE2B1007AC94E /* ImagePicker.swift */,
+			);
+			path = ImagePicker;
+			sourceTree = "<group>";
+		};
 		FF7B457D29B6F5B0002C4369 /* Errors */ = {
 			isa = PBXGroup;
 			children = (
@@ -223,6 +237,15 @@
 			path = StorageService;
 			sourceTree = "<group>";
 		};
+		FFAA6BEE29D76766001A3365 /* Favorites */ = {
+			isa = PBXGroup;
+			children = (
+				FFAA6BEF29D76780001A3365 /* FavoritesViewController.swift */,
+				FF6D937629DC2E2B007AC94E /* FavoritePostTableViewCell.swift */,
+			);
+			path = Favorites;
+			sourceTree = "<group>";
+		};
 		FFB3108529BF2AEA00D32055 /* Network Service */ = {
 			isa = PBXGroup;
 			children = (
@@ -239,6 +262,8 @@
 				FFD64C4B2917DF250015F6B3 /* ProfileViewController.swift */,
 				FF31F41D29471712009C1461 /* ProfileTableHederView.swift */,
 				FF8FEDF22950679300D37BB9 /* PostTableViewCell.swift */,
+				FF6D937229DAEF2F007AC94E /* NewPostViewController.swift */,
+				FF6D937429DC2C36007AC94E /* ProfileDelegate.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -264,17 +289,19 @@
 		FFD64C162916EC6E0015F6B3 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
+				FF6D936F29DAE28D007AC94E /* ImagePicker */,
+				FF1D2B522958095A00D0E676 /* App */,
+				FFAA6BEE29D76766001A3365 /* Favorites */,
+				FFD2BB2829408E9600EF3D5C /* Profile */,
 				FF0DB71F29D6FB6F00F492C9 /* CoreData */,
 				FF5F226E29D440440035F975 /* Realm */,
 				FF5F226B29D43ADD0035F975 /* Alerts */,
 				FF83960029C33C8500BA40D9 /* Firebase */,
 				FFB3108529BF2AEA00D32055 /* Network Service */,
 				FF7B457D29B6F5B0002C4369 /* Errors */,
-				FFD2BB2829408E9600EF3D5C /* Profile */,
 				FF1D2B53295809C900D0E676 /* Feed */,
 				FFE8D3CB29A8BB3700FD9508 /* Photos */,
 				FFE8D3BD29A003B800FD9508 /* Info */,
-				FF1D2B522958095A00D0E676 /* App */,
 				FF1D2B512958094700D0E676 /* Other */,
 				FFD64C202916EC6F0015F6B3 /* Assets.xcassets */,
 				FFD64C222916EC6F0015F6B3 /* LaunchScreen.storyboard */,
@@ -351,8 +378,6 @@
 			packageProductDependencies = (
 				FF3BD3C82993FFCE00F4CE31 /* iOSIntPackage */,
 				FFE8D37F299D089600FD9508 /* SnapKit */,
-				FF5F226729D4294C0035F975 /* Realm */,
-				FF5F226929D4294C0035F975 /* RealmSwift */,
 			);
 			productName = Navigation;
 			productReference = FFD64C142916EC6E0015F6B3 /* Navigation.app */;
@@ -388,7 +413,6 @@
 			packageReferences = (
 				FF3BD3C72993FFCE00F4CE31 /* XCRemoteSwiftPackageReference "iOSIntPackage" */,
 				FFE8D37E299D089600FD9508 /* XCRemoteSwiftPackageReference "SnapKit" */,
-				FF5F226629D4294C0035F975 /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			productRefGroup = FFD64C152916EC6E0015F6B3 /* Products */;
 			projectDirPath = "";
@@ -435,6 +459,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FFD64C522918C81C0015F6B3 /* PostViewController.swift in Sources */,
+				FFAA6BF029D76780001A3365 /* FavoritesViewController.swift in Sources */,
 				FFD64C4C2917DF250015F6B3 /* ProfileViewController.swift in Sources */,
 				FF5F227229D440650035F975 /* RealmManager.swift in Sources */,
 				FFD2BB2C2943450A00EF3D5C /* LoginViewController.swift in Sources */,
@@ -445,11 +470,15 @@
 				FF83960229C343BE00BA40D9 /* DataJSON.swift 18-30-32-395.swift in Sources */,
 				FF83960829C4678D00BA40D9 /* SignupViewController.swift in Sources */,
 				FF3EC6E8298B678B006D7A72 /* FirstSectionTableViewCell.swift in Sources */,
+				FF6D937329DAEF2F007AC94E /* NewPostViewController.swift in Sources */,
 				FF7B457F29B6F5BC002C4369 /* Errors.swift in Sources */,
 				FFE8D3B6299FAC2E00FD9508 /* FeedView.swift in Sources */,
 				FF3EC6E6298B6729006D7A72 /* UserService.swift in Sources */,
+				FF6D937729DC2E2B007AC94E /* FavoritePostTableViewCell.swift in Sources */,
 				FFAA6BE829D73628001A3365 /* TabBarController.swift in Sources */,
 				FF0DB72229D6FB8B00F492C9 /* CoreData.xcdatamodeld in Sources */,
+				FF6D937529DC2C36007AC94E /* ProfileDelegate.swift in Sources */,
+				FF6D937129DAE2B1007AC94E /* ImagePicker.swift in Sources */,
 				FFD2BB2E29436EDD00EF3D5C /* Custom.swift in Sources */,
 				FF3EC6EA298B67C3006D7A72 /* PhotosViewController.swift in Sources */,
 				FF5F227029D4405A0035F975 /* Model.swift in Sources */,
@@ -756,14 +785,6 @@
 				kind = branch;
 			};
 		};
-		FF5F226629D4294C0035F975 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/realm/realm-swift.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		FFE8D37E299D089600FD9508 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -779,16 +800,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FF3BD3C72993FFCE00F4CE31 /* XCRemoteSwiftPackageReference "iOSIntPackage" */;
 			productName = iOSIntPackage;
-		};
-		FF5F226729D4294C0035F975 /* Realm */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FF5F226629D4294C0035F975 /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = Realm;
-		};
-		FF5F226929D4294C0035F975 /* RealmSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FF5F226629D4294C0035F975 /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = RealmSwift;
 		};
 		FFE8D37F299D089600FD9508 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -9,6 +9,8 @@ import UIKit
 
 class ProfileHeaderView: UIView {
     
+    var delegate: ProfileDelegate?
+    var user: User!
     var statusText: String = ""
 
     let statusTextField: UITextField = {
@@ -27,7 +29,7 @@ class ProfileHeaderView: UIView {
 
     let avatarImageView: UIImageView = {
         let myView = UIImageView()
-        myView.image = UIImage(named: "corgi")!
+//        myView.image = UIImage(named: "corgi")!
         myView.layer.cornerRadius = 50
         myView.clipsToBounds = true
         myView.layer.borderColor = UIColor.white.cgColor
@@ -54,7 +56,8 @@ class ProfileHeaderView: UIView {
         return label
     }()
     
-    private lazy var setStatusButton = CustomButton(title: "Set status", titleColor: .white, bgColor: .blue, action: setStatusButtonPressed)
+    private lazy var setStatusButton = CustomButton(title: "Set status", titleColor: .white, bgColor: UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1), action: setStatusButtonPressed)
+    private lazy var newPostButton = CustomButton(title: "New post", titleColor: .white, bgColor: UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1), action: newPostButtonPressed)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -82,20 +85,41 @@ class ProfileHeaderView: UIView {
         addSubview(statusLabel)
         addSubview(fullNameLabel)
         addSubview(avatarImageView)
+        addSubview(newPostButton)
         setupConstraints()
     }
     
-    func setup(with user: User) {
+    func setup() {
         statusLabel.text = user.status
         fullNameLabel.text = user.fullName
-        avatarImageView.image = user.avatar
+        avatarImageView.image = UIImage(data: user.avatar ?? Data())
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
+        avatarImageView.isUserInteractionEnabled = true
+        avatarImageView.addGestureRecognizer(tapGestureRecognizer)
     }
+
+    @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
+        ImagePicker.defaultPicker.getImage(in: (self.window?.rootViewController)!) { imageData in
+            DispatchQueue.main.async {
+                if let imageData {
+                    self.avatarImageView.image = UIImage(data: imageData)
+                    CoreDataManeger.defaulManager.updateUserAvatar(user: self.user, imageData: imageData)
+                }
+            }
+        }
+    }
+    
         
     @objc
     private func setStatusButtonPressed() {
+        CoreDataManeger.defaulManager.updateUserStatus(user: user, newStatus: statusTextField.text)
         statusLabel.text = statusTextField.text ?? ""
     }
 
+    @objc
+    private func newPostButtonPressed() {
+        delegate?.pushNewPostViewController()
+    }
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
@@ -112,7 +136,7 @@ class ProfileHeaderView: UIView {
             setStatusButton.leftAnchor.constraint(equalTo: leftAnchor, constant: 16),
             setStatusButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -16),
             setStatusButton.heightAnchor.constraint(equalToConstant: 50),
-            setStatusButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
+            setStatusButton.bottomAnchor.constraint(equalTo: newPostButton.topAnchor, constant: -16),
             
             statusLabel.bottomAnchor.constraint(equalTo: setStatusButton.topAnchor, constant: -70),
             statusLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -120,8 +144,13 @@ class ProfileHeaderView: UIView {
             statusTextField.bottomAnchor.constraint(equalTo: setStatusButton.topAnchor, constant: -15),
             statusTextField.leftAnchor.constraint(equalTo: leftAnchor, constant: 132),
             statusTextField.rightAnchor.constraint(equalTo: rightAnchor, constant: -20),
-            statusTextField.heightAnchor.constraint(equalToConstant: 40)
+            statusTextField.heightAnchor.constraint(equalToConstant: 40),
 
+            newPostButton.topAnchor.constraint(equalTo: setStatusButton.bottomAnchor, constant: 16),
+            newPostButton.leftAnchor.constraint(equalTo: leftAnchor, constant: 16),
+            newPostButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -16),
+            newPostButton.heightAnchor.constraint(equalToConstant: 50),
+            newPostButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
         ])
     }
     
