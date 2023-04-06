@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FF06E04429DD8B63003C8095 /* SearchPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF06E04329DD8B63003C8095 /* SearchPicker.swift */; };
 		FF0DB72229D6FB8B00F492C9 /* CoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FF0DB72029D6FB8B00F492C9 /* CoreData.xcdatamodeld */; };
 		FF0DB72429D6FBC400F492C9 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0DB72329D6FBC400F492C9 /* CoreDataManager.swift */; };
 		FF31F41E29471712009C1461 /* ProfileTableHederView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF31F41D29471712009C1461 /* ProfileTableHederView.swift */; };
@@ -75,6 +76,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		FF06E04329DD8B63003C8095 /* SearchPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPicker.swift; sourceTree = "<group>"; };
 		FF0DB72129D6FB8B00F492C9 /* CoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreData.xcdatamodel; sourceTree = "<group>"; };
 		FF0DB72329D6FBC400F492C9 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		FF31F41D29471712009C1461 /* ProfileTableHederView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableHederView.swift; sourceTree = "<group>"; };
@@ -138,6 +140,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FF06E04229DD8B50003C8095 /* SearchPicker */ = {
+			isa = PBXGroup;
+			children = (
+				FF06E04329DD8B63003C8095 /* SearchPicker.swift */,
+			);
+			path = SearchPicker;
+			sourceTree = "<group>";
+		};
 		FF0DB71F29D6FB6F00F492C9 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
@@ -289,6 +299,7 @@
 		FFD64C162916EC6E0015F6B3 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
+				FF06E04229DD8B50003C8095 /* SearchPicker */,
 				FF6D936F29DAE28D007AC94E /* ImagePicker */,
 				FF1D2B522958095A00D0E676 /* App */,
 				FFAA6BEE29D76766001A3365 /* Favorites */,
@@ -459,6 +470,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FFD64C522918C81C0015F6B3 /* PostViewController.swift in Sources */,
+				FF06E04429DD8B63003C8095 /* SearchPicker.swift in Sources */,
 				FFAA6BF029D76780001A3365 /* FavoritesViewController.swift in Sources */,
 				FFD64C4C2917DF250015F6B3 /* ProfileViewController.swift in Sources */,
 				FF5F227229D440650035F975 /* RealmManager.swift in Sources */,

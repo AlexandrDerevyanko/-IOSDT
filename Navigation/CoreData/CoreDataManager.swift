@@ -48,16 +48,22 @@ class CoreDataManeger {
     }
     
     func addUser(logIn: String, password: String, fullName: String, avatar: Data?) {
-        let user = User(context: persistentContainer.viewContext)
-        user.login = logIn
-        user.password = password
-        user.fullName = fullName
-        user.dateCreated = Date()
-        user.avatar = avatar
-        user.isLogIn = true
         
-        saveContext()
-        reloadUsers()
+        persistentContainer.performBackgroundTask { contextBackground in
+            let user = User(context: contextBackground)
+            user.login = logIn
+            user.password = password
+            user.fullName = fullName
+            user.dateCreated = Date()
+            user.avatar = avatar
+            user.isLogIn = true
+            
+            do {
+                try contextBackground.save()
+            } catch {
+                print(error)
+            }
+        }
     }
     
     func updateUserStatus(user: User, newStatus: String?) {
@@ -93,23 +99,31 @@ class CoreDataManeger {
     var posts: [Post] = []
     func reloadPosts() {
         let fetchRequest = Post.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: true)]
-        do {
-            posts = try persistentContainer.viewContext.fetch(fetchRequest)
-        } catch {
-            print(error)
-        }
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
+        posts = (try? persistentContainer.viewContext.fetch(fetchRequest)) ?? []
     }
     
     func addPost(text: String, image: Data?, for user: User) {
-        let post = Post(context: persistentContainer.viewContext)
-        post.user = user
-        post.author = user.fullName
-        post.text = text
-        post.image = image
-        
-        saveContext()
-        reloadPosts()
+        persistentContainer.performBackgroundTask { contextBackground in
+            let post = Post(context: contextBackground)
+            post.author = user.fullName
+            post.text = text
+            post.image = image
+            
+            post.user = self.getUser(login: user.login!, context: contextBackground)
+            
+            do {
+                try contextBackground.save()
+            } catch {
+                print(error)
+            }
+        }
+    }
+    
+    func getUser(login: String, context: NSManagedObjectContext) -> User {
+        let fetchRequest = User.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "login == %@", login)
+        return ((try? context.fetch(fetchRequest))?.first)!
     }
     
     func updatePost(post: Post, newText: String, imageData: Data?) {

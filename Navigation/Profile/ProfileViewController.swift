@@ -14,6 +14,7 @@ class ProfileViewController: UIViewController, ProfileDelegate {
     init(user: User) {
         self.user = user
         super.init(nibName: nil, bundle: nil)
+        reloadData()
     }
     
     required init?(coder: NSCoder) {
@@ -36,7 +37,7 @@ class ProfileViewController: UIViewController, ProfileDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        
+//        reloadData()
         let signOutButton = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(pushSignOutButton))
         navigationItem.leftBarButtonItem = signOutButton
     }
@@ -53,13 +54,16 @@ class ProfileViewController: UIViewController, ProfileDelegate {
         navigationController?.navigationBar.compactAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         self.navigationController?.isNavigationBarHidden = false
-        tableView.reloadData()
+        reloadData()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        tableView.reloadData()
+    private func reloadData() {
+        DispatchQueue.main.async {
+            CoreDataManeger.defaulManager.reloadPosts()
+            self.tableView.reloadData()
+        }
     }
+    
     
     private func setupView() {
         view.backgroundColor = .systemBackground
@@ -85,11 +89,6 @@ class ProfileViewController: UIViewController, ProfileDelegate {
             alert.addAction(UIAlertAction(title: "Ok", style: .default))
             self.present(alert, animated: true)
         }
-    }
-    
-    func pushNewPostViewController() {
-        let newPostVC = NewPostViewController(user: user)
-        navigationController?.pushViewController(newPostVC, animated: true)
     }
     
     @objc
@@ -179,16 +178,26 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
     
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
-    }
+//    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+//        return true
+//    }
+//
+//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+//        if editingStyle == .delete {
+//            let postInCell = posts[indexPath.row]
+//            CoreDataManeger.defaulManager.deletePost(post: postInCell)
+//            tableView.deleteRows(at: [indexPath], with: .fade)
+//        }
+//    }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            let postInCell = posts[indexPath.row]
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let action = UIContextualAction(style: .destructive, title: "Delete") { action, view, complete in
+            let postInCell = self.posts[indexPath.row]
             CoreDataManeger.defaulManager.deletePost(post: postInCell)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
+
+        return UISwipeActionsConfiguration(actions: [action])
     }
     
 }
@@ -200,6 +209,12 @@ extension ProfileViewController {
         navigationController?.pushViewController(photosVC, animated: true)
     }
     
+    func pushNewPostViewController() {
+        let newPostVC = NewPostViewController(user: user)
+        newPostVC.delegate = self
+        navigationController?.pushViewController(newPostVC, animated: true)
+    }
+    
     func changePost(post: Post) {
         let postVC = NewPostViewController(post: post, user: user)
         navigationController?.pushViewController(postVC, animated: true)
@@ -207,5 +222,11 @@ extension ProfileViewController {
     
     func likePost(post: Post) {
         CoreDataManeger.defaulManager.favoritePost(post: post, isFavorite: true)
+    }
+    
+    func reloadPostData() {
+//            CoreDataManeger.defaulManager.reloadUsers()
+//            self.tableView.reloadData()
+//
     }
 }

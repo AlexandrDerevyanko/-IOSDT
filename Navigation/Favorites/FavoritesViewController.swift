@@ -10,21 +10,23 @@ import UIKit
 
 class FavoritesViewController: UIViewController {
         
+    var isSearch: Bool = false
+    var searchText: String = ""
     var user: User?
     var filteredPosts: [Post] {
         guard let user else { return [] }
         return user.postsSorted
     }
     var posts: [Post] {
-        var posts: [Post] = []
-        for i in filteredPosts {
-            if i.isFavorite {
-                posts.append(i)
-            }
-                
+        if isSearch {
+            return getSearchPosts()
+        } else {
+            return getPosts()
         }
-        return posts
     }
+    
+    lazy var searchButton = UIBarButtonItem(title: "Search", style: .plain, target: self, action: #selector(pushSearchButton))
+    lazy var clearButton = UIBarButtonItem(title: "Clear", style: .plain, target: self, action: #selector(pushClearButton))
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
@@ -42,6 +44,7 @@ class FavoritesViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         checkUserStatus()
+        setupButtons()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -78,7 +81,32 @@ class FavoritesViewController: UIViewController {
         ])
     }
     
-    func checkUserStatus() {
+    private func getPosts() -> [Post] {
+        var posts: [Post] = []
+        for i in filteredPosts {
+            if i.isFavorite {
+                posts.append(i)
+            }
+        }
+        return posts
+    }
+    
+    private func getSearchPosts() -> [Post] {
+        var posts: [Post] = []
+        for i in filteredPosts {
+            if i.user?.login == searchText {
+                posts.append(i)
+            }
+        }
+        return posts
+    }
+    
+    private func setupButtons() {
+        clearButton.isHidden = true
+        navigationItem.rightBarButtonItems = [searchButton, clearButton]
+    }
+    
+    private func checkUserStatus() {
         let auth = CoreDataManeger.defaulManager.users
         if auth.isEmpty {
             navigationController?.popToRootViewController(animated: true)
@@ -96,6 +124,23 @@ class FavoritesViewController: UIViewController {
                 Alert.defaulAlert.errors(showIn: self, error: .autorization)
             }
         }
+    }
+    
+    @objc
+    private func pushSearchButton() {
+        SearchPicker.defaultPicker.getText(showPickerIn: self, title: "Поиск", message: "Введите имя пользователя для поиска") { text in
+            self.searchText = text
+            self.isSearch = true
+            self.tableView.reloadData()
+            self.clearButton.isHidden = false
+        }
+    }
+    
+    @objc
+    private func pushClearButton() {
+        self.isSearch = false
+        self.clearButton.isHidden = true
+        tableView.reloadData()
     }
     
 }

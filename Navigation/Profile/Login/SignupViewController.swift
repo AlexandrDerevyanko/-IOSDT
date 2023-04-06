@@ -164,7 +164,7 @@ class SignupViewController: UIViewController {
                 case .logIn:
                     return
                 case .signUp:
-                    self.navigationController?.popToRootViewController(animated: true)
+                    self.navigationController?.popViewController(animated: true)
                 default:
                     return
                 }

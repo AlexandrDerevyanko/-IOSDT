@@ -111,18 +111,22 @@ class LoginViewController: UIViewController {
     }
     
     func checkUserStatus() {
-        let auth = CoreDataManeger.defaulManager.users
-        if auth.isEmpty {
-            return
-        } else {
-            guard let user = auth.last else { return }
-            if user.isLogIn {
-                DispatchQueue.main.async {
-                    let profileVC = ProfileViewController(user: user)
-                    self.navigationController?.pushViewController(profileVC, animated: true)
+        DispatchQueue.main.async {
+            CoreDataManeger.defaulManager.reloadUsers()
+            let auth = CoreDataManeger.defaulManager.users
+            if auth.isEmpty {
+                return
+            } else {
+                guard let user = auth.last else { return }
+                if user.isLogIn {
+                    DispatchQueue.main.async {
+                        let profileVC = ProfileViewController(user: user)
+                        self.navigationController?.pushViewController(profileVC, animated: true)
+                    }
                 }
             }
         }
+
     }
         
     private func setupUI() {

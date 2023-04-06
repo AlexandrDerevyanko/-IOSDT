@@ -11,6 +11,7 @@ import SnapKit
 
 class NewPostViewController: UIViewController {
     
+    var delegate: ProfileDelegate?
     var post: Post?
     var user: User
     var imageCoreData: Data?
@@ -150,7 +151,7 @@ class NewPostViewController: UIViewController {
         }
         if let post {
             CoreDataManeger.defaulManager.updatePost(post: post, newText: text, imageData: imageCoreData)
-            CoreDataManeger.defaulManager.saveContext()
+//            CoreDataManeger.defaulManager.saveContext()
             navigationController?.popViewController(animated: true)
         } else {
             CoreDataManeger.defaulManager.addPost(text: text, image: imageCoreData ?? Data(), for: user)
