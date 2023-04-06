@@ -128,7 +128,7 @@ class FavoritesViewController: UIViewController {
     
     @objc
     private func pushSearchButton() {
-        SearchPicker.defaultPicker.getText(showPickerIn: self, title: "Поиск", message: "Введите имя пользователя для поиска") { text in
+        SearchPicker.defaultPicker.getText(showPickerIn: self, title: "Поиск", message: "Введите email пользователя для поиска") { text in
             self.searchText = text
             self.isSearch = true
             self.tableView.reloadData()
