@@ -6,9 +6,13 @@ import iOSIntPackage
 class ProfileViewController: UIViewController, ProfileDelegate {
         
     var user: User
+    var currentUser: User? {
+        return nil
+    }
     lazy var profileHeaderView = ProfileHeaderView()
     var posts: [Post] {
-        return user.postsSorted
+        return CoreDataManeger.defaulManager.posts.filter{$0.user == user}
+//        return user.postsSorted
     }
     
     init(user: User) {
@@ -37,7 +41,6 @@ class ProfileViewController: UIViewController, ProfileDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-//        reloadData()
         let signOutButton = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(pushSignOutButton))
         navigationItem.leftBarButtonItem = signOutButton
     }
@@ -178,18 +181,6 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
     
-//    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-//        return true
-//    }
-//
-//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-//        if editingStyle == .delete {
-//            let postInCell = posts[indexPath.row]
-//            CoreDataManeger.defaulManager.deletePost(post: postInCell)
-//            tableView.deleteRows(at: [indexPath], with: .fade)
-//        }
-//    }
-    
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let action = UIContextualAction(style: .destructive, title: "Delete") { action, view, complete in
             let postInCell = self.posts[indexPath.row]
@@ -224,9 +215,4 @@ extension ProfileViewController {
         CoreDataManeger.defaulManager.favoritePost(post: post, isFavorite: true)
     }
     
-    func reloadPostData() {
-//            CoreDataManeger.defaulManager.reloadUsers()
-//            self.tableView.reloadData()
-//
-    }
 }

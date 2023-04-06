@@ -11,5 +11,4 @@ protocol ProfileDelegate {
     func pushNewPostViewController()
     func changePost(post: Post)
     func likePost(post: Post)
-    func reloadPostData()
 }

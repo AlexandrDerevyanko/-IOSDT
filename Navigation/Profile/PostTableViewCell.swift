@@ -5,9 +5,11 @@ class PostTableViewCell: UITableViewCell {
     
     var post: Post!
     var delegate: ProfileDelegate?
+    var buttonTapCallback: () -> ()  = { }
     
     private let images: UIImageView = {
         let images = UIImageView()
+        images.contentMode = .scaleAspectFit
         images.translatesAutoresizingMaskIntoConstraints = false
         return images
     }()
@@ -38,6 +40,13 @@ class PostTableViewCell: UITableViewCell {
         return likes
     }()
     
+    private lazy var likeButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "hand.thumbsup"), for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     private let views: UILabel = {
         let views = UILabel()
         views.font = UIFont.systemFont(ofSize: 16)
@@ -48,8 +57,8 @@ class PostTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        addSingleAndDoubleTapGesture()
         setupView()
+        addSingleAndDoubleTapGesture()
         #if DEBUG
 //        backgroundColor = .cyan
         #endif
@@ -83,6 +92,7 @@ class PostTableViewCell: UITableViewCell {
         addSubview(authors)
         addSubview(descriptions)
         addSubview(likes)
+        addSubview(likeButton)
         addSubview(views)
         
         NSLayoutConstraint.activate([
@@ -104,6 +114,11 @@ class PostTableViewCell: UITableViewCell {
             likes.topAnchor.constraint(equalTo: descriptions.bottomAnchor, constant: 16),
             likes.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             likes.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
+            
+            likeButton.leadingAnchor.constraint(equalTo: likes.trailingAnchor, constant: 16),
+            likeButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
+//            likeButton.heightAnchor.constraint(equalToConstant: 20),
+//            likeButton.widthAnchor.constraint(equalToConstant: 20),
 
             views.topAnchor.constraint(equalTo: descriptions.bottomAnchor, constant: 16),
             views.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
