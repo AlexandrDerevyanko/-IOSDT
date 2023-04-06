@@ -3,15 +3,22 @@ import UIKit
 import StorageService
 import iOSIntPackage
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: UIViewController, ProfileDelegate {
         
-    private let viewModel: ProfileViewModelProtocol
     var user: User
+    var currentUser: User? {
+        return nil
+    }
+    lazy var profileHeaderView = ProfileHeaderView()
+    var posts: [Post] {
+        return CoreDataManeger.defaulManager.posts.filter{$0.user == user}
+//        return user.postsSorted
+    }
     
-    init(viewModel: ProfileViewModelProtocol, user: User) {
-        self.viewModel = viewModel
+    init(user: User) {
         self.user = user
         super.init(nibName: nil, bundle: nil)
+        reloadData()
     }
     
     required init?(coder: NSCoder) {
@@ -34,8 +41,8 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        tableView.reloadData()
-        timer()
+        let signOutButton = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(pushSignOutButton))
+        navigationItem.leftBarButtonItem = signOutButton
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,13 +56,17 @@ class ProfileViewController: UIViewController {
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.compactAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        self.navigationController?.isNavigationBarHidden = true
+        self.navigationController?.isNavigationBarHidden = false
+        reloadData()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        tableView.reloadData()
+    private func reloadData() {
+        DispatchQueue.main.async {
+            CoreDataManeger.defaulManager.reloadPosts()
+            self.tableView.reloadData()
+        }
     }
+    
     
     private func setupView() {
         view.backgroundColor = .systemBackground
@@ -82,6 +93,13 @@ class ProfileViewController: UIViewController {
             self.present(alert, animated: true)
         }
     }
+    
+    @objc
+    private func pushSignOutButton() {
+        CoreDataManeger.defaulManager.deauthorization(user: user)
+        navigationController?.popViewController(animated: true)
+    }
+    
 }
 
 
@@ -90,9 +108,10 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         if section == 0 {
-            let cell = ProfileHeaderView()
-            let post = user
-            cell.setup(with: post)
+            let cell = profileHeaderView
+            cell.user = user
+            cell.delegate = self
+            cell.setup()
             return cell
         }
         return nil
@@ -104,13 +123,13 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
+
         if section == 0 {
             return 1
         } else if section == 1 {
-            return arrayOfPublications.count
+            return posts.count
         }
-        
+
         return 0
     }
 
@@ -129,14 +148,11 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SecondSectionCell", for: indexPath) as? PostTableViewCell else {
                 preconditionFailure("Error")
             }
-            
-            let post = arrayOfPublications[indexPath.row]
-            let arrayOfPublications = PostTableViewCell.ViewModel(author: post.author, description: post.description, image: UIImage(named: post.image), likes: post.likes, views: post.views)
-            
-            cell.setup(with: arrayOfPublications)
-            
+            let postInCell = posts[indexPath.row]
+            cell.delegate = self
+            cell.post = postInCell
+            cell.setup()
             return cell
-            
         }
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "DefaultCell", for: indexPath)
@@ -157,6 +173,7 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.section == 0 {
             if indexPath.row == 0 {
                 collectionViewPressed()
@@ -164,12 +181,38 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
     
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let action = UIContextualAction(style: .destructive, title: "Delete") { action, view, complete in
+            let postInCell = self.posts[indexPath.row]
+            CoreDataManeger.defaulManager.deletePost(post: postInCell)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+
+        return UISwipeActionsConfiguration(actions: [action])
+    }
+    
 }
 
 extension ProfileViewController {
     
     func collectionViewPressed() {
-        viewModel.pressed(viewInput: .collectionViewPressed)
+        let photosVC = PhotosViewController()
+        navigationController?.pushViewController(photosVC, animated: true)
+    }
+    
+    func pushNewPostViewController() {
+        let newPostVC = NewPostViewController(user: user)
+        newPostVC.delegate = self
+        navigationController?.pushViewController(newPostVC, animated: true)
+    }
+    
+    func changePost(post: Post) {
+        let postVC = NewPostViewController(post: post, user: user)
+        navigationController?.pushViewController(postVC, animated: true)
+    }
+    
+    func likePost(post: Post) {
+        CoreDataManeger.defaulManager.favoritePost(post: post, isFavorite: true)
     }
     
 }
