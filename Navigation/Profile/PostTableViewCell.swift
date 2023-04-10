@@ -40,9 +40,10 @@ class PostTableViewCell: UITableViewCell {
         return likes
     }()
     
-    private lazy var likeButton: UIButton = {
+    private let likeButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "hand.thumbsup"), for: .normal)
+        
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -59,9 +60,14 @@ class PostTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
         addSingleAndDoubleTapGesture()
+        addTargets()
         #if DEBUG
 //        backgroundColor = .cyan
         #endif
+    }
+    
+    private func addTargets() {
+        likeButton.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -139,12 +145,18 @@ class PostTableViewCell: UITableViewCell {
         singleTapGesture.require(toFail: doubleTapGesture)
     }
 
-    @objc private func singleTap() {
+    @objc
+    private func singleTap() {
         delegate?.changePost(post: post)
     }
 
-    @objc private func doubleTap() {
+    @objc
+    private func doubleTap() {
         delegate?.likePost(post: post)
     }
     
+    @objc
+    private func likeButtonTapped() {
+//        NotificationCenter.default.post(name: Notification.Name("likeNotification"), object: nil)
+    }
 }

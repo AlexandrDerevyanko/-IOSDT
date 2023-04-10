@@ -11,10 +11,10 @@ class CoreDataManeger {
     
     static let defaulManager = CoreDataManeger()
     
-    init() {
-        reloadUsers()
-        reloadPosts()
-    }
+//    init() {
+//        reloadUsers()
+//        reloadPosts()
+//    }
     
     lazy var persistentContainer: NSPersistentContainer = {
 
@@ -25,21 +25,21 @@ class CoreDataManeger {
             }
         })
         
-        container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+        container.viewContext.automaticallyMergesChangesFromParent = true
         return container
     }()
 
-    func saveContext () {
-        let context = persistentContainer.viewContext
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
-        }
-    }
+//    func saveContext () {
+//        let context = persistentContainer.viewContext
+//        if context.hasChanges {
+//            do {
+//                try context.save()
+//            } catch {
+//                let nserror = error as NSError
+//                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+//            }
+//        }
+//    }
     
     // Users
     
@@ -59,6 +59,7 @@ class CoreDataManeger {
             user.dateCreated = Date()
             user.avatar = avatar
             user.isLogIn = true
+            user.lastAutorizationDate = Date()
             
             do {
                 try contextBackground.save()
@@ -76,7 +77,6 @@ class CoreDataManeger {
         } catch {
             print(error)
         }
-        reloadUsers()
     }
     
     func updateUserAvatar(user: User, imageData: Data?) {
@@ -87,13 +87,11 @@ class CoreDataManeger {
         } catch {
             print(error)
         }
-        reloadUsers()
     }
     
     func deleteUser(user: User) {
         persistentContainer.viewContext.delete(user)
-        saveContext()
-        reloadUsers()
+        try? persistentContainer.viewContext.save()
     }
     
     // Posts
@@ -122,10 +120,10 @@ class CoreDataManeger {
         }
     }
     
-    func getUser(login: String, context: NSManagedObjectContext) -> User {
+    func getUser(login: String, context: NSManagedObjectContext) -> User? {
         let fetchRequest = User.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "login == %@", login)
-        return ((try? context.fetch(fetchRequest))?.first)!
+        return (try? context.fetch(fetchRequest))?.first
     }
     
     func updatePost(post: Post, newText: String, imageData: Data?) {
@@ -137,31 +135,33 @@ class CoreDataManeger {
         } catch {
             print(error)
         }
-        reloadPosts()
     }
     
     func favoritePost(post: Post, isFavorite: Bool) {
         post.isFavorite = isFavorite
+        if isFavorite {
+            post.likes += 1
+        } else {
+            post.likes -= 1
+        }
         
         do {
             try post.managedObjectContext?.save()
         } catch {
             print(error)
         }
-        reloadPosts()
     }
     
     func deletePost(post: Post) {
         persistentContainer.viewContext.delete(post)
-        saveContext()
-        reloadPosts()
+        try? persistentContainer.viewContext.save()
     }
     
     // Authorization
     
     func authorization(user: User) {
         user.isLogIn = true
-        
+        user.lastAutorizationDate = Date()
         do {
             try user.managedObjectContext?.save()
         } catch {

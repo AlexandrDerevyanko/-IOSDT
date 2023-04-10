@@ -1,9 +1,19 @@
 
 import UIKit
+import CoreData
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, NSFetchedResultsControllerDelegate {
     
+    var fetchResultsController: NSFetchedResultsController<User>?
     var logInDelegate: LoginDelegateProtocol?
+    
+    func initFetchResultsController() {
+        let fetchRequest = User.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "lastAutorizationDate", ascending: false)]
+        fetchResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManeger.defaulManager.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        fetchResultsController?.delegate = self
+        try? fetchResultsController?.performFetch()
+    }
     
     private let point: UIView = {
         let point = UIView()
@@ -100,6 +110,7 @@ class LoginViewController: UIViewController {
         view.backgroundColor = .white
         setupUI()
         setupConstraints()
+        initFetchResultsController()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -107,17 +118,20 @@ class LoginViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(didShowKeyboard(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didHideKeyboard(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         self.navigationItem.setHidesBackButton(true, animated: true)
-        checkUserStatus()
+        
+        DispatchQueue.main.async {
+            self.initFetchResultsController()
+            self.checkUserStatus()
+        }
+
     }
     
     func checkUserStatus() {
         DispatchQueue.main.async {
-            CoreDataManeger.defaulManager.reloadUsers()
-            let auth = CoreDataManeger.defaulManager.users
-            if auth.isEmpty {
+            if self.fetchResultsController!.fetchedObjects!.isEmpty {
                 return
             } else {
-                guard let user = auth.last else { return }
+                let user = self.fetchResultsController!.fetchedObjects![0]
                 if user.isLogIn {
                     DispatchQueue.main.async {
                         let profileVC = ProfileViewController(user: user)

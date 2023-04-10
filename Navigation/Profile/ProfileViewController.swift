@@ -1,24 +1,37 @@
 
 import UIKit
-import StorageService
-import iOSIntPackage
+//import StorageService
+//import iOSIntPackage
+import CoreData
 
-class ProfileViewController: UIViewController, ProfileDelegate {
+class ProfileViewController: UIViewController, ProfileDelegate, NSFetchedResultsControllerDelegate {
         
     var user: User
-    var currentUser: User? {
-        return nil
-    }
+//    var currentUser: User? {
+//        return nil
+//    }
     lazy var profileHeaderView = ProfileHeaderView()
-    var posts: [Post] {
-        return CoreDataManeger.defaulManager.posts.filter{$0.user == user}
-//        return user.postsSorted
+//    var posts: [Post] {
+//        return CoreDataManeger.defaulManager.posts.filter{$0.user == user}
+////        return user.postsSorted
+//    }
+    
+    var fetchResultsController: NSFetchedResultsController<Post>!
+    
+    func initFetchResultsController() {
+        let fetchRequest = Post.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
+        fetchRequest.predicate = NSPredicate(format: "user == %@", user)
+        fetchResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManeger.defaulManager.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+//        fetchResultsController.sectionIndexTitle(forSectionName: "456")
+//        fetchResultsController.section(forSectionIndexTitle: "456", at: 1)
+        fetchResultsController.delegate = self
+        try? fetchResultsController.performFetch()
     }
     
     init(user: User) {
         self.user = user
         super.init(nibName: nil, bundle: nil)
-        reloadData()
     }
     
     required init?(coder: NSCoder) {
@@ -41,6 +54,7 @@ class ProfileViewController: UIViewController, ProfileDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        initFetchResultsController()
         let signOutButton = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(pushSignOutButton))
         navigationItem.leftBarButtonItem = signOutButton
     }
@@ -57,16 +71,11 @@ class ProfileViewController: UIViewController, ProfileDelegate {
         navigationController?.navigationBar.compactAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         self.navigationController?.isNavigationBarHidden = false
-        reloadData()
-    }
-    
-    private func reloadData() {
         DispatchQueue.main.async {
-            CoreDataManeger.defaulManager.reloadPosts()
+            self.initFetchResultsController()
             self.tableView.reloadData()
         }
     }
-    
     
     private func setupView() {
         view.backgroundColor = .systemBackground
@@ -81,19 +90,6 @@ class ProfileViewController: UIViewController, ProfileDelegate {
         ])
     }
     
-    private func timer() {
-        let timeInterval = 3600
-        
-        Timer.scheduledTimer(
-            withTimeInterval: TimeInterval(timeInterval),
-            repeats: false
-        ) { timer in
-            let alert = UIAlertController(title: "Attention", message: "You are in the application for more than one hour", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: .default))
-            self.present(alert, animated: true)
-        }
-    }
-    
     @objc
     private func pushSignOutButton() {
         CoreDataManeger.defaulManager.deauthorization(user: user)
@@ -106,7 +102,7 @@ class ProfileViewController: UIViewController, ProfileDelegate {
 extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
+
         if section == 0 {
             let cell = profileHeaderView
             cell.user = user
@@ -115,7 +111,7 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
             return cell
         }
         return nil
-        
+
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -127,9 +123,8 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         if section == 0 {
             return 1
         } else if section == 1 {
-            return posts.count
+            return fetchResultsController.sections?[0].numberOfObjects ?? 0
         }
-
         return 0
     }
 
@@ -140,21 +135,21 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "DefaultCell", for: indexPath)
                 return cell
             }
-            
+
             return cell
-            
+
         } else if indexPath.section == 1 {
-            
+
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SecondSectionCell", for: indexPath) as? PostTableViewCell else {
                 preconditionFailure("Error")
             }
-            let postInCell = posts[indexPath.row]
+            let postInCell = fetchResultsController.object(at: [0, indexPath.row])
             cell.delegate = self
             cell.post = postInCell
             cell.setup()
             return cell
         }
-        
+
         let cell = tableView.dequeueReusableCell(withIdentifier: "DefaultCell", for: indexPath)
             
         return cell
@@ -162,15 +157,15 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            return tableView.frame.width / 3.2
-        }
-        if indexPath.section == 1 {
-            return UITableView.automaticDimension
-        }
-        return UITableView.automaticDimension
-    }
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        if indexPath.section == 0 {
+//            return tableView.frame.width / 3.2
+//        }
+//        if indexPath.section == 1 {
+//            return UITableView.automaticDimension
+//        }
+//        return UITableView.automaticDimension
+//    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
@@ -183,12 +178,31 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let action = UIContextualAction(style: .destructive, title: "Delete") { action, view, complete in
-            let postInCell = self.posts[indexPath.row]
+            let postInCell = self.fetchResultsController.object(at: [0, indexPath.row])
+            
             CoreDataManeger.defaulManager.deletePost(post: postInCell)
-            tableView.deleteRows(at: [indexPath], with: .fade)
+//            tableView.reloadData()
+//            tableView.deleteRows(at: [indexPath], with: .fade)
         }
 
         return UISwipeActionsConfiguration(actions: [action])
+    }
+
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+
+        switch type {
+        case .insert:
+            tableView.insertRows(at: [newIndexPath!], with: .automatic)
+        case .delete:
+            tableView.deleteRows(at: [indexPath!], with: .automatic)
+        case .move:
+            tableView.moveRow(at: indexPath!, to: newIndexPath!)
+        case .update:
+            tableView.reloadData()
+        @unknown default:
+            tableView.reloadData()
+        }
+        self.tableView.reloadData()
     }
     
 }
