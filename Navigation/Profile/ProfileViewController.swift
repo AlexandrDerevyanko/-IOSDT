@@ -23,8 +23,6 @@ class ProfileViewController: UIViewController, ProfileDelegate, NSFetchedResults
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
         fetchRequest.predicate = NSPredicate(format: "user == %@", user)
         fetchResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManeger.defaulManager.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-//        fetchResultsController.sectionIndexTitle(forSectionName: "456")
-//        fetchResultsController.section(forSectionIndexTitle: "456", at: 1)
         fetchResultsController.delegate = self
         try? fetchResultsController.performFetch()
     }
@@ -123,14 +121,14 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         if section == 0 {
             return 1
         } else if section == 1 {
-            return fetchResultsController.sections?[0].numberOfObjects ?? 0
+            return fetchResultsController.fetchedObjects?.count ?? 0
         }
         return 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            
+
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "FirstSectionCell", for: indexPath) as? FirstSectionTableViewCell else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "DefaultCell", for: indexPath)
                 return cell
@@ -143,10 +141,11 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SecondSectionCell", for: indexPath) as? PostTableViewCell else {
                 preconditionFailure("Error")
             }
-            let postInCell = fetchResultsController.object(at: [0, indexPath.row])
+            let postInCell = fetchResultsController.fetchedObjects![indexPath.row]
             cell.delegate = self
             cell.post = postInCell
             cell.setup()
+            print("\(indexPath) 99999999")
             return cell
         }
 
@@ -178,10 +177,11 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let action = UIContextualAction(style: .destructive, title: "Delete") { action, view, complete in
-            let postInCell = self.fetchResultsController.object(at: [0, indexPath.row])
-            
+            let postInCell = self.fetchResultsController.fetchedObjects![indexPath.row]
+
             CoreDataManeger.defaulManager.deletePost(post: postInCell)
-//            tableView.reloadData()
+            self.initFetchResultsController()
+            tableView.reloadData()
 //            tableView.deleteRows(at: [indexPath], with: .fade)
         }
 
@@ -193,10 +193,13 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         switch type {
         case .insert:
             tableView.insertRows(at: [newIndexPath!], with: .automatic)
+            print(1)
         case .delete:
             tableView.deleteRows(at: [indexPath!], with: .automatic)
+            print(1)
         case .move:
             tableView.moveRow(at: indexPath!, to: newIndexPath!)
+            print(1)
         case .update:
             tableView.reloadData()
         @unknown default:
