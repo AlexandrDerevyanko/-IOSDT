@@ -7,14 +7,8 @@ import CoreData
 class ProfileViewController: UIViewController, ProfileDelegate, NSFetchedResultsControllerDelegate {
         
     var user: User
-//    var currentUser: User? {
-//        return nil
-//    }
+
     lazy var profileHeaderView = ProfileHeaderView()
-//    var posts: [Post] {
-//        return CoreDataManeger.defaulManager.posts.filter{$0.user == user}
-////        return user.postsSorted
-//    }
     
     var fetchResultsController: NSFetchedResultsController<Post>!
     
@@ -96,7 +90,6 @@ class ProfileViewController: UIViewController, ProfileDelegate, NSFetchedResults
     
 }
 
-
 extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -145,7 +138,6 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
             cell.delegate = self
             cell.post = postInCell
             cell.setup()
-            print("\(indexPath) 99999999")
             return cell
         }
 
@@ -182,7 +174,6 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
             CoreDataManeger.defaulManager.deletePost(post: postInCell)
             self.initFetchResultsController()
             tableView.reloadData()
-//            tableView.deleteRows(at: [indexPath], with: .fade)
         }
 
         return UISwipeActionsConfiguration(actions: [action])
@@ -193,13 +184,10 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         switch type {
         case .insert:
             tableView.insertRows(at: [newIndexPath!], with: .automatic)
-            print(1)
         case .delete:
-            tableView.deleteRows(at: [indexPath!], with: .automatic)
-            print(1)
+            tableView.deleteRows(at: [IndexPath(row: indexPath!.row, section: 1)], with: .automatic)
         case .move:
             tableView.moveRow(at: indexPath!, to: newIndexPath!)
-            print(1)
         case .update:
             tableView.reloadData()
         @unknown default:
