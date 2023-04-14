@@ -134,13 +134,13 @@ class LoginViewController: UIViewController, NSFetchedResultsControllerDelegate 
                 let user = self.fetchResultsController!.fetchedObjects![0]
                 if user.isLogIn {
                     DispatchQueue.main.async {
+                        CoreDataManeger.defaulManager.user = user
                         let profileVC = ProfileViewController(user: user)
                         self.navigationController?.pushViewController(profileVC, animated: true)
                     }
                 }
             }
         }
-
     }
         
     private func setupUI() {
@@ -259,6 +259,7 @@ extension LoginViewController {
                 return
             }
             CoreDataManeger.defaulManager.authorization(user: user)
+            CoreDataManeger.defaulManager.user = user
             let profileVC = ProfileViewController(user: user)
             self.navigationController?.pushViewController(profileVC, animated: true)
         })

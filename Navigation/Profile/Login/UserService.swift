@@ -47,18 +47,20 @@ protocol CheckerServiceProtocol {
 }
 
 class CheckerService: CheckerServiceProtocol {
+    
     init() {}
     func checkCredentials(email: String?, password: String?, completion: @escaping (_ autorizationData: Autorization?, _ autorizattionError: AutorizationErrors?, _ user: User?) -> Void) {
         guard let mail = email, mail != "", let pass = password, pass != "" else {
             completion(nil, .empty, nil)
             return
         }
-        
+        CoreDataManeger.defaulManager.reloadUsers()
         let users = CoreDataManeger.defaulManager.users
         if users.isEmpty {
             completion(nil, .invalidPassword, nil)
             return
         }
+        CoreDataManeger.defaulManager.reloadUsers()
         for i in users {
             if mail == i.login, pass == i.password {
                 completion(nil, nil, i)

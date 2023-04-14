@@ -11,10 +11,10 @@ class CoreDataManeger {
     
     static let defaulManager = CoreDataManeger()
     
-//    init() {
-//        reloadUsers()
+    init() {
+        reloadUsers()
 //        reloadPosts()
-//    }
+    }
     
     lazy var persistentContainer: NSPersistentContainer = {
 
@@ -43,6 +43,7 @@ class CoreDataManeger {
     
     // Users
     
+    var user: User?
     var users: [User] = []
     func reloadUsers() {
         let fetchRequest = User.fetchRequest()

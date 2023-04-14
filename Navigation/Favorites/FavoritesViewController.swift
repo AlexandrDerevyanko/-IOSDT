@@ -7,22 +7,37 @@
 
 
 import UIKit
+import CoreData
 
-class FavoritesViewController: UIViewController {
+class FavoritesViewController: UIViewController, NSFetchedResultsControllerDelegate {
         
     var isSearch: Bool = false
     var searchText: String = ""
-    var user: User?
-    var filteredPosts: [Post] {
-        guard let user else { return [] }
-        return user.postsSorted
+    var user: User? {
+        return CoreDataManeger.defaulManager.user
     }
-    var posts: [Post] {
-        if isSearch {
-            return getSearchPosts()
-        } else {
-            return getPosts()
-        }
+//    var filteredPosts: [Post] {
+//        guard let user else { return [] }
+//        return user.postsSorted
+//    }
+//    var posts: [Post] {
+//        if isSearch {
+//            return getSearchPosts()
+//        } else {
+//            return getPosts()
+//        }
+//    }
+    
+    var fetchResultsController: NSFetchedResultsController<Post>!
+    
+    func initFetchResultsController() {
+        let fetchRequest = Post.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
+        fetchRequest.predicate = NSPredicate(format: "user == %@", user ?? User())
+        fetchRequest.predicate = NSPredicate(format: "isFavorite == true")
+        fetchResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManeger.defaulManager.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        fetchResultsController.delegate = self
+        try? fetchResultsController.performFetch()
     }
     
     lazy var searchButton = UIBarButtonItem(title: "Search", style: .plain, target: self, action: #selector(pushSearchButton))
@@ -81,25 +96,25 @@ class FavoritesViewController: UIViewController {
         ])
     }
     
-    private func getPosts() -> [Post] {
-        var posts: [Post] = []
-        for i in filteredPosts {
-            if i.isFavorite {
-                posts.append(i)
-            }
-        }
-        return posts
-    }
-    
-    private func getSearchPosts() -> [Post] {
-        var posts: [Post] = []
-        for i in filteredPosts {
-            if i.user?.login == searchText {
-                posts.append(i)
-            }
-        }
-        return posts
-    }
+//    private func getPosts() -> [Post] {
+//        var posts: [Post] = []
+//        for i in filteredPosts {
+//            if i.isFavorite {
+//                posts.append(i)
+//            }
+//        }
+//        return posts
+//    }
+//
+//    private func getSearchPosts() -> [Post] {
+//        var posts: [Post] = []
+//        for i in filteredPosts {
+//            if i.user?.login == searchText {
+//                posts.append(i)
+//            }
+//        }
+//        return posts
+//    }
     
     private func setupButtons() {
         clearButton.isHidden = true
@@ -107,21 +122,14 @@ class FavoritesViewController: UIViewController {
     }
     
     private func checkUserStatus() {
-        let auth = CoreDataManeger.defaulManager.users
-        if auth.isEmpty {
-            navigationController?.popToRootViewController(animated: true)
-            Alert.defaulAlert.errors(showIn: self, error: .autorization)
-        } else {
-            guard let user = auth.last else { return }
-            if user.isLogIn {
-                DispatchQueue.main.async {
-                    self.user = user
-                    self.tableView.reloadData()
-                }
-            } else {
-                self.user = nil
-                tableView.reloadData()
+        
+        DispatchQueue.main.async {
+            if self.user == nil {
+                self.tableView.reloadData()
                 Alert.defaulAlert.errors(showIn: self, error: .autorization)
+            } else {
+                self.initFetchResultsController()
+                self.tableView.reloadData()
             }
         }
     }
@@ -149,14 +157,14 @@ class FavoritesViewController: UIViewController {
 extension FavoritesViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return posts.count
+        return fetchResultsController?.fetchedObjects?.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "FirstSectionCell", for: indexPath) as? FavoritePostTableViewCell else {
                 preconditionFailure("Error")
             }
-            let postInCell = posts[indexPath.row]
+            let postInCell = fetchResultsController.fetchedObjects![indexPath.row]
             
             cell.post = postInCell
             cell.setup()
@@ -173,9 +181,9 @@ extension FavoritesViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let postInCell = posts[indexPath.row]
+            let postInCell = self.fetchResultsController.fetchedObjects![indexPath.row]
             CoreDataManeger.defaulManager.favoritePost(post: postInCell, isFavorite: false)
-            tableView.deleteRows(at: [indexPath], with: .fade)
+            tableView.deleteRows(at: [IndexPath(row: indexPath.row, section: 0)], with: .automatic)
         }
     }
     

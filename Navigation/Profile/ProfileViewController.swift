@@ -84,6 +84,7 @@ class ProfileViewController: UIViewController, ProfileDelegate, NSFetchedResults
     
     @objc
     private func pushSignOutButton() {
+        CoreDataManeger.defaulManager.user = nil
         CoreDataManeger.defaulManager.deauthorization(user: user)
         navigationController?.popViewController(animated: true)
     }
