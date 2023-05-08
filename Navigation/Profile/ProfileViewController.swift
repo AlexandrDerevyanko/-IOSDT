@@ -46,13 +46,13 @@ class ProfileViewController: UIViewController, NSFetchedResultsControllerDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        let signOutButton = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(pushSignOutButton))
+        let signOutButton = UIBarButtonItem(title: NSLocalizedString("logOut-button-profileVC-localizable", comment: ""), style: .plain, target: self, action: #selector(pushSignOutButton))
         navigationItem.leftBarButtonItem = signOutButton
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        title = "Profile"
+        title = NSLocalizedString("profile-tabbar-localizable", comment: "")
         let appearance = UINavigationBarAppearance()
         appearance.backgroundColor = .systemGray6
         appearance.titleTextAttributes = [.foregroundColor: UIColor.black]

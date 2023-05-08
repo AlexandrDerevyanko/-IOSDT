@@ -1,0 +1,33 @@
+"location-tabbar-localizable" = "Локация";
+"profile-tabbar-localizable" = "Профиль";
+"favorites-tabbar-localizable" = "Избранное";
+"cancel-button-localizable" = "Отмена";
+
+"empty-autorizationError-localizable" = "Похоже, вы оставили пустое поле";
+"invalidPassword-autorizationError-localizable" = "Не верный email или пароль";
+"weakPassword-autorizationError-localizable" = "Пароль состоит менее чем из 6 символов";
+"mismatchPassword-autorizationError-localizable" = "Введенные пароли не совпадают";
+"notFound-autorizationError-localizable" = "Не удалось найти указанный элемент";
+"emailAlreadyInUse-autorizationError-localizable" = "Такой email уже используется";
+"invalidEmail-autorizationError-localizable" = "Неверно введен email";
+"unexpected-autorizationError-localizable" = "Что то пошло не так";
+"autorization-autorizationError-localizable" = "Пожалуйста авторизируйтесь";
+
+"remove-annotations-button-locationVC-localizable" = "Удалить все точки на карте";
+
+"logIn-button-logInVC-localizable" = "Войти";
+"signUp-button-logInVC-localizable" = "Зарегистрироваться";
+
+"logOut-button-profileVC-localizable" = "Выйти";
+"status-label-profileVC-localizable" = "Вы можете установить новый статус";
+"setStatus-button-profileVC-localizable" = "Установить статус";
+"newPost-button-profileVC-localizable" = "Добавить пост";
+"photos-label-profileVC-localizable" = "Фото";
+"createPost-profileVC-localizable" = "Создать пост";
+"changePost-profileVC-localizable" = "Изменить пост";
+"save-button-profileVC-localizable" = "Сохранить";
+"setImage-button-profileVC-localizable" = "Установить изображение";
+"changeImage-button-profileVC-localizable" = "Измменить изображение";
+"likes-profileVC-localizable" = "Лайки";
+"views-profileVC-localizable" = "Просмотры";
+

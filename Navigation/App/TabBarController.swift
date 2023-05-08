@@ -37,10 +37,10 @@ class TabBarController: UITabBarController {
 
         self.viewControllers = [locationTabNavigationController, logInTabNavigationController, favoritesTabNavigationController]
         
-        let firstItem = UITabBarItem(title: "Location",
+        let firstItem = UITabBarItem(title: NSLocalizedString("location-tabbar-localizable", comment: ""),
                                  image: UIImage(systemName: "location"), tag: 0)
-        let secondItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person"), tag: 1)
-        let thirdItem = UITabBarItem(title: "Favorites", image: UIImage(systemName: "star"), tag: 2)
+        let secondItem = UITabBarItem(title: NSLocalizedString("profile-tabbar-localizable", comment: ""), image: UIImage(systemName: "person"), tag: 1)
+        let thirdItem = UITabBarItem(title: NSLocalizedString("favorites-tabbar-localizable", comment: ""), image: UIImage(systemName: "star"), tag: 2)
         
         locationTabNavigationController.tabBarItem = firstItem
         logInTabNavigationController.tabBarItem = secondItem

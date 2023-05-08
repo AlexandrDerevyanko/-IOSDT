@@ -22,6 +22,7 @@
 		FF68657E2A03DA1D000916BE /* LocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF68657D2A03DA1D000916BE /* LocationViewController.swift */; };
 		FF6865802A03DA7A000916BE /* CapitalAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF68657F2A03DA7A000916BE /* CapitalAnnotation.swift */; };
 		FF6A18552A0929980070D3D9 /*  InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FF6A18572A0929980070D3D9 /*  InfoPlist.strings */; };
+		FF6A185B2A09352B0070D3D9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FF6A185D2A09352B0070D3D9 /* Localizable.strings */; };
 		FF6D937129DAE2B1007AC94E /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6D937029DAE2B1007AC94E /* ImagePicker.swift */; };
 		FF6D937329DAEF2F007AC94E /* NewPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6D937229DAEF2F007AC94E /* NewPostViewController.swift */; };
 		FF6D937529DC2C36007AC94E /* ProfileDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6D937429DC2C36007AC94E /* ProfileDelegate.swift */; };
@@ -95,6 +96,8 @@
 		FF6A18522A09268B0070D3D9 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		FF6A18562A0929980070D3D9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = "en.lproj/ InfoPlist.strings"; sourceTree = "<group>"; };
 		FF6A18582A09299C0070D3D9 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = "ru.lproj/ InfoPlist.strings"; sourceTree = "<group>"; };
+		FF6A185C2A09352B0070D3D9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		FF6A185E2A0935300070D3D9 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FF6D937029DAE2B1007AC94E /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		FF6D937229DAEF2F007AC94E /* NewPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostViewController.swift; sourceTree = "<group>"; };
 		FF6D937429DC2C36007AC94E /* ProfileDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDelegate.swift; sourceTree = "<group>"; };
@@ -291,6 +294,7 @@
 				FF8FEDF22950679300D37BB9 /* PostTableViewCell.swift */,
 				FF6D937229DAEF2F007AC94E /* NewPostViewController.swift */,
 				FF6D937429DC2C36007AC94E /* ProfileDelegate.swift */,
+				FF3EC6E7298B678B006D7A72 /* FirstSectionTableViewCell.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -316,26 +320,27 @@
 		FFD64C162916EC6E0015F6B3 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
-				FF68657C2A03D9F7000916BE /* Location */,
-				FF06E04229DD8B50003C8095 /* SearchPicker */,
-				FF6D936F29DAE28D007AC94E /* ImagePicker */,
-				FF1D2B522958095A00D0E676 /* App */,
-				FFAA6BEE29D76766001A3365 /* Favorites */,
-				FFD2BB2829408E9600EF3D5C /* Profile */,
-				FF0DB71F29D6FB6F00F492C9 /* CoreData */,
-				FF5F226E29D440440035F975 /* Realm */,
-				FF5F226B29D43ADD0035F975 /* Alerts */,
-				FF83960029C33C8500BA40D9 /* Firebase */,
-				FFB3108529BF2AEA00D32055 /* Network Service */,
-				FF7B457D29B6F5B0002C4369 /* Errors */,
-				FF1D2B53295809C900D0E676 /* Feed */,
-				FFE8D3CB29A8BB3700FD9508 /* Photos */,
-				FFE8D3BD29A003B800FD9508 /* Info */,
-				FF1D2B512958094700D0E676 /* Other */,
-				FFD64C202916EC6F0015F6B3 /* Assets.xcassets */,
-				FFD64C222916EC6F0015F6B3 /* LaunchScreen.storyboard */,
-				FFD64C252916EC6F0015F6B3 /* Info.plist */,
 				FF6A18572A0929980070D3D9 /*  InfoPlist.strings */,
+				FF5F226B29D43ADD0035F975 /* Alerts */,
+				FF1D2B522958095A00D0E676 /* App */,
+				FFD64C202916EC6F0015F6B3 /* Assets.xcassets */,
+				FF0DB71F29D6FB6F00F492C9 /* CoreData */,
+				FF7B457D29B6F5B0002C4369 /* Errors */,
+				FFAA6BEE29D76766001A3365 /* Favorites */,
+				FF1D2B53295809C900D0E676 /* Feed */,
+				FF83960029C33C8500BA40D9 /* Firebase */,
+				FF6D936F29DAE28D007AC94E /* ImagePicker */,
+				FFE8D3BD29A003B800FD9508 /* Info */,
+				FFD64C252916EC6F0015F6B3 /* Info.plist */,
+				FFD64C222916EC6F0015F6B3 /* LaunchScreen.storyboard */,
+				FF6A185D2A09352B0070D3D9 /* Localizable.strings */,
+				FF68657C2A03D9F7000916BE /* Location */,
+				FFB3108529BF2AEA00D32055 /* Network Service */,
+				FF1D2B512958094700D0E676 /* Other */,
+				FFE8D3CB29A8BB3700FD9508 /* Photos */,
+				FFD2BB2829408E9600EF3D5C /* Profile */,
+				FF5F226E29D440440035F975 /* Realm */,
+				FF06E04229DD8B50003C8095 /* SearchPicker */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -353,7 +358,6 @@
 			children = (
 				FF3EC6E9298B67C3006D7A72 /* PhotosViewController.swift */,
 				FF3EC6EB298B68A1006D7A72 /* PhotosCollectionViewCell.swift */,
-				FF3EC6E7298B678B006D7A72 /* FirstSectionTableViewCell.swift */,
 			);
 			path = Photos;
 			sourceTree = "<group>";
@@ -467,6 +471,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF6A185B2A09352B0070D3D9 /* Localizable.strings in Resources */,
 				FFD64C242916EC6F0015F6B3 /* LaunchScreen.storyboard in Resources */,
 				FFD64C212916EC6F0015F6B3 /* Assets.xcassets in Resources */,
 				FF6A18552A0929980070D3D9 /*  InfoPlist.strings in Resources */,
@@ -545,6 +550,15 @@
 				FF6A18582A09299C0070D3D9 /* ru */,
 			);
 			name = " InfoPlist.strings";
+			sourceTree = "<group>";
+		};
+		FF6A185D2A09352B0070D3D9 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FF6A185C2A09352B0070D3D9 /* en */,
+				FF6A185E2A0935300070D3D9 /* ru */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 		FFD64C222916EC6F0015F6B3 /* LaunchScreen.storyboard */ = {
@@ -745,6 +759,9 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Navigation/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Required for location";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Required for location";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Required for location";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
@@ -773,6 +790,9 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Navigation/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Required for location";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Required for location";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Required for location";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";

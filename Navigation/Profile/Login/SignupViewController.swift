@@ -70,7 +70,7 @@ class SignupViewController: UIViewController {
     
     private let createAccountButton: BlueButton = {
         let button = BlueButton()
-        button.setTitle("Sign Up", for: .normal)
+        button.setTitle(NSLocalizedString("signUp-button-logInVC-localizable", comment: ""), for: .normal)
         button.setTitleColor(UIColor.white, for: .normal)
         button.backgroundColor = UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1)
         button.layer.cornerRadius = 10
@@ -131,7 +131,7 @@ class SignupViewController: UIViewController {
     }
     
     private func setupButton() {
-        let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(pushCancelButton))
+        let cancelButton = UIBarButtonItem(title: NSLocalizedString("cancel-button-localizable", comment: ""), style: .plain, target: self, action: #selector(pushCancelButton))
         navigationItem.leftBarButtonItem = cancelButton
     }
     

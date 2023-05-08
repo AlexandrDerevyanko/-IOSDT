@@ -49,7 +49,7 @@ class FavoritesViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        title = "Favorites posts"
+        title = NSLocalizedString("favorites-tabbar-localizable", comment: "")
         let appearance = UINavigationBarAppearance()
         appearance.backgroundColor = .systemGray6
         appearance.titleTextAttributes = [.foregroundColor: UIColor.black]

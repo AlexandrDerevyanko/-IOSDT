@@ -80,8 +80,8 @@ class PostTableViewCell: UITableViewCell {
         }
         authors.text = post.author
         descriptions.text = post.text
-        likes.text = "Likes: \(post.likes)"
-        views.text = "Views: \(post.views)"
+        likes.text = "\(NSLocalizedString("likes-profileVC-localizable", comment: "")): \(post.likes)"
+        views.text = "\(NSLocalizedString("views-profileVC-localizable", comment: "")): \(post.views)"
     }
     
     override func prepareForReuse() {

@@ -34,7 +34,7 @@ class FirstSectionTableViewCell: UITableViewCell {
     
     private let label: UILabel = {
         let label = UILabel()
-        label.text = "Photos"
+        label.text = NSLocalizedString("photos-label-profileVC-localizable", comment: "")
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

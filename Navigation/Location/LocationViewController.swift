@@ -8,6 +8,7 @@
 import UIKit
 import MapKit
 import CoreLocation
+import SnapKit
 
 class LocationViewController: UIViewController, UIGestureRecognizerDelegate {
     
@@ -19,7 +20,7 @@ class LocationViewController: UIViewController, UIGestureRecognizerDelegate {
     private lazy var hybridStyleButton = CustomButton(title: "Hubrid", bgColor: .white, action: hybridStyleButtonPressed)
     private lazy var satelliteStyleButton = CustomButton(title: "Satellite", bgColor: .white, action: satelliteStyleButtonPressed)
     private lazy var standardStyleButton = CustomButton(title: "Standard", bgColor: .white, action: standardStyleButtonPressed)
-    private lazy var removeAnnotationsButton = CustomButton(title: "Remove all annotations", bgColor: .white, action: removeAnnotationsButtonPressed)
+    private lazy var removeAnnotationsButton = CustomButton(title: NSLocalizedString("remove-annotations-button-locationVC-localizable", comment: ""), bgColor: .white, action: removeAnnotationsButtonPressed)
     
     private lazy var mapView: MKMapView = {
         let mapView = MKMapView()
@@ -98,9 +99,21 @@ class LocationViewController: UIViewController, UIGestureRecognizerDelegate {
             make.top.equalTo(16)
             make.centerX.equalTo(view.snp.centerX)
         }
+        removeAnnotationsButton.titleLabel?.snp.makeConstraints({ make in
+            make.left.equalTo(15)
+        })
         stackView.snp.makeConstraints { make in
             make.centerX.equalTo(mapView.snp.centerX)
             make.bottom.equalTo(mapView.safeAreaLayoutGuide).offset(-6)
+        }
+        hybridStyleButton.snp.makeConstraints { make in
+            make.width.equalTo(90)
+        }
+        satelliteStyleButton.snp.makeConstraints { make in
+            make.width.equalTo(90)
+        }
+        standardStyleButton.snp.makeConstraints { make in
+            make.width.equalTo(90)
         }
     }
     

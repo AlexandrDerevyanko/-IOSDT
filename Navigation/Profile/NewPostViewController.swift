@@ -42,8 +42,8 @@ class NewPostViewController: UIViewController {
         return label
     }()
     
-    private lazy var setImageButton = CustomButton(title: "Set Image", titleColor: .white, bgColor: UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1), hidden: true, action: buttonPressed)
-    private lazy var changeImageButton = CustomButton(title: "Change Image", titleColor: .white, bgColor: UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1), hidden: true, action: buttonPressed)
+    private lazy var setImageButton = CustomButton(title: NSLocalizedString("setImage-button-profileVC-localizable", comment: ""), titleColor: .white, bgColor: UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1), hidden: true, action: buttonPressed)
+    private lazy var changeImageButton = CustomButton(title: NSLocalizedString("changeImage-button-profileVC-localizable", comment: ""), titleColor: .white, bgColor: UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1), hidden: true, action: buttonPressed)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,7 +68,7 @@ class NewPostViewController: UIViewController {
     }
     
     private func setupButtons() {
-        let saveButton = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(saveButtonPressed))
+        let saveButton = UIBarButtonItem(title: NSLocalizedString("save-button-profileVC-localizable", comment: ""), style: .plain, target: self, action: #selector(saveButtonPressed))
         navigationItem.rightBarButtonItem = saveButton
     }
     
@@ -81,9 +81,9 @@ class NewPostViewController: UIViewController {
         setupConstraints()
         setupNotebutton()
         if post != nil {
-            navigationItem.title = "Change post"
+            navigationItem.title = NSLocalizedString("changePost-profileVC-localizable", comment: "")
         } else {
-            navigationItem.title = "Create new post"
+            navigationItem.title = NSLocalizedString("createPost-profileVC-localizable", comment: "")
         }
     }
     

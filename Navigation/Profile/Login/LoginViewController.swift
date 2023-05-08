@@ -75,7 +75,7 @@ class LoginViewController: UIViewController, NSFetchedResultsControllerDelegate 
         
     private let logInButton: BlueButton = {
         let button = BlueButton()
-        button.setTitle("Log In", for: .normal)
+        button.setTitle(NSLocalizedString("logIn-button-logInVC-localizable", comment: ""), for: .normal)
         button.setTitleColor(UIColor.white, for: .normal)
         button.backgroundColor = UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1)
         button.layer.cornerRadius = 10
@@ -89,7 +89,7 @@ class LoginViewController: UIViewController, NSFetchedResultsControllerDelegate 
     
     private let signUpButton: BlueButton = {
         let button = BlueButton()
-        button.setTitle("Sign Up", for: .normal)
+        button.setTitle(NSLocalizedString("signUp-button-logInVC-localizable", comment: ""), for: .normal)
         button.setTitleColor(UIColor.white, for: .normal)
         button.backgroundColor = UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1)
         button.layer.cornerRadius = 10

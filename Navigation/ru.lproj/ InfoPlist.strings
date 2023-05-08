@@ -5,3 +5,6 @@
   Created by Aleksandr Derevyanko on 08.05.2023.
   
 */
+NSLocationAlwaysAndWhenInUseUsageDescription = "Требуется для определения местоположения";
+NSLocationAlwaysUsageDescription = "Требуется для определения местоположения";
+NSLocationWhenInUseUsageDescription = "Требуется для определения местоположения";

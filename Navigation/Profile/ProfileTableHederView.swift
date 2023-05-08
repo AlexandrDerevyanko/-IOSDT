@@ -49,15 +49,14 @@ class ProfileHeaderView: UIView {
             
     private let statusLabel: UILabel = {
         let label = UILabel()
-        label.text = "Waiting for something"
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .gray
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private lazy var setStatusButton = CustomButton(title: "Set status", titleColor: .white, bgColor: UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1), action: setStatusButtonPressed)
-    private lazy var newPostButton = CustomButton(title: "New post", titleColor: .white, bgColor: UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1), action: newPostButtonPressed)
+    private lazy var setStatusButton = CustomButton(title: NSLocalizedString("setStatus-button-profileVC-localizable", comment: ""), titleColor: .white, bgColor: UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1), action: setStatusButtonPressed)
+    private lazy var newPostButton = CustomButton(title: NSLocalizedString("newPost-button-profileVC-localizable", comment: ""), titleColor: .white, bgColor: UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1), action: newPostButtonPressed)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -91,6 +90,9 @@ class ProfileHeaderView: UIView {
     
     func setup() {
         statusLabel.text = user.status
+        if statusLabel.text == nil {
+            statusLabel.text = NSLocalizedString("status-label-profileVC-localizable", comment: "")
+        }
         fullNameLabel.text = user.fullName
         avatarImageView.image = UIImage(data: user.avatar ?? Data())
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))

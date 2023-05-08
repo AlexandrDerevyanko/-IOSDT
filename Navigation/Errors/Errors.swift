@@ -23,31 +23,31 @@ extension AutorizationErrors: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .empty:
-            return NSLocalizedString("You left an empty field",
+            return NSLocalizedString("empty-autorizationError-localizable",
                                      comment: "")
         case .invalidPassword:
-            return NSLocalizedString("Incorrect email or password",
+            return NSLocalizedString("invalidPassword-autorizationError-localizable",
                                      comment: "")
         case .weakPassword:
-            return NSLocalizedString("Password is less than 6 characters",
+            return NSLocalizedString("weakPassword-autorizationError-localizable",
                                      comment: "")
         case .mismatchPassword:
-            return NSLocalizedString("The entered passwords do not match",
+            return NSLocalizedString("mismatchPassword-autorizationError-localizable",
                                      comment: "")
         case .notFound:
-            return NSLocalizedString("Error Description: The specified item could not be found.",
+            return NSLocalizedString("notFound-autorizationError-localizable",
                                      comment: "")
         case .emailAlreadyInUse:
-            return NSLocalizedString("This email is already in use",
+            return NSLocalizedString("emailAlreadyInUse-autorizationError-localizable",
                                      comment: "")
         case .invalidEmail:
-            return NSLocalizedString("Email entered incorrectly",
+            return NSLocalizedString("invalidEmail-autorizationError-localizable",
                                      comment: "")
         case .unexpected:
-            return NSLocalizedString("Something went wrong",
+            return NSLocalizedString("unexpected-autorizationError-localizable",
                                      comment: "")
         case .autorization:
-            return NSLocalizedString("Please login", comment: "")
+            return NSLocalizedString("autorization-autorizationError-localizable", comment: "")
         }
     }
 }
