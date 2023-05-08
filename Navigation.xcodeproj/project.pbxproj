@@ -19,6 +19,8 @@
 		FF5F226D29D43AEE0035F975 /* Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5F226C29D43AEE0035F975 /* Alerts.swift */; };
 		FF5F227029D4405A0035F975 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5F226F29D4405A0035F975 /* Model.swift */; };
 		FF5F227229D440650035F975 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5F227129D440650035F975 /* RealmManager.swift */; };
+		FF68657E2A03DA1D000916BE /* LocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF68657D2A03DA1D000916BE /* LocationViewController.swift */; };
+		FF6865802A03DA7A000916BE /* CapitalAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF68657F2A03DA7A000916BE /* CapitalAnnotation.swift */; };
 		FF6D937129DAE2B1007AC94E /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6D937029DAE2B1007AC94E /* ImagePicker.swift */; };
 		FF6D937329DAEF2F007AC94E /* NewPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6D937229DAEF2F007AC94E /* NewPostViewController.swift */; };
 		FF6D937529DC2C36007AC94E /* ProfileDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6D937429DC2C36007AC94E /* ProfileDelegate.swift */; };
@@ -87,6 +89,8 @@
 		FF5F226C29D43AEE0035F975 /* Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alerts.swift; sourceTree = "<group>"; };
 		FF5F226F29D4405A0035F975 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		FF5F227129D440650035F975 /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
+		FF68657D2A03DA1D000916BE /* LocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationViewController.swift; sourceTree = "<group>"; };
+		FF68657F2A03DA7A000916BE /* CapitalAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapitalAnnotation.swift; sourceTree = "<group>"; };
 		FF6D937029DAE2B1007AC94E /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		FF6D937229DAEF2F007AC94E /* NewPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostViewController.swift; sourceTree = "<group>"; };
 		FF6D937429DC2C36007AC94E /* ProfileDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDelegate.swift; sourceTree = "<group>"; };
@@ -213,6 +217,15 @@
 			path = Realm;
 			sourceTree = "<group>";
 		};
+		FF68657C2A03D9F7000916BE /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				FF68657D2A03DA1D000916BE /* LocationViewController.swift */,
+				FF68657F2A03DA7A000916BE /* CapitalAnnotation.swift */,
+			);
+			path = Location;
+			sourceTree = "<group>";
+		};
 		FF6D936F29DAE28D007AC94E /* ImagePicker */ = {
 			isa = PBXGroup;
 			children = (
@@ -299,6 +312,7 @@
 		FFD64C162916EC6E0015F6B3 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
+				FF68657C2A03D9F7000916BE /* Location */,
 				FF06E04229DD8B50003C8095 /* SearchPicker */,
 				FF6D936F29DAE28D007AC94E /* ImagePicker */,
 				FF1D2B522958095A00D0E676 /* App */,
@@ -472,6 +486,7 @@
 				FFD64C522918C81C0015F6B3 /* PostViewController.swift in Sources */,
 				FF06E04429DD8B63003C8095 /* SearchPicker.swift in Sources */,
 				FFAA6BF029D76780001A3365 /* FavoritesViewController.swift in Sources */,
+				FF6865802A03DA7A000916BE /* CapitalAnnotation.swift in Sources */,
 				FFD64C4C2917DF250015F6B3 /* ProfileViewController.swift in Sources */,
 				FF5F227229D440650035F975 /* RealmManager.swift in Sources */,
 				FFD2BB2C2943450A00EF3D5C /* LoginViewController.swift in Sources */,
@@ -496,6 +511,7 @@
 				FF5F227029D4405A0035F975 /* Model.swift in Sources */,
 				FFD64C4E291833880015F6B3 /* Feed.swift in Sources */,
 				FF31F41E29471712009C1461 /* ProfileTableHederView.swift in Sources */,
+				FF68657E2A03DA1D000916BE /* LocationViewController.swift in Sources */,
 				FF8FEDF32950679300D37BB9 /* PostTableViewCell.swift in Sources */,
 				FF3EC6EC298B68A1006D7A72 /* PhotosCollectionViewCell.swift in Sources */,
 				FFFEF824291FC00D0025FB74 /* InfoViewController.swift in Sources */,

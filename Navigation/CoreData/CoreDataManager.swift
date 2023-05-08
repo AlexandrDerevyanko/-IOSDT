@@ -129,7 +129,9 @@ class CoreDataManeger {
     
     func updatePost(post: Post, newText: String, imageData: Data?) {
         post.text = newText
-        post.image = imageData
+        if let imageData {
+            post.image = imageData
+        }
         
         do {
             try post.managedObjectContext?.save()

@@ -18,7 +18,7 @@ class TabBarController: UITabBarController {
 //        fatalError("init(coder:) has not been implemented")
 //    }
     
-    var feedTabNavigationController: UINavigationController!
+    var locationTabNavigationController: UINavigationController!
     var logInTabNavigationController: UINavigationController!
     var favoritesTabNavigationController: UINavigationController!
     let loginVC = LoginViewController()
@@ -31,18 +31,18 @@ class TabBarController: UITabBarController {
     func setupUI() {
         
         loginVC.logInDelegate = MyLoginFactory().makeCheckerService()
-        feedTabNavigationController = UINavigationController.init(rootViewController: FeedViewController())
+        locationTabNavigationController = UINavigationController.init(rootViewController: LocationViewController())
         logInTabNavigationController = UINavigationController.init(rootViewController: loginVC)
         favoritesTabNavigationController = UINavigationController.init(rootViewController: FavoritesViewController())
 
-        self.viewControllers = [feedTabNavigationController, logInTabNavigationController, favoritesTabNavigationController]
+        self.viewControllers = [locationTabNavigationController, logInTabNavigationController, favoritesTabNavigationController]
         
-        let firstItem = UITabBarItem(title: "Feed",
-                                 image: UIImage(systemName: "newspaper"), tag: 0)
+        let firstItem = UITabBarItem(title: "Location",
+                                 image: UIImage(systemName: "location"), tag: 0)
         let secondItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person"), tag: 1)
-        let thirdItem = UITabBarItem(title: "Favorites", image: UIImage(systemName: "star"), tag: 1)
+        let thirdItem = UITabBarItem(title: "Favorites", image: UIImage(systemName: "star"), tag: 2)
         
-        feedTabNavigationController.tabBarItem = firstItem
+        locationTabNavigationController.tabBarItem = firstItem
         logInTabNavigationController.tabBarItem = secondItem
         favoritesTabNavigationController.tabBarItem = thirdItem
         

@@ -4,7 +4,7 @@ import UIKit
 //import iOSIntPackage
 import CoreData
 
-class ProfileViewController: UIViewController, ProfileDelegate, NSFetchedResultsControllerDelegate {
+class ProfileViewController: UIViewController, NSFetchedResultsControllerDelegate {
         
     var user: User
 
@@ -199,7 +199,7 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     
 }
 
-extension ProfileViewController {
+extension ProfileViewController: ProfileDelegate {
     
     func collectionViewPressed() {
         let photosVC = PhotosViewController()

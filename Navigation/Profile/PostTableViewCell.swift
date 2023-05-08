@@ -43,7 +43,7 @@ class PostTableViewCell: UITableViewCell {
     private let likeButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "hand.thumbsup"), for: .normal)
-        
+        button.isUserInteractionEnabled = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -94,41 +94,39 @@ class PostTableViewCell: UITableViewCell {
     }
     
     private func setupView() {
-        addSubview(images)
-        addSubview(authors)
-        addSubview(descriptions)
-        addSubview(likes)
-        addSubview(likeButton)
-        addSubview(views)
+        contentView.addSubview(images)
+        contentView.addSubview(authors)
+        contentView.addSubview(descriptions)
+        contentView.addSubview(likes)
+        contentView.addSubview(likeButton)
+        contentView.addSubview(views)
         
         NSLayoutConstraint.activate([
             
-            authors.topAnchor.constraint(equalTo: topAnchor, constant: 16),
-            authors.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            authors.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            authors.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            authors.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            authors.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             authors.heightAnchor.constraint(equalToConstant: 30),
 
             images.topAnchor.constraint(equalTo: authors.bottomAnchor, constant: 16),
-            images.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            images.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            images.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            images.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             images.heightAnchor.constraint(equalTo: images.widthAnchor, multiplier: 1),
 
             descriptions.topAnchor.constraint(equalTo: images.bottomAnchor, constant: 16),
-            descriptions.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            descriptions.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            descriptions.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            descriptions.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
 
             likes.topAnchor.constraint(equalTo: descriptions.bottomAnchor, constant: 16),
-            likes.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            likes.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
+            likes.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            likes.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
             
             likeButton.leadingAnchor.constraint(equalTo: likes.trailingAnchor, constant: 16),
-            likeButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
-//            likeButton.heightAnchor.constraint(equalToConstant: 20),
-//            likeButton.widthAnchor.constraint(equalToConstant: 20),
+            likeButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
 
             views.topAnchor.constraint(equalTo: descriptions.bottomAnchor, constant: 16),
-            views.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            views.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
+            views.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            views.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
         ])
         
     }
@@ -138,25 +136,20 @@ class PostTableViewCell: UITableViewCell {
         singleTapGesture.numberOfTapsRequired = 1
         self.addGestureRecognizer(singleTapGesture)
 
-        let doubleTapGesture = UITapGestureRecognizer(target: self, action: #selector(doubleTap))
-        doubleTapGesture.numberOfTapsRequired = 2
-        self.addGestureRecognizer(doubleTapGesture)
-
-        singleTapGesture.require(toFail: doubleTapGesture)
+//        let doubleTapGesture = UITapGestureRecognizer(target: self, action: #selector(doubleTap))
+//        doubleTapGesture.numberOfTapsRequired = 2
+//        self.addGestureRecognizer(doubleTapGesture)
+//
+//        singleTapGesture.require(toFail: doubleTapGesture)
     }
 
     @objc
     private func singleTap() {
         delegate?.changePost(post: post)
     }
-
-    @objc
-    private func doubleTap() {
-        delegate?.likePost(post: post)
-    }
     
     @objc
     private func likeButtonTapped() {
-//        NotificationCenter.default.post(name: Notification.Name("likeNotification"), object: nil)
+        delegate?.likePost(post: post)
     }
 }

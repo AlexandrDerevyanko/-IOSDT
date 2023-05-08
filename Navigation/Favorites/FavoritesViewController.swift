@@ -16,18 +16,7 @@ class FavoritesViewController: UIViewController, NSFetchedResultsControllerDeleg
     var user: User? {
         return CoreDataManeger.defaulManager.user
     }
-//    var filteredPosts: [Post] {
-//        guard let user else { return [] }
-//        return user.postsSorted
-//    }
-//    var posts: [Post] {
-//        if isSearch {
-//            return getSearchPosts()
-//        } else {
-//            return getPosts()
-//        }
-//    }
-    
+
     var fetchResultsController: NSFetchedResultsController<Post>!
     
     func initFetchResultsController() {
@@ -39,9 +28,6 @@ class FavoritesViewController: UIViewController, NSFetchedResultsControllerDeleg
         fetchResultsController.delegate = self
         try? fetchResultsController.performFetch()
     }
-    
-    lazy var searchButton = UIBarButtonItem(title: "Search", style: .plain, target: self, action: #selector(pushSearchButton))
-    lazy var clearButton = UIBarButtonItem(title: "Clear", style: .plain, target: self, action: #selector(pushClearButton))
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
@@ -59,7 +45,6 @@ class FavoritesViewController: UIViewController, NSFetchedResultsControllerDeleg
         super.viewDidLoad()
         setupView()
         checkUserStatus()
-        setupButtons()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -96,31 +81,6 @@ class FavoritesViewController: UIViewController, NSFetchedResultsControllerDeleg
         ])
     }
     
-//    private func getPosts() -> [Post] {
-//        var posts: [Post] = []
-//        for i in filteredPosts {
-//            if i.isFavorite {
-//                posts.append(i)
-//            }
-//        }
-//        return posts
-//    }
-//
-//    private func getSearchPosts() -> [Post] {
-//        var posts: [Post] = []
-//        for i in filteredPosts {
-//            if i.user?.login == searchText {
-//                posts.append(i)
-//            }
-//        }
-//        return posts
-//    }
-    
-    private func setupButtons() {
-        clearButton.isHidden = true
-        navigationItem.rightBarButtonItems = [searchButton, clearButton]
-    }
-    
     private func checkUserStatus() {
         
         DispatchQueue.main.async {
@@ -132,23 +92,6 @@ class FavoritesViewController: UIViewController, NSFetchedResultsControllerDeleg
                 self.tableView.reloadData()
             }
         }
-    }
-    
-    @objc
-    private func pushSearchButton() {
-        SearchPicker.defaultPicker.getText(showPickerIn: self, title: "Поиск", message: "Введите email пользователя для поиска") { text in
-            self.searchText = text
-            self.isSearch = true
-            self.tableView.reloadData()
-            self.clearButton.isHidden = false
-        }
-    }
-    
-    @objc
-    private func pushClearButton() {
-        self.isSearch = false
-        self.clearButton.isHidden = true
-        tableView.reloadData()
     }
     
 }
@@ -183,8 +126,26 @@ extension FavoritesViewController: UITableViewDataSource, UITableViewDelegate {
         if editingStyle == .delete {
             let postInCell = self.fetchResultsController.fetchedObjects![indexPath.row]
             CoreDataManeger.defaulManager.favoritePost(post: postInCell, isFavorite: false)
-            tableView.deleteRows(at: [IndexPath(row: indexPath.row, section: 0)], with: .automatic)
+            initFetchResultsController()
+            tableView.reloadData()
         }
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+
+        switch type {
+        case .insert:
+            tableView.insertRows(at: [newIndexPath!], with: .automatic)
+        case .delete:
+            tableView.deleteRows(at: [indexPath!], with: .automatic)
+        case .move:
+            tableView.moveRow(at: indexPath!, to: newIndexPath!)
+        case .update:
+            tableView.reloadData()
+        @unknown default:
+            tableView.reloadData()
+        }
+        self.tableView.reloadData()
     }
     
 }
