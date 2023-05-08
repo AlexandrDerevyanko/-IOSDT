@@ -57,30 +57,30 @@ class PhotosViewController: UIViewController {
         urlString: String,
         completion: @escaping (Result<String, ImagesError>) -> Void) {
             
-            guard URL(string: urlString) != nil else {
-                completion(.failure(.badURL))
-                return
-            }
-            
-            let queue = DispatchQueue.global(qos: .default)
-            let workItem = DispatchWorkItem.init { [self] in
-                let startTime = Date()
-                imageProcessor.processImagesOnThread(sourceImages: data as? [UIImage] ?? [UIImage()], filter: .chrome, qos: .default) { images in
-                    let CGImages = images
-                    var UIImages: [UIImage?] = []
-                    for index in CGImages {
-                        UIImages.append(UIImage(cgImage: index!))
-                        data = UIImages
-                    }
-                    let endTime = Date()
-                    print(endTime.timeIntervalSince(startTime))
-                    DispatchQueue.main.async {
-                        self.collectionView.reloadData()
-                        completion(.success("Filters applied"))
-                    }
-                }
-            }
-            queue.sync (execute: workItem)
+//            guard URL(string: urlString) != nil else {
+//                completion(.failure(.badURL))
+//                return
+//            }
+//            
+//            let queue = DispatchQueue.global(qos: .default)
+//            let workItem = DispatchWorkItem.init { [self] in
+//                let startTime = Date()
+//                imageProcessor.processImagesOnThread(sourceImages: data as? [UIImage] ?? [UIImage()], filter: .chrome, qos: .default) { images in
+//                    let CGImages = images
+//                    var UIImages: [UIImage?] = []
+//                    for index in CGImages {
+//                        UIImages.append(UIImage(cgImage: index!))
+//                        data = UIImages
+//                    }
+//                    let endTime = Date()
+//                    print(endTime.timeIntervalSince(startTime))
+//                    DispatchQueue.main.async {
+//                        self.collectionView.reloadData()
+//                        completion(.success("Filters applied"))
+//                    }
+//                }
+//            }
+//            queue.sync (execute: workItem)
             
     }
     
@@ -111,7 +111,8 @@ class PhotosViewController: UIViewController {
 extension PhotosViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        data.count
+//        data.count
+        return 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -119,9 +120,9 @@ extension PhotosViewController: UICollectionViewDataSource, UICollectionViewDele
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DefaultCell", for: indexPath)
             return cell
         }
-
-        cell.clipsToBounds = true
-        cell.setup(with: data[indexPath.row])
+//
+//        cell.clipsToBounds = true
+//        cell.setup(with: data[indexPath.row])
         return cell
     }
 
