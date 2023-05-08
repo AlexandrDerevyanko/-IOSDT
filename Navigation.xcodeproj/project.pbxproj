@@ -21,6 +21,7 @@
 		FF5F227229D440650035F975 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5F227129D440650035F975 /* RealmManager.swift */; };
 		FF68657E2A03DA1D000916BE /* LocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF68657D2A03DA1D000916BE /* LocationViewController.swift */; };
 		FF6865802A03DA7A000916BE /* CapitalAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF68657F2A03DA7A000916BE /* CapitalAnnotation.swift */; };
+		FF6A18552A0929980070D3D9 /*  InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FF6A18572A0929980070D3D9 /*  InfoPlist.strings */; };
 		FF6D937129DAE2B1007AC94E /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6D937029DAE2B1007AC94E /* ImagePicker.swift */; };
 		FF6D937329DAEF2F007AC94E /* NewPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6D937229DAEF2F007AC94E /* NewPostViewController.swift */; };
 		FF6D937529DC2C36007AC94E /* ProfileDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6D937429DC2C36007AC94E /* ProfileDelegate.swift */; };
@@ -91,6 +92,9 @@
 		FF5F227129D440650035F975 /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
 		FF68657D2A03DA1D000916BE /* LocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationViewController.swift; sourceTree = "<group>"; };
 		FF68657F2A03DA7A000916BE /* CapitalAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapitalAnnotation.swift; sourceTree = "<group>"; };
+		FF6A18522A09268B0070D3D9 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		FF6A18562A0929980070D3D9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = "en.lproj/ InfoPlist.strings"; sourceTree = "<group>"; };
+		FF6A18582A09299C0070D3D9 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = "ru.lproj/ InfoPlist.strings"; sourceTree = "<group>"; };
 		FF6D937029DAE2B1007AC94E /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		FF6D937229DAEF2F007AC94E /* NewPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostViewController.swift; sourceTree = "<group>"; };
 		FF6D937429DC2C36007AC94E /* ProfileDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDelegate.swift; sourceTree = "<group>"; };
@@ -331,6 +335,7 @@
 				FFD64C202916EC6F0015F6B3 /* Assets.xcassets */,
 				FFD64C222916EC6F0015F6B3 /* LaunchScreen.storyboard */,
 				FFD64C252916EC6F0015F6B3 /* Info.plist */,
+				FF6A18572A0929980070D3D9 /*  InfoPlist.strings */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -433,6 +438,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = FFD64C0B2916EC6E0015F6B3;
 			packageReferences = (
@@ -463,6 +469,7 @@
 			files = (
 				FFD64C242916EC6F0015F6B3 /* LaunchScreen.storyboard in Resources */,
 				FFD64C212916EC6F0015F6B3 /* Assets.xcassets in Resources */,
+				FF6A18552A0929980070D3D9 /*  InfoPlist.strings in Resources */,
 				FF8395FF29C33C6500BA40D9 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -531,10 +538,20 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		FF6A18572A0929980070D3D9 /*  InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FF6A18562A0929980070D3D9 /* en */,
+				FF6A18582A09299C0070D3D9 /* ru */,
+			);
+			name = " InfoPlist.strings";
+			sourceTree = "<group>";
+		};
 		FFD64C222916EC6F0015F6B3 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				FFD64C232916EC6F0015F6B3 /* Base */,
+				FF6A18522A09268B0070D3D9 /* ru */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -606,6 +623,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -666,6 +684,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";

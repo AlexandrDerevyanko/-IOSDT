@@ -46,7 +46,6 @@ class ProfileViewController: UIViewController, NSFetchedResultsControllerDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        initFetchResultsController()
         let signOutButton = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(pushSignOutButton))
         navigationItem.leftBarButtonItem = signOutButton
     }
@@ -63,10 +62,12 @@ class ProfileViewController: UIViewController, NSFetchedResultsControllerDelegat
         navigationController?.navigationBar.compactAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         self.navigationController?.isNavigationBarHidden = false
-        DispatchQueue.main.async {
-            self.initFetchResultsController()
-            self.tableView.reloadData()
-        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        initFetchResultsController()
+        tableView.reloadData()
     }
     
     private func setupView() {
@@ -115,7 +116,7 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         if section == 0 {
             return 1
         } else if section == 1 {
-            return fetchResultsController.fetchedObjects?.count ?? 0
+            return fetchResultsController?.fetchedObjects?.count ?? 0
         }
         return 0
     }
@@ -184,7 +185,7 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
 
         switch type {
         case .insert:
-            tableView.insertRows(at: [newIndexPath!], with: .automatic)
+            tableView.insertRows(at: [IndexPath(row: newIndexPath!.row, section: 1)], with: .automatic)
         case .delete:
             tableView.deleteRows(at: [IndexPath(row: indexPath!.row, section: 1)], with: .automatic)
         case .move:
