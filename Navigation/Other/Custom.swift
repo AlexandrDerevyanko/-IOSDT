@@ -43,7 +43,7 @@ final class CustomButton: UIButton {
     
     var buttonAction: Action
     
-    init(title: String, titleColor: UIColor = .black, bgColor: UIColor, action: @escaping Action) {
+    init(title: String, titleColor: UIColor = .black, bgColor: UIColor, hidden: Bool = false, action: @escaping Action) {
         buttonAction = action
         super.init(frame: .zero)
         setTitle(title, for: .normal)
@@ -54,6 +54,7 @@ final class CustomButton: UIButton {
         layer.shadowRadius = 4
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOpacity = 0.7
+        isHidden = hidden
         translatesAutoresizingMaskIntoConstraints = false
         addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
     }
@@ -86,3 +87,27 @@ class TextFieldWithPadding: UITextField {
         return rect.inset(by: textPadding)
     }
 }
+
+extension UIColor {
+    static func createColor(lightMode: UIColor, darkMode: UIColor) -> UIColor {
+        guard #available(iOS 13.0, *) else {
+            return lightMode
+        }
+        return UIColor{ (traitCollection) -> UIColor in
+            return traitCollection.userInterfaceStyle == .light ? lightMode : darkMode
+        }
+    }
+}
+
+
+//extension UIColor {
+//    static func createColor(lightMode: UIColor, darkMode: UIColor) -> UIColor {
+//        guard #available(iOS 13.0, *) else {
+//            return lightMode
+//        }
+//        return UIColor { (traitCollection) -> UIColor in
+//            return traitCollection.userInterfaceStyle == .light ? lightMode :
+//            darkMode
+//        }
+//    }
+//}
