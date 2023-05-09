@@ -51,7 +51,7 @@ class LoginViewController: UIViewController, NSFetchedResultsControllerDelegate 
         logIn.tag = 0
         logIn.text = "corgi@gmail.com"
         logIn.textColor = .black
-        logIn.backgroundColor = .systemGray6
+        logIn.backgroundColor = UIColor.createColor(lightMode: .systemGray6, darkMode: .systemGray)
         logIn.font = UIFont.systemFont(ofSize: 16)
         logIn.placeholder = "Email or phone"
         logIn.autocapitalizationType = .none
@@ -64,7 +64,7 @@ class LoginViewController: UIViewController, NSFetchedResultsControllerDelegate 
         password.tag = 1
         password.text = "123456"
         password.textColor = .black
-        password.backgroundColor = .systemGray6
+        password.backgroundColor = UIColor.createColor(lightMode: .systemGray6, darkMode: .systemGray)
         password.font = UIFont.systemFont(ofSize: 16)
         password.placeholder = "Password"
         password.isSecureTextEntry = true
@@ -77,7 +77,7 @@ class LoginViewController: UIViewController, NSFetchedResultsControllerDelegate 
         let button = BlueButton()
         button.setTitle(NSLocalizedString("logIn-button-logInVC-localizable", comment: ""), for: .normal)
         button.setTitleColor(UIColor.white, for: .normal)
-        button.backgroundColor = UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1)
+        button.backgroundColor = UIColor.createColor(lightMode: UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1), darkMode: .systemGray4)
         button.layer.cornerRadius = 10
         button.layer.shadowOffset = CGSize(width: 4, height: 4)
         button.layer.shadowRadius = 4
@@ -91,7 +91,7 @@ class LoginViewController: UIViewController, NSFetchedResultsControllerDelegate 
         let button = BlueButton()
         button.setTitle(NSLocalizedString("signUp-button-logInVC-localizable", comment: ""), for: .normal)
         button.setTitleColor(UIColor.white, for: .normal)
-        button.backgroundColor = UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1)
+        button.backgroundColor = UIColor.createColor(lightMode: UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1), darkMode: .systemGray4)
         button.layer.cornerRadius = 10
         button.layer.shadowOffset = CGSize(width: 4, height: 4)
         button.layer.shadowRadius = 4
@@ -107,7 +107,7 @@ class LoginViewController: UIViewController, NSFetchedResultsControllerDelegate 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .systemGray3)
         setupUI()
         setupConstraints()
         initFetchResultsController()

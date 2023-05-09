@@ -36,6 +36,7 @@ class ProfileViewController: UIViewController, NSFetchedResultsControllerDelegat
         tableView.dataSource = self
         tableView.delegate = self
         tableView.rowHeight = UITableView.automaticDimension
+        tableView.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .systemGray3)
         tableView.register(FirstSectionTableViewCell.self, forCellReuseIdentifier: "FirstSectionCell")
         tableView.register(PostTableViewCell.self, forCellReuseIdentifier: "SecondSectionCell")
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "DefaultCell")
@@ -47,21 +48,22 @@ class ProfileViewController: UIViewController, NSFetchedResultsControllerDelegat
         super.viewDidLoad()
         setupView()
         let signOutButton = UIBarButtonItem(title: NSLocalizedString("logOut-button-profileVC-localizable", comment: ""), style: .plain, target: self, action: #selector(pushSignOutButton))
+        signOutButton.tintColor = UIColor.createColor(lightMode: .systemBlue, darkMode: .white)
         navigationItem.leftBarButtonItem = signOutButton
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         title = NSLocalizedString("profile-tabbar-localizable", comment: "")
-        let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = .systemGray6
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.black]
-        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
-        navigationController?.navigationBar.tintColor = .black
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.compactAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        self.navigationController?.isNavigationBarHidden = false
+//        let appearance = UINavigationBarAppearance()
+//        appearance.backgroundColor = .systemGray6
+//        appearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+//        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
+//        navigationController?.navigationBar.tintColor = .black
+//        navigationController?.navigationBar.standardAppearance = appearance
+//        navigationController?.navigationBar.compactAppearance = appearance
+//        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+//        self.navigationController?.isNavigationBarHidden = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -71,7 +73,7 @@ class ProfileViewController: UIViewController, NSFetchedResultsControllerDelegat
     }
     
     private func setupView() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .systemGray3)
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
                    

@@ -38,12 +38,13 @@ class NewPostViewController: UIViewController {
     private let textView: UITextView = {
         let label = UITextView()
         label.font = UIFont.systemFont(ofSize: 16)
+        label.backgroundColor = UIColor.createColor(lightMode: .systemGray6, darkMode: .systemGray)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private lazy var setImageButton = CustomButton(title: NSLocalizedString("setImage-button-profileVC-localizable", comment: ""), titleColor: .white, bgColor: UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1), hidden: true, action: buttonPressed)
-    private lazy var changeImageButton = CustomButton(title: NSLocalizedString("changeImage-button-profileVC-localizable", comment: ""), titleColor: .white, bgColor: UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1), hidden: true, action: buttonPressed)
+    private lazy var setImageButton = CustomButton(title: NSLocalizedString("setImage-button-profileVC-localizable", comment: ""), titleColor: .white, bgColor: UIColor.createColor(lightMode: UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1), darkMode: .systemGray4), hidden: true, action: buttonPressed)
+    private lazy var changeImageButton = CustomButton(title: NSLocalizedString("changeImage-button-profileVC-localizable", comment: ""), titleColor: .white, bgColor: UIColor.createColor(lightMode: UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1), darkMode: .systemGray4), hidden: true, action: buttonPressed)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,7 +74,7 @@ class NewPostViewController: UIViewController {
     }
     
     private func setupUI() {
-        view.backgroundColor = .systemGray6
+        view.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .systemGray3)
         view.addSubview(textView)
         view.addSubview(imageView)
         view.addSubview(setImageButton)

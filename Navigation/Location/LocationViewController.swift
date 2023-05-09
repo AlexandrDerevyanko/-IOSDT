@@ -17,10 +17,10 @@ class LocationViewController: UIViewController, UIGestureRecognizerDelegate {
         return locationManager
     }()
     
-    private lazy var hybridStyleButton = CustomButton(title: "Hubrid", bgColor: .white, action: hybridStyleButtonPressed)
-    private lazy var satelliteStyleButton = CustomButton(title: "Satellite", bgColor: .white, action: satelliteStyleButtonPressed)
-    private lazy var standardStyleButton = CustomButton(title: "Standard", bgColor: .white, action: standardStyleButtonPressed)
-    private lazy var removeAnnotationsButton = CustomButton(title: NSLocalizedString("remove-annotations-button-locationVC-localizable", comment: ""), bgColor: .white, action: removeAnnotationsButtonPressed)
+    private lazy var hybridStyleButton = CustomButton(title: "Hubrid", titleColor: UIColor.createColor(lightMode: .black, darkMode: .white), bgColor: UIColor.createColor(lightMode: .white, darkMode: .systemGray3), action: hybridStyleButtonPressed)
+    private lazy var satelliteStyleButton = CustomButton(title: "Satellite", titleColor: UIColor.createColor(lightMode: .black, darkMode: .white), bgColor: UIColor.createColor(lightMode: .white, darkMode: .systemGray3), action: satelliteStyleButtonPressed)
+    private lazy var standardStyleButton = CustomButton(title: "Standard", titleColor: UIColor.createColor(lightMode: .black, darkMode: .white), bgColor: UIColor.createColor(lightMode: .white, darkMode: .systemGray3), action: standardStyleButtonPressed)
+    private lazy var removeAnnotationsButton = CustomButton(title: NSLocalizedString("remove-annotations-button-locationVC-localizable", comment: ""), titleColor: UIColor.createColor(lightMode: .black, darkMode: .white), bgColor: UIColor.createColor(lightMode: .white, darkMode: .systemGray3), action: removeAnnotationsButtonPressed)
     
     private lazy var mapView: MKMapView = {
         let mapView = MKMapView()
@@ -64,7 +64,7 @@ class LocationViewController: UIViewController, UIGestureRecognizerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .systemGray3)
         setupUI()
         findUserLocation()
         mapView.delegate = self
@@ -74,6 +74,11 @@ class LocationViewController: UIViewController, UIGestureRecognizerDelegate {
             lpgr.delaysTouchesBegan = true
             lpgr.delegate = self
             self.mapView.addGestureRecognizer(lpgr)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        title = NSLocalizedString("location-tabbar-localizable", comment: "")
     }
     
     override func viewDidAppear(_ animated: Bool) {

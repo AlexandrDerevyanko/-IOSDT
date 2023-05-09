@@ -9,15 +9,6 @@ import UIKit
 
 class TabBarController: UITabBarController {
     
-//    init() {
-//        super.init(nibName: nil, bundle: nil)
-//        setupUILogOutStatus()
-//    }
-//    
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-    
     var locationTabNavigationController: UINavigationController!
     var logInTabNavigationController: UINavigationController!
     var favoritesTabNavigationController: UINavigationController!
@@ -35,7 +26,7 @@ class TabBarController: UITabBarController {
         logInTabNavigationController = UINavigationController.init(rootViewController: loginVC)
         favoritesTabNavigationController = UINavigationController.init(rootViewController: FavoritesViewController())
 
-        self.viewControllers = [locationTabNavigationController, logInTabNavigationController, favoritesTabNavigationController]
+        self.viewControllers = [logInTabNavigationController, locationTabNavigationController, favoritesTabNavigationController]
         
         let firstItem = UITabBarItem(title: NSLocalizedString("location-tabbar-localizable", comment: ""),
                                  image: UIImage(systemName: "location"), tag: 0)
@@ -46,6 +37,8 @@ class TabBarController: UITabBarController {
         logInTabNavigationController.tabBarItem = secondItem
         favoritesTabNavigationController.tabBarItem = thirdItem
         
+        UITabBar.appearance().tintColor = UIColor.createColor(lightMode: .systemBlue, darkMode: .white)
+        UITabBar.appearance().backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .systemGray3)
     }
     
 }

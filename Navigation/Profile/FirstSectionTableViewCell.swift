@@ -59,7 +59,7 @@ class FirstSectionTableViewCell: UITableViewCell {
     }
 
     private func setupView() {
-        backgroundColor = .systemBackground
+        backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .systemGray3)
         addSubview(collectionView)
         addSubview(label)
         addSubview(button)

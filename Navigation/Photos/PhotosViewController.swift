@@ -30,6 +30,7 @@ class PhotosViewController: UIViewController {
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "DefaultCell")
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .systemGray3)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
@@ -37,7 +38,7 @@ class PhotosViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        setupNavigationBar()
+//        setupNavigationBar()
         imageFiltered(urlString: "") { result in
             switch result {
             case .success(let message):
@@ -48,9 +49,11 @@ class PhotosViewController: UIViewController {
         }
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        title = "Photo Gallery"
         collectionView.reloadData()
+//        self.navigationItem.backBarButtonItem?.tintColor = UIColor.createColor(lightMode: .systemBlue, darkMode: .white)
     }
     
     private func imageFiltered(
@@ -84,11 +87,11 @@ class PhotosViewController: UIViewController {
             
     }
     
-    private func setupNavigationBar() {
-        self.navigationController?.isNavigationBarHidden = false
-        self.navigationController?.navigationBar.isTranslucent = true
-        self.navigationItem.title = "Photo Gallery"
-    }
+//    private func setupNavigationBar() {
+//        self.navigationController?.isNavigationBarHidden = false
+//        self.navigationController?.navigationBar.isTranslucent = true
+//        self.navigationItem.title = "Photo Gallery"
+//    }
     
     private func setupView() {
         view.backgroundColor = .systemBackground

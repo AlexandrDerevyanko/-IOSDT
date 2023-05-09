@@ -34,6 +34,7 @@ class PhotosCollectionViewCell: UICollectionViewCell {
     }
         
     private func setupView() {
+        backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .systemGray3)
         addSubview(images)
             
         NSLayoutConstraint.activate([

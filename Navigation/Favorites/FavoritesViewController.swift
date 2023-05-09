@@ -35,6 +35,7 @@ class FavoritesViewController: UIViewController, NSFetchedResultsControllerDeleg
         tableView.dataSource = self
         tableView.delegate = self
         tableView.rowHeight = UITableView.automaticDimension
+        tableView.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .systemGray3)
         tableView.register(FavoritePostTableViewCell.self, forCellReuseIdentifier: "FirstSectionCell")
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "DefaultCell")
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -50,15 +51,6 @@ class FavoritesViewController: UIViewController, NSFetchedResultsControllerDeleg
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         title = NSLocalizedString("favorites-tabbar-localizable", comment: "")
-        let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = .systemGray6
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.black]
-        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
-        navigationController?.navigationBar.tintColor = .black
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.compactAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        self.navigationController?.isNavigationBarHidden = false
         tableView.reloadData()
     }
     
@@ -69,7 +61,7 @@ class FavoritesViewController: UIViewController, NSFetchedResultsControllerDeleg
     }
     
     private func setupView() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .systemGray3)
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
                    

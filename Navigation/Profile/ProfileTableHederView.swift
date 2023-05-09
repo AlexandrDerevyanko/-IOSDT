@@ -17,19 +17,17 @@ class ProfileHeaderView: UIView {
         let fText = UITextField()
         fText.borderStyle = .roundedRect
         fText.contentVerticalAlignment = .center
-        fText.textColor = .black
         fText.font = UIFont.systemFont(ofSize: 15)
+        fText.backgroundColor = UIColor.createColor(lightMode: .systemGray6, darkMode: .systemGray)
+        fText.textColor = UIColor.createColor(lightMode: .black, darkMode: .white)
         fText.layer.cornerRadius = 12
         fText.clipsToBounds = true
-        fText.layer.borderColor = UIColor.black.cgColor
-        fText.layer.borderWidth = 1
         fText.translatesAutoresizingMaskIntoConstraints = false
         return fText
     }()
 
     let avatarImageView: UIImageView = {
         let myView = UIImageView()
-//        myView.image = UIImage(named: "corgi")!
         myView.layer.cornerRadius = 50
         myView.clipsToBounds = true
         myView.layer.borderColor = UIColor.white.cgColor
@@ -42,7 +40,7 @@ class ProfileHeaderView: UIView {
         let label = UILabel()
         label.text = "Corgi"
         label.font = UIFont.boldSystemFont(ofSize: 18)
-        label.textColor = .black
+        label.textColor = UIColor.createColor(lightMode: .black, darkMode: .white)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -51,16 +49,16 @@ class ProfileHeaderView: UIView {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .gray
+        label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private lazy var setStatusButton = CustomButton(title: NSLocalizedString("setStatus-button-profileVC-localizable", comment: ""), titleColor: .white, bgColor: UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1), action: setStatusButtonPressed)
-    private lazy var newPostButton = CustomButton(title: NSLocalizedString("newPost-button-profileVC-localizable", comment: ""), titleColor: .white, bgColor: UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1), action: newPostButtonPressed)
+    private lazy var setStatusButton = CustomButton(title: NSLocalizedString("setStatus-button-profileVC-localizable", comment: ""), titleColor: .white, bgColor: UIColor.createColor(lightMode: UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1), darkMode: .systemGray4), action: setStatusButtonPressed)
+    private lazy var newPostButton = CustomButton(title: NSLocalizedString("newPost-button-profileVC-localizable", comment: ""), titleColor: .white, bgColor: UIColor.createColor(lightMode: UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1), darkMode: .systemGray4), action: newPostButtonPressed)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .systemBackground
         setupUI()
         #if DEBUG
 //        backgroundColor = .cyan
@@ -79,6 +77,7 @@ class ProfileHeaderView: UIView {
     }
     
     private func setupUI() {
+        backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .systemGray3)
         addSubview(setStatusButton)
         addSubview(statusTextField)
         addSubview(statusLabel)
@@ -141,7 +140,8 @@ class ProfileHeaderView: UIView {
             setStatusButton.bottomAnchor.constraint(equalTo: newPostButton.topAnchor, constant: -16),
             
             statusLabel.bottomAnchor.constraint(equalTo: setStatusButton.topAnchor, constant: -70),
-            statusLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            statusLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 16),
+            statusLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             
             statusTextField.bottomAnchor.constraint(equalTo: setStatusButton.topAnchor, constant: -15),
             statusTextField.leftAnchor.constraint(equalTo: leftAnchor, constant: 132),
