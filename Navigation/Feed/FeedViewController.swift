@@ -3,20 +3,20 @@ import UIKit
 
 class FeedViewController: UIViewController {
     
-//    private let viewModel: FeedViewModelProtocol
+    private let viewModel: FeedViewModelProtocol
 
     private lazy var feedView = FeedView(delegate: self)
     
     
-//    init(viewModel: FeedViewModelProtocol) {
-//        self.viewModel = viewModel
-//        super.init(nibName: nil, bundle: nil)
-//    }
+    init(viewModel: FeedViewModelProtocol) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
     
-//    @available(*, unavailable)
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         super.loadView()
