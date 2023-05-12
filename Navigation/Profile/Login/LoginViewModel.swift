@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 protocol LoginViewModelProtocol: ViewModelProtocol {
     var onStateDidChange: ((LoginViewModel.State) -> Void)? { get set }
@@ -10,6 +11,7 @@ final class LoginViewModel: LoginViewModelProtocol {
         case waiting
         case alert(AutorizationErrors)
         case verificationRejected(String, String, String)
+        case setImage(UIImage)
         case verificationAccepted(String, String, String)
     }
 
@@ -33,6 +35,7 @@ final class LoginViewModel: LoginViewModelProtocol {
     func updateState(viewInput: ViewInput) {
         switch viewInput {
         case let .loginButtonPressed(email, password):
+            
             logInDelegate?.logIn(logIn: email, password: password, completion: { [self] data, error, user  in
                 if let error = error {
                     state = .alert(error)
@@ -46,14 +49,30 @@ final class LoginViewModel: LoginViewModelProtocol {
                 CoreDataManeger.defaulManager.user = user
                 coordinator?.pushProfileViewController(user: user)
             })
+            
         case .signupButtonPressed:
+            
             coordinator?.pushSignupViewController()
+            
         case .verify:
-            biometricIDAuth.canEvaluate { (canEvaluate, _, canEvaluateError) in
+            
+            biometricIDAuth.canEvaluate { (canEvaluate, biometricType, canEvaluateError) in
                 guard canEvaluate else {
                     state = .verificationRejected("Error", canEvaluateError?.localizedDescription ?? "Face ID/Touch ID may not be configured", "Ok")
                     return
                 }
+                
+                switch biometricType {
+                case .faceID:
+                    state = .setImage(UIImage(systemName: "faceid")?.withTintColor(.white, renderingMode: .alwaysOriginal) ?? UIImage())
+                case .touchID:
+                    state = .setImage(UIImage(systemName: "touchid")?.withTintColor(.white, renderingMode: .alwaysOriginal) ?? UIImage())
+                case .none:
+                    ()
+                case .unknown:
+                    ()
+                }
+                    
                 biometricIDAuth.evaluate { (success, error) in
                     guard success else {
                         self.state = .verificationRejected("Error", error?.localizedDescription ?? "Face ID/Touch ID may not be configured", "Ok")

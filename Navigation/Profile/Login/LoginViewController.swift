@@ -253,6 +253,8 @@ class LoginViewController: UIViewController, NSFetchedResultsControllerDelegate 
                 AlertManager.defaulManager.alert(title: title, message: message, okActionTitle: okTitle, showIn: self)
             case let .verificationRejected(title, message, okTitle):
                 AlertManager.defaulManager.alert(title: title, message: message, okActionTitle: okTitle, showIn: self)
+            case let .setImage(image):
+                verifyButton.setImage(image, for: .normal)
             }
         }
     }
