@@ -147,7 +147,7 @@ class NewPostViewController: UIViewController {
     @objc
     private func saveButtonPressed() {
         guard let text = textView.text, text != "" else {
-            Alert.defaulAlert.errors(showIn: self, error: .empty)
+            AlertManager.defaulManager.autorizationErrors(showIn: self, error: .empty)
             return
         }
         if let post {

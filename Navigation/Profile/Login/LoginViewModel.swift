@@ -8,17 +8,21 @@ protocol LoginViewModelProtocol: ViewModelProtocol {
 final class LoginViewModel: LoginViewModelProtocol {
     enum State {
         case waiting
-        case login
-        case signup
+        case alert(AutorizationErrors)
+        case verificationRejected(String, String, String)
+        case verificationAccepted(String, String, String)
     }
 
     enum ViewInput {
-        case loginButtonPressed
+        case loginButtonPressed(email: String, password: String)
         case signupButtonPressed
+        case verify
     }
 
     weak var coordinator: LoginCoordinator?
     var onStateDidChange: ((State) -> Void)?
+    var logInDelegate: LoginDelegateProtocol?
+    var biometricIDAuth = BiometricIDAuth()
 
     private(set) var state: State = .waiting {
         didSet {
@@ -28,18 +32,36 @@ final class LoginViewModel: LoginViewModelProtocol {
 
     func updateState(viewInput: ViewInput) {
         switch viewInput {
-        case .loginButtonPressed:
-            state = .waiting
-//            networkService.loadBooks { [weak self] result in
-//                switch result {
-//                case .success(let books):
-//                    self?.state = .loaded(books: books)
-//                case .failure(let error):
-//                    self?.state = .error(error)
-//                }
-//            }
+        case let .loginButtonPressed(email, password):
+            logInDelegate?.logIn(logIn: email, password: password, completion: { [self] data, error, user  in
+                if let error = error {
+                    state = .alert(error)
+                    return
+                }
+                guard let user = user else {
+                    state = .alert(.invalidPassword)
+                    return
+                }
+                CoreDataManeger.defaulManager.authorization(user: user)
+                CoreDataManeger.defaulManager.user = user
+                coordinator?.pushProfileViewController(user: user)
+            })
         case .signupButtonPressed:
             coordinator?.pushSignupViewController()
+        case .verify:
+            biometricIDAuth.canEvaluate { (canEvaluate, _, canEvaluateError) in
+                guard canEvaluate else {
+                    state = .verificationRejected("Error", canEvaluateError?.localizedDescription ?? "Face ID/Touch ID may not be configured", "Ok")
+                    return
+                }
+                biometricIDAuth.evaluate { (success, error) in
+                    guard success else {
+                        self.state = .verificationRejected("Error", error?.localizedDescription ?? "Face ID/Touch ID may not be configured", "Ok")
+                        return
+                    }
+                    self.state = .verificationAccepted("Success", "You have a free pass, now", "Ok")
+                }
+            }
         }
     }
 }

@@ -7,23 +7,23 @@ protocol FeedViewModelProtocol: ViewModelProtocol {
 
 final class FeedViewModel: FeedViewModelProtocol {
     enum State {
-        case aboutInfo(AboutInfo)
+        case initial
+        case checkTrue
+        case checkFalse
+        case error(Error)
     }
 
     enum ViewInput {
-        case initial
-        case aboutInfoButtonDidTap
+        case check(String)
+        case pushInfoViewController
+        case pushPostViewController
     }
 
-    struct AboutInfo {
-        let buttonTitle: String
-        let info: String
-    }
-
+    weak var coordinator: FeedCoordinator?
     var onStateDidChange: ((State) -> Void)?
     
 
-    private(set) var state: State = .aboutInfo(AboutInfo.makeInfo(isHidden: true)) {
+    private(set) var state: State = .initial {
         didSet {
             onStateDidChange?(state)
         }
@@ -31,23 +31,17 @@ final class FeedViewModel: FeedViewModelProtocol {
 
     func updateState(viewInput: ViewInput) {
         switch viewInput {
-        case .initial:
-            state = .aboutInfo(AboutInfo.makeInfo(isHidden: true))
-        case .aboutInfoButtonDidTap:
-            state = .aboutInfo(AboutInfo.makeInfo(isHidden: false))
+        case let .check(text):
+            if CheckService.defaultCheckService.check(text: text) {
+                state = .checkTrue
+            } else {
+                state = .checkFalse
+            }
+        case .pushInfoViewController:
+            coordinator?.pushInfoViewController()
+        case .pushPostViewController:
+            coordinator?.pushPostViewController()
         }
     }
 }
 
-extension FeedViewModel.AboutInfo {
-    static var showTitle: String { "Показать" }
-    static var hideTitle: String { "Скрыть" }
-}
-
-private extension FeedViewModel.AboutInfo {
-    static func makeInfo(isHidden: Bool) -> Self {
-        let buttonTitle: String = isHidden ? Self.showTitle : Self.hideTitle
-        let info: String = isHidden ? "" : "Здесь инфо о приложении"
-        return FeedViewModel.AboutInfo(buttonTitle: buttonTitle, info: info)
-    }
-}

@@ -7,13 +7,14 @@ final class AppFactory {
         switch moduleType {
         case .profile:
             let viewModel = LoginViewModel()
-            let VC = LoginViewController()
-            VC.logInDelegate = MyLoginFactory().makeCheckerService()
+            viewModel.logInDelegate = MyLoginFactory().makeCheckerService()
+            let VC = LoginViewController(viewModel: viewModel)
+//            VC.logInDelegate = MyLoginFactory().makeCheckerService()
             let view = UINavigationController(rootViewController: VC)
             return Module(moduleType: moduleType, viewModel: viewModel, view: view)
         case .feed:
             let viewModel = FeedViewModel()
-            let view = UINavigationController(rootViewController: FeedViewController())
+            let view = UINavigationController(rootViewController: FeedViewController(viewModel: viewModel))
             return Module(moduleType: moduleType, viewModel: viewModel, view: view)
         }
     }

@@ -4,8 +4,18 @@ import CoreData
 
 class LoginViewController: UIViewController, NSFetchedResultsControllerDelegate {
     
+    private let viewModel: LoginViewModelProtocol
     var fetchResultsController: NSFetchedResultsController<User>?
     var logInDelegate: LoginDelegateProtocol?
+    
+    init(viewModel: LoginViewModelProtocol) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     func initFetchResultsController() {
         let fetchRequest = User.fetchRequest()
@@ -100,6 +110,20 @@ class LoginViewController: UIViewController, NSFetchedResultsControllerDelegate 
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    
+    private let verifyButton: BlueButton = {
+        let button = BlueButton()
+        button.setTitle("Verify using Face ID/Touch ID", for: .normal)
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.backgroundColor = UIColor.createColor(lightMode: UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1), darkMode: .systemGray4)
+        button.layer.cornerRadius = 10
+        button.layer.shadowOffset = CGSize(width: 4, height: 4)
+        button.layer.shadowRadius = 4
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOpacity = 0.7
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
         
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -111,6 +135,7 @@ class LoginViewController: UIViewController, NSFetchedResultsControllerDelegate 
         setupUI()
         setupConstraints()
         initFetchResultsController()
+        bindViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -149,6 +174,7 @@ class LoginViewController: UIViewController, NSFetchedResultsControllerDelegate 
         scrollView.addSubview(logo)
         scrollView.addSubview(logInButton)
         scrollView.addSubview(signUpButton)
+        scrollView.addSubview(verifyButton)
         stackView.addArrangedSubview(loginTextFiled)
         stackView.addArrangedSubview(point)
         stackView.addArrangedSubview(passwordTextFiled)
@@ -159,6 +185,7 @@ class LoginViewController: UIViewController, NSFetchedResultsControllerDelegate 
     private func setupButton() {
         logInButton.addTarget(self, action: #selector(logInButtonPressed), for: .touchUpInside)
         signUpButton.addTarget(self, action: #selector(signUpButtonPressed), for: .touchUpInside)
+        verifyButton.addTarget(self, action: #selector(verifyButtonPressed), for: .touchUpInside)
         }
         
     private func setupGestures() {
@@ -202,7 +229,32 @@ class LoginViewController: UIViewController, NSFetchedResultsControllerDelegate 
             signUpButton.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 16),
             signUpButton.rightAnchor.constraint(equalTo: scrollView.rightAnchor, constant: -16)
         
+            
         ])
+        verifyButton.snp.makeConstraints({ make in
+            make.top.equalTo(signUpButton.snp.bottom).offset(16)
+            make.height.equalTo(50)
+            make.left.equalTo(16)
+            make.right.equalTo(-16)
+        })
+    }
+    
+    func bindViewModel() {
+        viewModel.onStateDidChange = { [weak self] state in
+            guard let self = self else {
+                return
+            }
+            switch state {
+            case .waiting:
+                ()
+            case let .alert(error):
+                AlertManager.defaulManager.autorizationErrors(showIn: self, error: error)
+            case let .verificationAccepted(title, message, okTitle):
+                AlertManager.defaulManager.alert(title: title, message: message, okActionTitle: okTitle, showIn: self)
+            case let .verificationRejected(title, message, okTitle):
+                AlertManager.defaulManager.alert(title: title, message: message, okActionTitle: okTitle, showIn: self)
+            }
+        }
     }
         
     @objc
@@ -227,14 +279,17 @@ class LoginViewController: UIViewController, NSFetchedResultsControllerDelegate 
         
     @objc
     private func logInButtonPressed() {
-        logIn()
+        viewModel.updateState(viewInput: .loginButtonPressed(email: loginTextFiled.text ?? "", password: passwordTextFiled.text ?? ""))
     }
     
     @objc
     private func signUpButtonPressed() {
-        let VC = SignupViewController()
-        VC.signUpDelegate = MyLoginFactory().makeCheckerService()
-        navigationController?.pushViewController(VC, animated: true)
+        viewModel.updateState(viewInput: .signupButtonPressed)
+    }
+    
+    @objc
+    private func verifyButtonPressed() {
+        viewModel.updateState(viewInput: .verify)
     }
         
     @objc
@@ -252,10 +307,11 @@ extension LoginViewController {
         let password = passwordTextFiled.text
         logInDelegate?.logIn(logIn: email, password: password, completion: { data, error, user  in
             if let error = error {
-                Alert.defaulAlert.errors(showIn: self, error: error)
+                AlertManager.defaulManager.autorizationErrors(showIn: self, error: error)
+                return
             }
             guard let user = user else {
-                Alert.defaulAlert.errors(showIn: self, error: .invalidPassword)
+                AlertManager.defaulManager.autorizationErrors(showIn: self, error: .invalidPassword)
                 return
             }
             CoreDataManeger.defaulManager.authorization(user: user)

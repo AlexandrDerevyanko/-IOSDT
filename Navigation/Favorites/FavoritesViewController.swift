@@ -78,7 +78,7 @@ class FavoritesViewController: UIViewController, NSFetchedResultsControllerDeleg
         DispatchQueue.main.async {
             if self.user == nil {
                 self.tableView.reloadData()
-                Alert.defaulAlert.errors(showIn: self, error: .autorization)
+                AlertManager.defaulManager.autorizationErrors(showIn: self, error: .autorization)
             } else {
                 self.initFetchResultsController()
                 self.tableView.reloadData()

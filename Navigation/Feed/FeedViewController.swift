@@ -21,6 +21,7 @@ class FeedViewController: UIViewController {
     override func loadView() {
         super.loadView()
         view = feedView
+        bindViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -36,19 +37,38 @@ class FeedViewController: UIViewController {
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
     
+    func bindViewModel() {
+        viewModel.onStateDidChange = { [weak self] state in
+            guard let self = self else {
+                return
+            }
+            switch state {
+            case .initial:
+                ()
+            case .checkTrue:
+                self.feedView.check(status: true)
+            case .checkFalse:
+                self.feedView.check(status: false)
+            case .error:
+                ()
+            }
+        }
+    }
+    
 }
 
 extension FeedViewController: FeedViewDelegate {
     
     func postButtonPressed() {
-        let viewControllerToPush = PostViewController()
-        navigationController?.pushViewController(viewControllerToPush, animated: true)
+        viewModel.updateState(viewInput: .pushPostViewController)
     }
     
     func infoButtonPressed() {
-        let networkService = NetworkService()
-        let viewControllerToPush = InfoViewController(networkService: networkService)
-        navigationController?.pushViewController(viewControllerToPush, animated: true)
+        viewModel.updateState(viewInput: .pushInfoViewController)
+    }
+    
+    func checkGuessButtonPressed(text: String) {
+        viewModel.updateState(viewInput: .check(text))
     }
     
 }

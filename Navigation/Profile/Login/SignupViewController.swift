@@ -158,7 +158,7 @@ class SignupViewController: UIViewController {
 
         signUpDelegate?.signUp(fullName: fullName, email: email, password: password, passwordConfirmation: confirmPassword, completion: { data, error in
             if let error = error {
-                Alert.defaulAlert.errors(showIn: self, error: error)
+                AlertManager.defaulManager.autorizationErrors(showIn: self, error: error)
             } else {
                 switch data {
                 case .logIn:

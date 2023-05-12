@@ -22,8 +22,14 @@ final class LoginCoordinator: ModuleCoordinatable {
         return viewController
     }
 
+    func pushProfileViewController(user: User) {
+        let viewControllerToPush = ProfileViewController(user: user)
+        (module?.view as? UINavigationController)?.pushViewController(viewControllerToPush, animated: true)
+    }
+    
     func pushSignupViewController() {
         let viewControllerToPush = SignupViewController()
+        viewControllerToPush.signUpDelegate = MyLoginFactory().makeCheckerService()
         (module?.view as? UINavigationController)?.pushViewController(viewControllerToPush, animated: true)
     }
 }
