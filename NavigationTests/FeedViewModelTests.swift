@@ -5,8 +5,7 @@ final class FeedViewModelTests: XCTestCase {
     var password: String!
 
     override func setUpWithError() throws {
-        try super.setUpWithError()
-        password = "1234"
+
     }
 
     override func tearDownWithError() throws {
