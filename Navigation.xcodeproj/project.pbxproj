@@ -39,6 +39,7 @@
 		FF73092E2A0D07ED00CF6833 /* CheckService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF73092D2A0D07ED00CF6833 /* CheckService.swift */; };
 		FF7309392A0E3A8A00CF6833 /* FeedViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7309382A0E3A8A00CF6833 /* FeedViewModelTests.swift */; };
 		FF7309402A0E805900CF6833 /* BiometricIDAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF73093F2A0E805900CF6833 /* BiometricIDAuth.swift */; };
+		FF7309432A0FD2E600CF6833 /* LocalNotificationsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7309422A0FD2E600CF6833 /* LocalNotificationsService.swift */; };
 		FF7B457F29B6F5BC002C4369 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7B457E29B6F5BC002C4369 /* Errors.swift */; };
 		FF8395FF29C33C6500BA40D9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FF8395FE29C33C6500BA40D9 /* GoogleService-Info.plist */; };
 		FF83960229C343BE00BA40D9 /* DataJSON.swift 18-30-32-395.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF83960129C343BE00BA40D9 /* DataJSON.swift 18-30-32-395.swift */; };
@@ -134,6 +135,7 @@
 		FF7309362A0E3A8A00CF6833 /* NavigationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NavigationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF7309382A0E3A8A00CF6833 /* FeedViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewModelTests.swift; sourceTree = "<group>"; };
 		FF73093F2A0E805900CF6833 /* BiometricIDAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricIDAuth.swift; sourceTree = "<group>"; };
+		FF7309422A0FD2E600CF6833 /* LocalNotificationsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNotificationsService.swift; sourceTree = "<group>"; };
 		FF7B457E29B6F5BC002C4369 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		FF8395FE29C33C6500BA40D9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FF83960129C343BE00BA40D9 /* DataJSON.swift 18-30-32-395.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DataJSON.swift 18-30-32-395.swift"; sourceTree = "<group>"; };
@@ -318,6 +320,14 @@
 			path = NavigationTests;
 			sourceTree = "<group>";
 		};
+		FF7309412A0FD2D400CF6833 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				FF7309422A0FD2E600CF6833 /* LocalNotificationsService.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
 		FF7B457D29B6F5B0002C4369 /* Errors */ = {
 			isa = PBXGroup;
 			children = (
@@ -399,6 +409,7 @@
 		FFD64C162916EC6E0015F6B3 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
+				FF7309412A0FD2D400CF6833 /* Notifications */,
 				FF6A18572A0929980070D3D9 /*  InfoPlist.strings */,
 				FF5F226B29D43ADD0035F975 /* Alerts */,
 				FF1D2B522958095A00D0E676 /* App */,
@@ -635,6 +646,7 @@
 				FFD64C4A2917DF090015F6B3 /* FeedViewController.swift in Sources */,
 				FF5F226D29D43AEE0035F975 /* AlertManager.swift in Sources */,
 				FF83960229C343BE00BA40D9 /* DataJSON.swift 18-30-32-395.swift in Sources */,
+				FF7309432A0FD2E600CF6833 /* LocalNotificationsService.swift in Sources */,
 				FF83960829C4678D00BA40D9 /* SignupViewController.swift in Sources */,
 				FF3EC6E8298B678B006D7A72 /* FirstSectionTableViewCell.swift in Sources */,
 				FF6D937329DAEF2F007AC94E /* NewPostViewController.swift in Sources */,

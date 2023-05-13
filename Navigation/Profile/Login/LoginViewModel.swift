@@ -24,7 +24,7 @@ final class LoginViewModel: LoginViewModelProtocol {
     weak var coordinator: LoginCoordinator?
     var onStateDidChange: ((State) -> Void)?
     var logInDelegate: LoginDelegateProtocol?
-    var biometricIDAuth = BiometricIDAuth()
+    private var biometricIDAuth = BiometricIDAuth()
 
     private(set) var state: State = .waiting {
         didSet {
