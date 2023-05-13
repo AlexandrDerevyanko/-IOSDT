@@ -1,10 +1,3 @@
-//
-//  FeedListCoordinator.swift
-//  Navigation
-//
-//  Created by Aleksandr Derevyanko on 17.02.2023.
-//
-
 import UIKit
 
 final class FeedCoordinator: ModuleCoordinatable {
@@ -12,8 +5,8 @@ final class FeedCoordinator: ModuleCoordinatable {
 
     private let factory: AppFactory
 
-    private(set) var childCoordinators: [Coordinatable] = []
     private(set) var module: Module?
+    private(set) var childCoordinators: [Coordinatable] = []
 
     init(moduleType: Module.ModuleType, factory: AppFactory) {
         self.moduleType = moduleType
@@ -29,13 +22,15 @@ final class FeedCoordinator: ModuleCoordinatable {
         return viewController
     }
     
+    func pushInfoViewController() {
+        let networkService = NetworkService()
+        let viewControllerToPush = InfoViewController(networkService: networkService)
+        (module?.view as? UINavigationController)?.pushViewController(viewControllerToPush, animated: true)
+    }
+    
     func pushPostViewController() {
         let viewControllerToPush = PostViewController()
         (module?.view as? UINavigationController)?.pushViewController(viewControllerToPush, animated: true)
     }
     
-    func pushInfoViewController() {
-        let viewControllerToPush = InfoViewController()
-        (module?.view as? UINavigationController)?.pushViewController(viewControllerToPush, animated: true)
-    }
 }

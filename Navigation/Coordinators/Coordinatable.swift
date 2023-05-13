@@ -1,8 +1,8 @@
 //
-//  AppCoordinator.swift
+//  Coordinatable.swift
 //  Navigation
 //
-//  Created by Aleksandr Derevyanko on 17.02.2023.
+//  Created by Aleksandr Derevyanko on 11.05.2023.
 //
 
 import UIKit

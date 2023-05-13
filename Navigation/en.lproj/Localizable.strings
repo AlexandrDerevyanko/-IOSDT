@@ -1,0 +1,34 @@
+"location-tabbar-localizable" = "Location";
+"profile-tabbar-localizable" = "Profile";
+"feed-tabbar-localizable" = "Feed";
+"favorites-tabbar-localizable" = "Favorites";
+"cancel-button-localizable" = "Cancel";
+
+"empty-autorizationError-localizable" = "You left an empty field";
+"invalidPassword-autorizationError-localizable" = "Incorrect email or password";
+"weakPassword-autorizationError-localizable" = "Password is less than 6 characters";
+"mismatchPassword-autorizationError-localizable" = "The entered passwords do not match";
+"notFound-autorizationError-localizable" = "The specified item could not be found";
+"emailAlreadyInUse-autorizationError-localizable" = "This email is already in use";
+"invalidEmail-autorizationError-localizable" = "Email entered incorrectly";
+"unexpected-autorizationError-localizable" = "Something went wrong";
+"autorization-autorizationError-localizable" = "Please login";
+
+"remove-annotations-button-locationVC-localizable" = "Remove all annotations";
+
+"logIn-button-logInVC-localizable" = "Log in";
+"signUp-button-logInVC-localizable" = "Sign Up";
+
+"title-profileVC-localizable" = "Profile";
+"logOut-button-profileVC-localizable" = "Log out";
+"status-label-profileVC-localizable" = "You can set new status";
+"setStatus-button-profileVC-localizable" = "Set status";
+"newPost-button-profileVC-localizable" = "New post";
+"photos-label-profileVC-localizable" = "Photos";
+"createPost-profileVC-localizable" = "Create new post";
+"changePost-profileVC-localizable" = "Change post";
+"save-button-profileVC-localizable" = "Save";
+"setImage-button-profileVC-localizable" = "Set image";
+"changeImage-button-profileVC-localizable" = "Change image";
+"likes-profileVC-localizable" = "Likes";
+"views-profileVC-localizable" = "Views";
