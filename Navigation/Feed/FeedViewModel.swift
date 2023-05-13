@@ -1,35 +1,47 @@
-//
-//  FeedViewModel.swift
-//  Navigation
-//
-//  Created by Aleksandr Derevyanko on 17.02.2023.
-//
+import Foundation
 
-protocol FeedViewModelProtocol: ViewModelProtocol{
-    func buttonPressed(viewInput: FeedViewModel.ViewInput)
+protocol FeedViewModelProtocol: ViewModelProtocol {
+    var onStateDidChange: ((FeedViewModel.State) -> Void)? { get set }
+    func updateState(viewInput: FeedViewModel.ViewInput)
 }
 
-class FeedViewModel: FeedViewModelProtocol {
-    
-    enum ViewInput {
-        case postButtonPressed
-        case infoButtonPressed
+final class FeedViewModel: FeedViewModelProtocol {
+    enum State {
+        case initial
+        case checkTrue
+        case checkFalse
+        case error(Error)
     }
-    
+
+    enum ViewInput {
+        case check(String)
+        case pushInfoViewController
+        case pushPostViewController
+    }
+
     weak var coordinator: FeedCoordinator?
-    var secretWord = "alpha"
+    var onStateDidChange: ((State) -> Void)?
     
-    func buttonPressed(viewInput: ViewInput) {
-        switch viewInput {
-        case .postButtonPressed:
-            coordinator?.pushPostViewController()
-        case .infoButtonPressed:
-            coordinator?.pushInfoViewController()
+
+    private(set) var state: State = .initial {
+        didSet {
+            onStateDidChange?(state)
         }
     }
 
-    func check(word: String) -> String? {
-        return word == secretWord ? word : nil
+    func updateState(viewInput: ViewInput) {
+        switch viewInput {
+        case let .check(text):
+            if CheckService.defaultCheckService.check(text: text) {
+                state = .checkTrue
+            } else {
+                state = .checkFalse
+            }
+        case .pushInfoViewController:
+            coordinator?.pushInfoViewController()
+        case .pushPostViewController:
+            coordinator?.pushPostViewController()
+        }
     }
-    
 }
+

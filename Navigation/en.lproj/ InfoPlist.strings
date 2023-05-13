@@ -1,0 +1,10 @@
+/* 
+   InfoPlist.strings
+  Navigation
+
+  Created by Aleksandr Derevyanko on 08.05.2023.
+  
+*/
+NSLocationAlwaysAndWhenInUseUsageDescription = "Required for location";
+NSLocationAlwaysUsageDescription = "Required for location";
+NSLocationWhenInUseUsageDescription = "Required for location";

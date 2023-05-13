@@ -1,9 +1,3 @@
-//
-//  AppCoordinator.swift
-//  Navigation
-//
-//  Created by Aleksandr Derevyanko on 17.02.2023.
-//
 
 import UIKit
 
@@ -17,16 +11,16 @@ final class AppCoordinator: Coordinatable {
     }
 
     func start() -> UIViewController {
+        let loginCoordinator = LoginCoordinator(moduleType: .profile, factory: factory)
         let feedCoordinator = FeedCoordinator(moduleType: .feed, factory: factory)
-        let profileCoordinator = ProfileCoordinator(moduleType: .profile, factory: factory)
 
         let appTabBarController = AppTabBarController(viewControllers: [
-            feedCoordinator.start(),
-            profileCoordinator.start()
+            loginCoordinator.start(),
+            feedCoordinator.start()
         ])
 
+        addChildCoordinator(loginCoordinator)
         addChildCoordinator(feedCoordinator)
-        addChildCoordinator(profileCoordinator)
 
         return appTabBarController
     }
