@@ -1,15 +1,27 @@
 
 import UIKit
-import StorageService
-import iOSIntPackage
+//import StorageService
+//import iOSIntPackage
+import CoreData
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: UIViewController, ProfileDelegate, NSFetchedResultsControllerDelegate {
         
-    private let viewModel: ProfileViewModelProtocol
     var user: User
+
+    lazy var profileHeaderView = ProfileHeaderView()
     
-    init(viewModel: ProfileViewModelProtocol, user: User) {
-        self.viewModel = viewModel
+    var fetchResultsController: NSFetchedResultsController<Post>!
+    
+    func initFetchResultsController() {
+        let fetchRequest = Post.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
+        fetchRequest.predicate = NSPredicate(format: "user == %@", user)
+        fetchResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManeger.defaulManager.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        fetchResultsController.delegate = self
+        try? fetchResultsController.performFetch()
+    }
+    
+    init(user: User) {
         self.user = user
         super.init(nibName: nil, bundle: nil)
     }
@@ -34,8 +46,9 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        tableView.reloadData()
-        timer()
+        initFetchResultsController()
+        let signOutButton = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(pushSignOutButton))
+        navigationItem.leftBarButtonItem = signOutButton
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,12 +62,11 @@ class ProfileViewController: UIViewController {
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.compactAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        self.navigationController?.isNavigationBarHidden = true
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        tableView.reloadData()
+        self.navigationController?.isNavigationBarHidden = false
+        DispatchQueue.main.async {
+            self.initFetchResultsController()
+            self.tableView.reloadData()
+        }
     }
     
     private func setupView() {
@@ -70,33 +82,28 @@ class ProfileViewController: UIViewController {
         ])
     }
     
-    private func timer() {
-        let timeInterval = 3600
-        
-        Timer.scheduledTimer(
-            withTimeInterval: TimeInterval(timeInterval),
-            repeats: false
-        ) { timer in
-            let alert = UIAlertController(title: "Attention", message: "You are in the application for more than one hour", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: .default))
-            self.present(alert, animated: true)
-        }
+    @objc
+    private func pushSignOutButton() {
+        CoreDataManeger.defaulManager.user = nil
+        CoreDataManeger.defaulManager.deauthorization(user: user)
+        navigationController?.popViewController(animated: true)
     }
+    
 }
-
 
 extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
+
         if section == 0 {
-            let cell = ProfileHeaderView()
-            let post = user
-            cell.setup(with: post)
+            let cell = profileHeaderView
+            cell.user = user
+            cell.delegate = self
+            cell.setup()
             return cell
         }
         return nil
-        
+
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -104,41 +111,37 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
+
         if section == 0 {
             return 1
         } else if section == 1 {
-            return arrayOfPublications.count
+            return fetchResultsController.fetchedObjects?.count ?? 0
         }
-        
         return 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            
+
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "FirstSectionCell", for: indexPath) as? FirstSectionTableViewCell else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "DefaultCell", for: indexPath)
                 return cell
             }
-            
+
             return cell
-            
+
         } else if indexPath.section == 1 {
-            
+
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SecondSectionCell", for: indexPath) as? PostTableViewCell else {
                 preconditionFailure("Error")
             }
-            
-            let post = arrayOfPublications[indexPath.row]
-            let arrayOfPublications = PostTableViewCell.ViewModel(author: post.author, description: post.description, image: UIImage(named: post.image), likes: post.likes, views: post.views)
-            
-            cell.setup(with: arrayOfPublications)
-            
+            let postInCell = fetchResultsController.fetchedObjects![indexPath.row]
+            cell.delegate = self
+            cell.post = postInCell
+            cell.setup()
             return cell
-            
         }
-        
+
         let cell = tableView.dequeueReusableCell(withIdentifier: "DefaultCell", for: indexPath)
             
         return cell
@@ -146,17 +149,18 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            return tableView.frame.width / 3.2
-        }
-        if indexPath.section == 1 {
-            return UITableView.automaticDimension
-        }
-        return UITableView.automaticDimension
-    }
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        if indexPath.section == 0 {
+//            return tableView.frame.width / 3.2
+//        }
+//        if indexPath.section == 1 {
+//            return UITableView.automaticDimension
+//        }
+//        return UITableView.automaticDimension
+//    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.section == 0 {
             if indexPath.row == 0 {
                 collectionViewPressed()
@@ -164,12 +168,57 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
     
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let action = UIContextualAction(style: .destructive, title: "Delete") { action, view, complete in
+            let postInCell = self.fetchResultsController.fetchedObjects![indexPath.row]
+
+            CoreDataManeger.defaulManager.deletePost(post: postInCell)
+            self.initFetchResultsController()
+            tableView.reloadData()
+        }
+
+        return UISwipeActionsConfiguration(actions: [action])
+    }
+
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+
+        switch type {
+        case .insert:
+            tableView.insertRows(at: [newIndexPath!], with: .automatic)
+        case .delete:
+            tableView.deleteRows(at: [IndexPath(row: indexPath!.row, section: 1)], with: .automatic)
+        case .move:
+            tableView.moveRow(at: indexPath!, to: newIndexPath!)
+        case .update:
+            tableView.reloadData()
+        @unknown default:
+            tableView.reloadData()
+        }
+        self.tableView.reloadData()
+    }
+    
 }
 
 extension ProfileViewController {
     
     func collectionViewPressed() {
-        viewModel.pressed(viewInput: .collectionViewPressed)
+        let photosVC = PhotosViewController()
+        navigationController?.pushViewController(photosVC, animated: true)
+    }
+    
+    func pushNewPostViewController() {
+        let newPostVC = NewPostViewController(user: user)
+        newPostVC.delegate = self
+        navigationController?.pushViewController(newPostVC, animated: true)
+    }
+    
+    func changePost(post: Post) {
+        let postVC = NewPostViewController(post: post, user: user)
+        navigationController?.pushViewController(postVC, animated: true)
+    }
+    
+    func likePost(post: Post) {
+        CoreDataManeger.defaulManager.favoritePost(post: post, isFavorite: true)
     }
     
 }

@@ -86,7 +86,8 @@ class FirstSectionTableViewCell: UITableViewCell {
 extension FirstSectionTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        data.count
+//        data.count
+        return 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -95,9 +96,9 @@ extension FirstSectionTableViewCell: UICollectionViewDataSource, UICollectionVie
             return cell
         }
 
-        cell.clipsToBounds = true
-        cell.layer.cornerRadius = 6
-        cell.setup(with: data[indexPath.row])
+//        cell.clipsToBounds = true
+//        cell.layer.cornerRadius = 6
+//        cell.setup(with: data[indexPath.row])
         return cell
     }
 
