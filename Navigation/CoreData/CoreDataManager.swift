@@ -6,6 +6,7 @@
 //
 
 import CoreData
+import UIKit
 
 class CoreDataManeger {
     
@@ -28,18 +29,6 @@ class CoreDataManeger {
         container.viewContext.automaticallyMergesChangesFromParent = true
         return container
     }()
-
-//    func saveContext () {
-//        let context = persistentContainer.viewContext
-//        if context.hasChanges {
-//            do {
-//                try context.save()
-//            } catch {
-//                let nserror = error as NSError
-//                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-//            }
-//        }
-//    }
     
     // Users
     
@@ -58,7 +47,13 @@ class CoreDataManeger {
             user.password = password
             user.fullName = fullName
             user.dateCreated = Date()
-            user.avatar = avatar
+            let image = UIImage(named: "addPhotoIcon")
+            let imageData = image?.pngData()
+            if let imageData {
+                user.avatar = imageData
+            } else {
+                user.avatar = avatar
+            }
             user.isLogIn = true
             user.lastAutorizationDate = Date()
             
@@ -68,6 +63,10 @@ class CoreDataManeger {
                 print(error)
             }
         }
+    }
+    
+    func subscribe(aotorizedUser: User, subscribedUser: User) {
+//        aotorizedUser.subscrabedUser = subscribedUser
     }
     
     func updateUserStatus(user: User, newStatus: String?) {
@@ -155,6 +154,16 @@ class CoreDataManeger {
         }
     }
     
+    func showPost(post: Post) {
+        post.views += 1
+        
+        do {
+            try post.managedObjectContext?.save()
+        } catch {
+            print(error)
+        }
+    }
+    
     func deletePost(post: Post) {
         persistentContainer.viewContext.delete(post)
         try? persistentContainer.viewContext.save()
@@ -179,6 +188,42 @@ class CoreDataManeger {
             try user.managedObjectContext?.save()
         } catch {
             print(error)
+        }
+    }
+    
+    // Subscribe
+    
+    // Добавление подписки на пользователя
+    func addSubscription(authorizedUser: User, subscriptionUser: User) {
+        persistentContainer.performBackgroundTask { contextBackground in
+            let subscription = Subscription(context: contextBackground)
+            let contextBackgroundSubscriptionUser = self.getUser(login: subscriptionUser.login ?? "", context: contextBackground)
+            let contextBackgroundAuthorizedUser = self.getUser(login: authorizedUser.login ?? "", context: contextBackground)
+            subscription.login = contextBackgroundSubscriptionUser?.login
+            subscription.dateCreated = Date()
+            subscription.user = contextBackgroundAuthorizedUser
+            
+            do {
+                try contextBackground.save()
+            } catch {
+                print(error)
+            }
+        }
+    }
+    // Добавление подписчика
+    func addSubscriber(authorizedUser: User, subscriberUser: User) {
+        persistentContainer.performBackgroundTask { contextBackground in
+            let subscriber = Subscriber(context: contextBackground)
+            let contextBackgroundSubscriberUser = self.getUser(login: subscriberUser.login ?? "", context: contextBackground)
+            let contextBackgroundAuthorizedUser = self.getUser(login: authorizedUser.login ?? "", context: contextBackground)
+            subscriber.login = contextBackgroundAuthorizedUser?.login
+            subscriber.user = contextBackgroundSubscriberUser
+            
+            do {
+                try contextBackground.save()
+            } catch {
+                print(error)
+            }
         }
     }
     

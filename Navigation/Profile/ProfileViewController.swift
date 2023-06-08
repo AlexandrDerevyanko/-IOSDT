@@ -1,34 +1,32 @@
 
 import UIKit
-//import StorageService
-//import iOSIntPackage
 import CoreData
 
-class ProfileViewController: UIViewController, NSFetchedResultsControllerDelegate {
-        
-    var user: User
+protocol ProfileDelegate: AnyObject {
+    func pushNewPostViewController()
+    func changePost(post: Post)
+    func likePost(post: Post)
+    func setStatusButtonPressed(status: String, user: User)
+    func subscribe(authorizedUser: User, subscriptionUser: User)
+    func subscribersButtonPressed()
+    func subscriptionsButtonPressed()
+    
+}
 
-    lazy var profileHeaderView = ProfileHeaderView()
+class ProfileViewController: UIViewController, NSFetchedResultsControllerDelegate {
     
-    var fetchResultsController: NSFetchedResultsController<Post>!
+    var user: User
+    var isCurrentUser: Bool
     
-    func initFetchResultsController() {
-        let fetchRequest = Post.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
-        fetchRequest.predicate = NSPredicate(format: "user == %@", user)
-        fetchResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManeger.defaulManager.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        fetchResultsController.delegate = self
-        try? fetchResultsController.performFetch()
+    var headerView: UIView {
+        return isCurrentUser ? ProfileHeaderView(delegate: self, user: user, subscribers: subscribersFetchResultsController?.fetchedObjects?.count ?? 100, subscriptions: subscriptionsFetchResultsController?.fetchedObjects?.count ?? 100) : UserProfileView(delegate: self, user: user, subscribers: subscribersFetchResultsController?.fetchedObjects?.count ?? 100, subscriptions: subscriptionsFetchResultsController?.fetchedObjects?.count ?? 100)
     }
     
-    init(user: User) {
-        self.user = user
-        super.init(nibName: nil, bundle: nil)
-    }
+    private let viewModel: ProfileViewModelProtocol
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    var postsFetchResultsController: NSFetchedResultsController<Post>?
+    var subscriptionsFetchResultsController: NSFetchedResultsController<Subscription>?
+    var subscribersFetchResultsController: NSFetchedResultsController<Subscriber>?
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
@@ -44,49 +42,75 @@ class ProfileViewController: UIViewController, NSFetchedResultsControllerDelegat
         return tableView
     }()
     
+    init(user: User, viewModel: ProfileViewModelProtocol, isUser: Bool) {
+        self.user = user
+        self.isCurrentUser = isUser
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        let signOutButton = UIBarButtonItem(title: NSLocalizedString("logOut-button-profileVC-localizable", comment: ""), style: .plain, target: self, action: #selector(pushSignOutButton))
-        signOutButton.tintColor = UIColor.createColor(lightMode: .systemBlue, darkMode: .white)
-        navigationItem.leftBarButtonItem = signOutButton
+        let logOutButton = UIBarButtonItem(title: NSLocalizedString("logOut-button-profileVC-localizable", comment: ""), style: .plain, target: self, action: #selector(pushLogOutButton))
+        logOutButton.tintColor = UIColor.createColor(lightMode: .systemBlue, darkMode: .white)
+        isCurrentUser ? navigationItem.leftBarButtonItem = logOutButton : ()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         title = NSLocalizedString("profile-tabbar-localizable", comment: "")
-//        let appearance = UINavigationBarAppearance()
-//        appearance.backgroundColor = .systemGray6
-//        appearance.titleTextAttributes = [.foregroundColor: UIColor.black]
-//        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
-//        navigationController?.navigationBar.tintColor = .black
-//        navigationController?.navigationBar.standardAppearance = appearance
-//        navigationController?.navigationBar.compactAppearance = appearance
-//        navigationController?.navigationBar.scrollEdgeAppearance = appearance
-//        self.navigationController?.isNavigationBarHidden = false
+        initSubscriptionsFetchResultsController()
+        initSubscribersFetchResultsController()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        initFetchResultsController()
+        initPostsFetchResultsController()
         tableView.reloadData()
     }
     
     private func setupView() {
         view.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .systemGray3)
         view.addSubview(tableView)
-        NSLayoutConstraint.activate([
-                   
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
-        ])
+        tableView.snp.makeConstraints { make in
+            make.edges.equalTo(view)
+        }
+    }
+    
+    func initPostsFetchResultsController() {
+        let fetchRequest = Post.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
+        fetchRequest.predicate = NSPredicate(format: "user == %@", user)
+        postsFetchResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManeger.defaulManager.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        postsFetchResultsController?.delegate = self
+        try? postsFetchResultsController?.performFetch()
+    }
+    
+    func initSubscriptionsFetchResultsController() {
+        let fetchRequest = Subscription.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
+        fetchRequest.predicate = NSPredicate(format: "user == %@", user)
+        subscriptionsFetchResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManeger.defaulManager.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        subscriptionsFetchResultsController?.delegate = self
+        try? subscriptionsFetchResultsController?.performFetch()
+    }
+    
+    func initSubscribersFetchResultsController() {
+        let fetchRequest = Subscriber.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
+        fetchRequest.predicate = NSPredicate(format: "user == %@", user)
+        subscribersFetchResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManeger.defaulManager.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        subscribersFetchResultsController?.delegate = self
+        try? subscribersFetchResultsController?.performFetch()
     }
     
     @objc
-    private func pushSignOutButton() {
+    private func pushLogOutButton() {
         CoreDataManeger.defaulManager.user = nil
         CoreDataManeger.defaulManager.deauthorization(user: user)
         navigationController?.popViewController(animated: true)
@@ -99,10 +123,7 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
 
         if section == 0 {
-            let cell = profileHeaderView
-            cell.user = user
-            cell.delegate = self
-            cell.setup()
+            let cell = headerView
             return cell
         }
         return nil
@@ -118,7 +139,7 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         if section == 0 {
             return 1
         } else if section == 1 {
-            return fetchResultsController?.fetchedObjects?.count ?? 0
+            return postsFetchResultsController?.fetchedObjects?.count ?? 0
         }
         return 0
     }
@@ -138,7 +159,7 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SecondSectionCell", for: indexPath) as? PostTableViewCell else {
                 preconditionFailure("Error")
             }
-            let postInCell = fetchResultsController.fetchedObjects![indexPath.row]
+            let postInCell = postsFetchResultsController?.fetchedObjects?[indexPath.row]
             cell.delegate = self
             cell.post = postInCell
             cell.setup()
@@ -173,11 +194,11 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let action = UIContextualAction(style: .destructive, title: "Delete") { action, view, complete in
-            let postInCell = self.fetchResultsController.fetchedObjects![indexPath.row]
-
-            CoreDataManeger.defaulManager.deletePost(post: postInCell)
-            self.initFetchResultsController()
-            tableView.reloadData()
+            if let postInCell = self.postsFetchResultsController?.fetchedObjects?[indexPath.row] {
+                CoreDataManeger.defaulManager.deletePost(post: postInCell)
+                self.initPostsFetchResultsController()
+                tableView.reloadData()
+            }
         }
 
         return UISwipeActionsConfiguration(actions: [action])
@@ -221,7 +242,23 @@ extension ProfileViewController: ProfileDelegate {
     }
     
     func likePost(post: Post) {
-        CoreDataManeger.defaulManager.favoritePost(post: post, isFavorite: true)
+        viewModel.updateState(viewInput: .likePost(post: post))
+    }
+    
+    func setStatusButtonPressed(status: String, user: User) {
+        viewModel.updateState(viewInput: .setStatus(status: status, user: user))
+    }
+    
+    func subscribe(authorizedUser: User, subscriptionUser: User) {
+        viewModel.updateState(viewInput: .subscribe(authorizedUser: authorizedUser, subscriptionUser: subscriptionUser))
+    }
+    
+    func subscribersButtonPressed() {
+        print(subscribersFetchResultsController?.fetchedObjects?.count)
+    }
+    
+    func subscriptionsButtonPressed() {
+        print(subscriptionsFetchResultsController?.fetchedObjects?.count)
     }
     
 }

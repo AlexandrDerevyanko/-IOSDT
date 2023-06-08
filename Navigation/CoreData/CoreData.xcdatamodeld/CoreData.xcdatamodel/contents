@@ -10,6 +10,16 @@
         <attribute name="views" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="posts" inverseEntity="User"/>
     </entity>
+    <entity name="Subscriber" representedClassName="Subscriber" syncable="YES" codeGenerationType="class">
+        <attribute name="dateCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="login" optional="YES" attributeType="String"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="subscribers" inverseEntity="User"/>
+    </entity>
+    <entity name="Subscription" representedClassName="Subscription" syncable="YES" codeGenerationType="class">
+        <attribute name="dateCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="login" optional="YES" attributeType="String"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="subscriptions" inverseEntity="User"/>
+    </entity>
     <entity name="User" representedClassName="User" syncable="YES" codeGenerationType="class">
         <attribute name="avatar" optional="YES" attributeType="Binary"/>
         <attribute name="dateCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -20,5 +30,7 @@
         <attribute name="password" optional="YES" attributeType="String"/>
         <attribute name="status" optional="YES" attributeType="String"/>
         <relationship name="posts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Post" inverseName="user" inverseEntity="Post"/>
+        <relationship name="subscribers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Subscriber" inverseName="user" inverseEntity="Subscriber"/>
+        <relationship name="subscriptions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Subscription" inverseName="user" inverseEntity="Subscription"/>
     </entity>
 </model>

@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import StorageService
 import iOSIntPackage
 
 class PhotosViewController: UIViewController {

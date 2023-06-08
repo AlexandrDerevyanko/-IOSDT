@@ -5,7 +5,7 @@ final class AppFactory {
 
     func makeModule(ofType moduleType: Module.ModuleType) -> Module {
         switch moduleType {
-        case .profile:
+        case .login:
             let viewModel = LoginViewModel()
             viewModel.logInDelegate = MyLoginFactory().makeCheckerService()
             let VC = LoginViewController(viewModel: viewModel)

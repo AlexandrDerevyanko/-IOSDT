@@ -4,7 +4,7 @@ protocol ViewModelProtocol: AnyObject {}
 
 struct Module {
     enum ModuleType {
-        case profile
+        case login
         case feed
     }
 
@@ -16,7 +16,7 @@ struct Module {
 extension Module.ModuleType {
     var tabBarItem: UITabBarItem {
         switch self {
-        case .profile:
+        case .login:
             return UITabBarItem(title: NSLocalizedString("profile-tabbar-localizable", comment: ""), image: .add, tag: 0)
         case .feed:
             return UITabBarItem(title: NSLocalizedString("feed-tabbar-localizable", comment: ""), image: .checkmark, tag: 1)

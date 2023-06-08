@@ -18,7 +18,7 @@ final class LoginViewModel: LoginViewModelProtocol {
     enum ViewInput {
         case loginButtonPressed(email: String, password: String)
         case signupButtonPressed
-        case verify
+        case checkUser(user: User)
     }
 
     weak var coordinator: LoginCoordinator?
@@ -54,33 +54,8 @@ final class LoginViewModel: LoginViewModelProtocol {
             
             coordinator?.pushSignupViewController()
             
-        case .verify:
-            
-            biometricIDAuth.canEvaluate { (canEvaluate, biometricType, canEvaluateError) in
-                guard canEvaluate else {
-                    state = .verificationRejected("Error", canEvaluateError?.localizedDescription ?? "Face ID/Touch ID may not be configured", "Ok")
-                    return
-                }
-                
-                switch biometricType {
-                case .faceID:
-                    state = .setImage(UIImage(systemName: "faceid")?.withTintColor(.white, renderingMode: .alwaysOriginal) ?? UIImage())
-                case .touchID:
-                    state = .setImage(UIImage(systemName: "touchid")?.withTintColor(.white, renderingMode: .alwaysOriginal) ?? UIImage())
-                case .none:
-                    ()
-                case .unknown:
-                    ()
-                }
-                    
-                biometricIDAuth.evaluate { (success, error) in
-                    guard success else {
-                        self.state = .verificationRejected("Error", error?.localizedDescription ?? "Face ID/Touch ID may not be configured", "Ok")
-                        return
-                    }
-                    self.state = .verificationAccepted("Success", "You have a free pass, now", "Ok")
-                }
-            }
+        case let .checkUser(user):
+            coordinator?.pushProfileViewController(user: user)
         }
     }
 }

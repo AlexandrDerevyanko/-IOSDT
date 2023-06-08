@@ -1,9 +1,3 @@
-//
-//  FavoritePostTableViewCell.swift
-//  Navigation
-//
-//  Created by Aleksandr Derevyanko on 04.04.2023.
-//
 
 import UIKit
 import SnapKit

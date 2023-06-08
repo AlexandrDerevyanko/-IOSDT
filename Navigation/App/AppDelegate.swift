@@ -13,7 +13,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var localNotificationsService = LocalNotificationsService()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        localNotificationsService.registerForLatestUpdatesIfPossible()
         return true
     }
 

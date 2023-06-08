@@ -152,7 +152,6 @@ class NewPostViewController: UIViewController {
         }
         if let post {
             CoreDataManeger.defaulManager.updatePost(post: post, newText: text, imageData: imageCoreData)
-//            CoreDataManeger.defaulManager.saveContext()
             navigationController?.popViewController(animated: true)
         } else {
             CoreDataManeger.defaulManager.addPost(text: text, image: imageCoreData ?? Data(), for: user)

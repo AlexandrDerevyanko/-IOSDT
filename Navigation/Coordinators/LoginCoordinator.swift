@@ -23,7 +23,9 @@ final class LoginCoordinator: ModuleCoordinatable {
     }
 
     func pushProfileViewController(user: User) {
-        let viewControllerToPush = ProfileViewController(user: user)
+        let viewModel = ProfileViewModel()
+//        viewModel.coordinator = ProfileCoordinator(moduleType: moduleType, factory: factory)
+        let viewControllerToPush = ProfileViewController(user: user, viewModel: viewModel, isUser: true)
         (module?.view as? UINavigationController)?.pushViewController(viewControllerToPush, animated: true)
     }
     
