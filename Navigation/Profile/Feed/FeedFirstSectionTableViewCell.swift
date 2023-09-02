@@ -2,31 +2,26 @@
 import UIKit
 import iOSIntPackage
 
-class FirstSectionTableViewCell: UITableViewCell {
+class FeedFirstSectionTableViewCell: UITableViewCell {
     
-    var photos: [Photo]?
-
-    private enum Constants {
-        static let numberOfItemsInLIne: CGFloat = 4
-    }
+    var users: [User]?
 
     private lazy var layout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.sectionInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         return layout
     }()
 
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(PhotosCollectionViewCell.self, forCellWithReuseIdentifier: "CustomCell")
+        collectionView.register(FeedUserCollectionViewCell.self, forCellWithReuseIdentifier: "FeedUserCell")
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "DefaultCell")
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
-    
+
     private let label: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString("photos-label-profileVC-localizable", comment: "")
@@ -34,7 +29,7 @@ class FirstSectionTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
+
     private let button: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "arrow.right"), for: [])
@@ -42,80 +37,60 @@ class FirstSectionTableViewCell: UITableViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .systemBackground
         setupView()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     private func setupView() {
         backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .systemGray3)
-        addSubview(collectionView)
-        addSubview(label)
-        addSubview(button)
+        contentView.addSubview(collectionView)
         setupConstraints()
-//        NSLayoutConstraint.activate([
-//            
-//            button.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
-//            button.centerYAnchor.constraint(equalTo: label.centerYAnchor),
-//            
-//            label.topAnchor.constraint(equalTo: topAnchor, constant: 12),
-//            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
-//            
-//            collectionView.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 12),
-//            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
-//            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-//            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12),
-//            
-//            
-//        ])
-        
     }
-    
+
     private func setupConstraints() {
-        button.snp.makeConstraints { make in
-            make.right.equalTo(snp.right).offset(-12)
-            make.centerY.equalTo(label.snp.centerY)
-        }
-        label.snp.makeConstraints { make in
-            make.top.equalTo(snp.top).offset(12)
-            make.left.equalTo(snp.left).offset(12)
-        }
         collectionView.snp.makeConstraints { make in
             make.left.equalTo(snp.left)
             make.right.equalTo(snp.right)
-            make.top.equalTo(button.snp.bottom).offset(-12)
+            make.top.equalTo(snp.top)
             make.bottom.equalTo(snp.bottom)
         }
     }
-
 }
 
-extension FirstSectionTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension FeedFirstSectionTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let photos else { return 0 }
-        if photos.count >= 4 {
+    private enum Constants {
+        static var numberOfItemsInLIne: CGFloat {
             return 4
-        } else {
-            return photos.count
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if let users, users.count <= 30 {
+            return users.count
+        } else {
+            return 30
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CustomCell", for: indexPath) as? PhotosCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FeedUserCell", for: indexPath) as? FeedUserCollectionViewCell else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DefaultCell", for: indexPath)
             return cell
         }
-
-        cell.clipsToBounds = true
-        cell.layer.cornerRadius = 6
-        cell.setup(with: UIImage(data: (photos?[indexPath.row].image)!))
+        
+        cell.setup(img: UIImage(data: users?[indexPath.row].avatar ?? Data()), name: users?[indexPath.row].fullName)
         return cell
     }
 
@@ -127,20 +102,7 @@ extension FirstSectionTableViewCell: UICollectionViewDataSource, UICollectionVie
 
         let itemWidth = floor(width / Constants.numberOfItemsInLIne)
 
-        return CGSize(width: itemWidth, height: itemWidth)
-        
+        return CGSize(width: itemWidth, height: collectionView.frame.height - interItemSpacing)
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-
-        return 8
-
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-
-        return 8
-
-    }
-    
 }

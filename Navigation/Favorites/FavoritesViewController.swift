@@ -115,12 +115,12 @@ extension FavoritesViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            let postInCell = self.fetchResultsController.fetchedObjects![indexPath.row]
-            CoreDataManeger.defaulManager.favoritePost(post: postInCell, isFavorite: false)
-            initFetchResultsController()
-            tableView.reloadData()
-        }
+//        if editingStyle == .delete {
+//            let postInCell = self.fetchResultsController.fetchedObjects![indexPath.row]
+//            CoreDataManeger.defaulManager.likePost(post: postInCell, isFavorite: false)
+//            initFetchResultsController()
+//            tableView.reloadData()
+//        }
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {

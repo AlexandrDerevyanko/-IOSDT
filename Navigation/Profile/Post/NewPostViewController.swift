@@ -31,6 +31,7 @@ class NewPostViewController: UIViewController {
         let image = UIImageView()
         image.clipsToBounds = true
         image.layer.cornerRadius = 15
+        image.contentMode = .scaleAspectFill
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()

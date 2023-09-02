@@ -1,12 +1,13 @@
 
 import UIKit
 
-class SubscribersTableViewCell: UITableViewCell {
+class UserTableViewCell: UITableViewCell {
     
-    var name: String?
+    var user: User?
     
     private let nameLabel: UILabel = {
         let label = UILabel()
+        label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -14,9 +15,6 @@ class SubscribersTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
-        if let name {
-            setup(name: name)
-        }
     }
     
     required init?(coder: NSCoder) {
@@ -24,18 +22,19 @@ class SubscribersTableViewCell: UITableViewCell {
     }
     
     private func setupUI() {
-        contentView.addSubview(nameLabel)
+        addSubview(nameLabel)
         setupConstraints()
     }
     
     private func setupConstraints() {
         nameLabel.snp.makeConstraints { make in
-            make.center.equalTo(snp.center)
+            make.left.equalTo(15)
+            make.top.equalTo(15)
         }
     }
     
-    func setup(name: String) {
-        nameLabel.text = name
+    func setup() {
+        nameLabel.text = user?.fullName
     }
     
 }

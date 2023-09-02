@@ -10,6 +10,7 @@ import SnapKit
 
 class SignupViewController: UIViewController {
     
+    lazy var coordinator = ProfileCoordinator(navigationController: self.navigationController)
     var signUpDelegate: LoginDelegateProtocol?
     
     private let stackView: UIStackView = {
@@ -149,6 +150,10 @@ class SignupViewController: UIViewController {
         signUp()
     }
     
+}
+
+extension SignupViewController {
+    
     private func signUp() {
         
         let fullName = fullNameTextField.text
@@ -156,19 +161,17 @@ class SignupViewController: UIViewController {
         let password = passwordTextField.text
         let confirmPassword = confirmPasswordTextField.text
 
-        signUpDelegate?.signUp(fullName: fullName, email: email, password: password, passwordConfirmation: confirmPassword, completion: { data, error in
-            if let error = error {
+        signUpDelegate?.signUp(fullName: fullName, email: email, password: password, passwordConfirmation: confirmPassword, completion: { isAutorization, error in
+            if let error {
                 AlertManager.defaulManager.autorizationErrors(showIn: self, error: error)
-            } else {
-                switch data {
-                case .logIn:
-                    return
-                case .signUp:
-                    self.navigationController?.popViewController(animated: true)
-                default:
-                    return
-                }
+                return
             }
+            if (isAutorization != nil) == true {
+                self.coordinator.popViewController()
+//                self.navigationController?.popViewController(animated: true)
+            }
+ 
         })
     }
+    
 }

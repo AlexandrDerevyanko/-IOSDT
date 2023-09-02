@@ -7,11 +7,14 @@
 
 import UIKit
 import iOSIntPackage
+import CoreData
 
-class PhotosViewController: UIViewController {
+class PhotosViewController: UIViewController, NSFetchedResultsControllerDelegate {
     
-    var imageProcessor = ImageProcessor()
-    
+    var user: User
+    var isCurrentUser: Bool
+        
+    var photosFetchResultsController: NSFetchedResultsController<Photo>?
     private enum Constants {
         static let numberOfItemsInLIne: CGFloat = 3
     }
@@ -34,78 +37,61 @@ class PhotosViewController: UIViewController {
         return collectionView
     }()
     
+    init(user: User, isCurrentUser: Bool) {
+        self.user = user
+        self.isCurrentUser = isCurrentUser
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
-//        setupNavigationBar()
-        imageFiltered(urlString: "") { result in
-            switch result {
-            case .success(let message):
-                print("\(message)")
-            case .failure(let error):
-                print(error)
-            }
-        }
+        setupUI()
+        initPhotosFetchResultsController()
+        let addPhotoButton = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(addPhotoButtonPressed))
+        navigationItem.rightBarButtonItem = addPhotoButton
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         title = "Photo Gallery"
         collectionView.reloadData()
-//        self.navigationItem.backBarButtonItem?.tintColor = UIColor.createColor(lightMode: .systemBlue, darkMode: .white)
     }
     
-    private func imageFiltered(
-        urlString: String,
-        completion: @escaping (Result<String, ImagesError>) -> Void) {
-            
-//            guard URL(string: urlString) != nil else {
-//                completion(.failure(.badURL))
-//                return
-//            }
-//            
-//            let queue = DispatchQueue.global(qos: .default)
-//            let workItem = DispatchWorkItem.init { [self] in
-//                let startTime = Date()
-//                imageProcessor.processImagesOnThread(sourceImages: data as? [UIImage] ?? [UIImage()], filter: .chrome, qos: .default) { images in
-//                    let CGImages = images
-//                    var UIImages: [UIImage?] = []
-//                    for index in CGImages {
-//                        UIImages.append(UIImage(cgImage: index!))
-//                        data = UIImages
-//                    }
-//                    let endTime = Date()
-//                    print(endTime.timeIntervalSince(startTime))
-//                    DispatchQueue.main.async {
-//                        self.collectionView.reloadData()
-//                        completion(.success("Filters applied"))
-//                    }
-//                }
-//            }
-//            queue.sync (execute: workItem)
-            
+    private func initPhotosFetchResultsController() {
+        let fetchRequest = Photo.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
+        fetchRequest.predicate = NSPredicate(format: "user == %@", user)
+        photosFetchResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManeger.defaulManager.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        photosFetchResultsController?.delegate = self
+        try? photosFetchResultsController?.performFetch()
     }
     
-//    private func setupNavigationBar() {
-//        self.navigationController?.isNavigationBarHidden = false
-//        self.navigationController?.navigationBar.isTranslucent = true
-//        self.navigationItem.title = "Photo Gallery"
-//    }
-    
-    private func setupView() {
+    private func setupUI() {
         view.backgroundColor = .systemBackground
         view.addSubview(collectionView)
-        
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            collectionView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        setupConstraints()
     }
     
-    @objc private func cancel() {
+    private func setupConstraints() {
+        collectionView.snp.makeConstraints { make in
+            make.edges.equalTo(view)
+        }
+    }
+    
+    @objc
+    private func cancel() {
         navigationController?.popToRootViewController(animated: true)
+    }
+    
+    @objc
+    private func addPhotoButtonPressed() {
+        ImagePicker.defaultPicker.getImage(in: self) { imageData in
+            CoreDataManeger.defaulManager.addPhoto(image: imageData, for: self.user)
+        }
     }
     
 }
@@ -113,8 +99,7 @@ class PhotosViewController: UIViewController {
 extension PhotosViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        data.count
-        return 0
+        return photosFetchResultsController?.fetchedObjects?.count ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -124,7 +109,8 @@ extension PhotosViewController: UICollectionViewDataSource, UICollectionViewDele
         }
 //
 //        cell.clipsToBounds = true
-//        cell.setup(with: data[indexPath.row])
+        let data = photosFetchResultsController?.fetchedObjects
+        cell.setup(with: UIImage(data: data?[indexPath.row].image ?? Data()))
         return cell
     }
 
@@ -149,6 +135,25 @@ extension PhotosViewController: UICollectionViewDataSource, UICollectionViewDele
         
         return 8
         
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+
+        switch type {
+        case .insert:
+            collectionView.reloadData()
+//            tableView.insertRows(at: [IndexPath(row: newIndexPath!.row, section: 1)], with: .automatic)
+        case .delete:
+//            tableView.deleteRows(at: [IndexPath(row: indexPath!.row, section: 1)], with: .automatic)
+            collectionView.reloadData()
+        case .move:
+            ()
+        case .update:
+            collectionView.reloadData()
+        @unknown default:
+            collectionView.reloadData()
+        }
+        self.collectionView.reloadData()
     }
     
 }

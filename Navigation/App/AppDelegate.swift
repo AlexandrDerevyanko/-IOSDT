@@ -13,6 +13,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var localNotificationsService = LocalNotificationsService()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        let users = CoreDataManeger.defaulManager.users
+        if users.count == 0 {
+
+            
+            CoreDataManeger.defaulManager.addUser(logIn: "corgi@gmail.com", password: "123456", fullName: "Corgi Cevin", avatar: UIImage(named: "corgi")?.pngData())
+            CoreDataManeger.defaulManager.addUser(logIn: "corgi@gmail.com2", password: "123456", fullName: "Corgi Dexter", avatar: UIImage(named: "sadCorgi")?.pngData())
+            CoreDataManeger.defaulManager.addUser(logIn: "corgi@gmail.com3", password: "123456", fullName: "Corgi Dexter", avatar: UIImage(named: "sadCorgi")?.pngData())
+            CoreDataManeger.defaulManager.addUser(logIn: "corgi@gmail.com4", password: "123456", fullName: "Corgi Dexter", avatar: UIImage(named: "sadCorgi")?.pngData())
+            CoreDataManeger.defaulManager.addUser(logIn: "corgi@gmail.com5", password: "123456", fullName: "Corgi Dexter", avatar: UIImage(named: "sadCorgi")?.pngData())
+            
+            var firstUser: User {
+                return CoreDataManeger.defaulManager.getUser(login: "corgi@gmail.com", context: CoreDataManeger.defaulManager.persistentContainer.viewContext) ?? User()
+            }
+            var secondUser: User {
+                return CoreDataManeger.defaulManager.getUser(login: "corgi@gmail.com2", context: CoreDataManeger.defaulManager.persistentContainer.viewContext) ?? User()
+            }
+            
+            CoreDataManeger.defaulManager.addPost(text: "Test post", image: UIImage(named: "3")?.pngData(), for: firstUser)
+            CoreDataManeger.defaulManager.addPost(text: "Test post", image: UIImage(named: "4")?.pngData(), for: firstUser)
+            CoreDataManeger.defaulManager.addPost(text: "Test post", image: UIImage(named: "1")?.pngData(), for: secondUser)
+            CoreDataManeger.defaulManager.addPost(text: "Test post", image: UIImage(named: "2")?.pngData(), for: secondUser)
+            
+        }
         return true
     }
 

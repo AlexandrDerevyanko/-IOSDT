@@ -11,14 +11,15 @@ class ProfileHeaderView: UIView {
     
     private weak var delegate: ProfileDelegate?
     private var user: User
-    var subscriptions: [User]?
+    private var subscribers: [Subscriber]
+    private var subscriptions: [Subscription]
 
     let avatarImageView: UIImageView = {
         let myView = UIImageView()
         myView.layer.cornerRadius = 50
         myView.clipsToBounds = true
-        myView.layer.borderColor = UIColor.white.cgColor
-        myView.layer.borderWidth = 3
+        myView.layer.borderColor = UIColor.lightGray.cgColor
+        myView.layer.borderWidth = 0.5
         myView.image = UIImage(systemName: "camera")
         myView.translatesAutoresizingMaskIntoConstraints = false
         return myView
@@ -66,8 +67,6 @@ class ProfileHeaderView: UIView {
         return label
     }()
     
-    private lazy var subscribersButton = CustomButton(title: "Кнопка", titleColor: .white, bgColor: UIColor.createColor(lightMode: UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1), darkMode: .systemGray4), action: subscribersButtonPressed)
-    
     let subscriptionsLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
@@ -77,16 +76,15 @@ class ProfileHeaderView: UIView {
         return label
     }()
     
-    private lazy var subscriptionsButton = CustomButton(title: "Кнопка", titleColor: .white, bgColor: UIColor.createColor(lightMode: UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1), darkMode: .systemGray4), action: subscriptionsButtonPressed)
-    
-
-    
-    init(delegate: ProfileDelegate, user: User, subscribers: Int, subscriptions: Int) {
+    init(delegate: ProfileDelegate, user: User, subscribers: [Subscriber], subscriptions: [Subscription]) {
         self.delegate = delegate
         self.user = user
+        self.subscribers = subscribers
+        self.subscriptions = subscriptions
         super.init(frame: .zero)
-        setup(subscribers: subscribers, subscriptions: subscriptions)
+        setup(subscribers: subscribers.count, subscriptions: subscriptions.count)
         setupUI()
+        addTargets()
     }
 
     @available(*, unavailable)
@@ -110,9 +108,7 @@ class ProfileHeaderView: UIView {
         addSubview(setStatusButton)
         addSubview(newPostButton)
         addSubview(subscribersLabel)
-        addSubview(subscribersButton)
         addSubview(subscriptionsLabel)
-        addSubview(subscriptionsButton)
         setupConstraints()
     }
     
@@ -155,21 +151,21 @@ class ProfileHeaderView: UIView {
             make.left.equalTo(16)
             make.bottom.equalTo(-16)
         }
-        subscribersButton.snp.makeConstraints { make in
+        subscriptionsLabel.snp.makeConstraints { make in
             make.top.equalTo(newPostButton.snp.bottom).offset(16)
             make.left.equalTo(subscribersLabel.snp.right).offset(16)
             make.bottom.equalTo(-16)
         }
-        subscriptionsLabel.snp.makeConstraints { make in
-            make.top.equalTo(newPostButton.snp.bottom).offset(16)
-            make.left.equalTo(subscribersButton.snp.right).offset(16)
-            make.bottom.equalTo(-16)
-        }
-        subscriptionsButton.snp.makeConstraints { make in
-            make.top.equalTo(newPostButton.snp.bottom).offset(16)
-            make.left.equalTo(subscriptionsLabel.snp.right).offset(16)
-            make.bottom.equalTo(-16)
-        }
+    }
+    
+    private func addTargets() {
+        let subscribersTap = UITapGestureRecognizer(target: self, action: #selector(subscribersLabelPressed))
+        subscribersLabel.isUserInteractionEnabled = true
+        subscribersLabel.addGestureRecognizer(subscribersTap)
+        
+        let subscriptionsTap = UITapGestureRecognizer(target: self, action: #selector(subscriptionsLabelPressed))
+        subscriptionsLabel.isUserInteractionEnabled = true
+        subscriptionsLabel.addGestureRecognizer(subscriptionsTap)
     }
     
     func setup(subscribers: Int, subscriptions: Int) {
@@ -212,13 +208,13 @@ class ProfileHeaderView: UIView {
     }
     
     @objc
-    private func subscribersButtonPressed() {
-        delegate?.subscribersButtonPressed()
+    private func subscribersLabelPressed() {
+        delegate?.pushUsersViewController(post: nil, subscribers: subscribers, subscriptions: nil)
     }
     
     @objc
-    private func subscriptionsButtonPressed() {
-        delegate?.subscriptionsButtonPressed()
+    private func subscriptionsLabelPressed() {
+        delegate?.pushUsersViewController(post: nil, subscribers: nil, subscriptions: subscriptions)
     }
     
 }

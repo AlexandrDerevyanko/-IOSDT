@@ -4,27 +4,11 @@ import CoreData
 
 class LoginViewController: UIViewController, NSFetchedResultsControllerDelegate {
     
-    private let viewModel: LoginViewModelProtocol
-    var fetchResultsController: NSFetchedResultsController<User>?
+    lazy var coordinator = ProfileCoordinator(navigationController: self.navigationController)
     var logInDelegate: LoginDelegateProtocol?
-    
-    init(viewModel: LoginViewModelProtocol) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-        navigationController?.navigationBar.isHidden = true
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func initFetchResultsController() {
-        let fetchRequest = User.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "lastAutorizationDate", ascending: false)]
-        fetchResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManeger.defaulManager.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        fetchResultsController?.delegate = self
-        try? fetchResultsController?.performFetch()
-    }
+    private let alertManager = AlertManager.defaulManager
+    private let coreDataManager = CoreDataManeger.defaulManager
+    private var users: [User] = []
     
     private let point: UIView = {
         let point = UIView()
@@ -35,7 +19,7 @@ class LoginViewController: UIViewController, NSFetchedResultsControllerDelegate 
     
     private let logo: UIImageView = {
         let myView = UIImageView()
-        myView.image = UIImage(named: "logo")!
+        myView.image = UIImage(named: "logo")
         myView.translatesAutoresizingMaskIntoConstraints = false
         return myView
     }()
@@ -118,11 +102,10 @@ class LoginViewController: UIViewController, NSFetchedResultsControllerDelegate 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .systemGray3)
+        view.backgroundColor = .white
+        users = coreDataManager.users
         setupUI()
         setupConstraints()
-        initFetchResultsController()
-        bindViewModel()
         checkUserStatus()
     }
     
@@ -134,18 +117,12 @@ class LoginViewController: UIViewController, NSFetchedResultsControllerDelegate 
 
     }
     
-    func checkUserStatus() {
-        DispatchQueue.main.async {
-            if self.fetchResultsController!.fetchedObjects!.isEmpty {
-                return
-            } else {
-                let user = self.fetchResultsController!.fetchedObjects![0]
-                if user.isLogIn {
-                    DispatchQueue.main.async {
-                        CoreDataManeger.defaulManager.user = user
-                        self.viewModel.updateState(viewInput: .checkUser(user: user))
-                    }
-                }
+    private func checkUserStatus() {
+        
+        if let user = coreDataManager.user {
+            if user.isLogIn {
+                tabBarController?.tabBar.isHidden = false
+                coordinator.pushProfileViewController(user: user, isUser: true)
             }
         }
     }
@@ -154,12 +131,11 @@ class LoginViewController: UIViewController, NSFetchedResultsControllerDelegate 
         view.addSubview(scrollView)
         scrollView.addSubview(stackView)
         scrollView.addSubview(logo)
-        scrollView.addSubview(logInButton)
-        scrollView.addSubview(signUpButton)
-//        scrollView.addSubview(verifyButton)
         stackView.addArrangedSubview(loginTextFiled)
         stackView.addArrangedSubview(point)
         stackView.addArrangedSubview(passwordTextFiled)
+        scrollView.addSubview(logInButton)
+        scrollView.addSubview(signUpButton)
         setupButton()
         setupGestures()
     }
@@ -167,7 +143,6 @@ class LoginViewController: UIViewController, NSFetchedResultsControllerDelegate 
     private func setupButton() {
         logInButton.addTarget(self, action: #selector(logInButtonPressed), for: .touchUpInside)
         signUpButton.addTarget(self, action: #selector(signUpButtonPressed), for: .touchUpInside)
-//        verifyButton.addTarget(self, action: #selector(verifyButtonPressed), for: .touchUpInside)
         }
         
     private func setupGestures() {
@@ -176,69 +151,44 @@ class LoginViewController: UIViewController, NSFetchedResultsControllerDelegate 
     }
         
     private func setupConstraints() {
-        NSLayoutConstraint.activate( [
         
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
-            logo.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 120),
-            logo.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-            logo.heightAnchor.constraint(equalToConstant: 100),
-            logo.widthAnchor.constraint(equalToConstant: 100),
-            
-            stackView.topAnchor.constraint(equalTo: logo.bottomAnchor, constant: 120),
-            stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 16),
-            stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -16),
-            stackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-            
-            loginTextFiled.heightAnchor.constraint(equalToConstant: 49),
-            
-            passwordTextFiled.heightAnchor.constraint(equalToConstant: 49),
-            
-            point.heightAnchor.constraint(equalToConstant: 0.45),
-            point.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            point.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            
-            logInButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 16),
-            logInButton.heightAnchor.constraint(equalToConstant: 50),
-            logInButton.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 16),
-            logInButton.rightAnchor.constraint(equalTo: scrollView.rightAnchor, constant: -16),
-            
-            signUpButton.topAnchor.constraint(equalTo: logInButton.bottomAnchor, constant: 16),
-            signUpButton.heightAnchor.constraint(equalToConstant: 50),
-            signUpButton.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 16),
-            signUpButton.rightAnchor.constraint(equalTo: scrollView.rightAnchor, constant: -16)
-        
-            
-        ])
-//        verifyButton.snp.makeConstraints({ make in
-//            make.top.equalTo(signUpButton.snp.bottom).offset(16)
-//            make.height.equalTo(50)
-//            make.left.equalTo(16)
-//            make.right.equalTo(-16)
-//        })
-    }
-    
-    func bindViewModel() {
-        viewModel.onStateDidChange = { [weak self] state in
-            guard let self = self else {
-                return
-            }
-            switch state {
-            case .waiting:
-                checkUserStatus()
-            case let .alert(error):
-                AlertManager.defaulManager.autorizationErrors(showIn: self, error: error)
-            case let .verificationAccepted(title, message, okTitle):
-                AlertManager.defaulManager.alert(title: title, message: message, okActionTitle: okTitle, showIn: self)
-            case let .verificationRejected(title, message, okTitle):
-                AlertManager.defaulManager.alert(title: title, message: message, okActionTitle: okTitle, showIn: self)
-            case .setImage(_):
-//                verifyButton.setImage(image, for: .normal)
-                ()
-            }
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalTo(view)
+        }
+        logo.snp.makeConstraints { make in
+            make.top.equalTo(scrollView.snp.top).offset(100)
+            make.centerX.equalTo(scrollView.snp.centerX)
+            make.height.equalTo(100)
+            make.width.equalTo(100)
+        }
+        stackView.snp.makeConstraints { make in
+            make.top.equalTo(logo.snp.bottom).offset(100)
+            make.left.equalTo(scrollView.snp.left).offset(16)
+            make.right.equalTo(scrollView.snp.right).offset(-16)
+            make.centerX.equalTo(scrollView.snp.centerX)
+        }
+        loginTextFiled.snp.makeConstraints { make in
+            make.height.equalTo(49)
+        }
+        passwordTextFiled.snp.makeConstraints { make in
+            make.height.equalTo(49)
+        }
+        point.snp.makeConstraints { make in
+            make.height.equalTo(0.45)
+            make.left.equalTo(stackView.snp.left)
+            make.right.equalTo(stackView.snp.right)
+        }
+        logInButton.snp.makeConstraints { make in
+            make.top.equalTo(stackView.snp.bottom).offset(16)
+            make.height.equalTo(50)
+            make.left.equalTo(scrollView.snp.left).offset(16)
+            make.right.equalTo(scrollView.snp.right).offset(-16)
+        }
+        signUpButton.snp.makeConstraints { make in
+            make.top.equalTo(logInButton.snp.bottom).offset(16)
+            make.height.equalTo(50)
+            make.left.equalTo(scrollView.snp.left).offset(16)
+            make.right.equalTo(scrollView.snp.right).offset(-16)
         }
     }
         
@@ -264,12 +214,12 @@ class LoginViewController: UIViewController, NSFetchedResultsControllerDelegate 
         
     @objc
     private func logInButtonPressed() {
-        viewModel.updateState(viewInput: .loginButtonPressed(email: loginTextFiled.text ?? "", password: passwordTextFiled.text ?? ""))
+        logIn()
     }
     
     @objc
     private func signUpButtonPressed() {
-        viewModel.updateState(viewInput: .signupButtonPressed)
+        coordinator.pushSignupViewController()
     }
 
     @objc
@@ -282,22 +232,23 @@ class LoginViewController: UIViewController, NSFetchedResultsControllerDelegate 
 
 extension LoginViewController {
     
-//    func logIn() {
-//        let email = loginTextFiled.text
-//        let password = passwordTextFiled.text
-//        logInDelegate?.logIn(logIn: email, password: password, completion: { data, error, user  in
-//            if let error = error {
-//                AlertManager.defaulManager.autorizationErrors(showIn: self, error: error)
-//                return
-//            }
-//            guard let user = user else {
-//                AlertManager.defaulManager.autorizationErrors(showIn: self, error: .invalidPassword)
-//                return
-//            }
-//            CoreDataManeger.defaulManager.authorization(user: user)
-//            CoreDataManeger.defaulManager.user = user
-//            let profileVC = ProfileViewController(user: user)
-//            self.navigationController?.pushViewController(profileVC, animated: true)
-//        })
-//    }
+    private func logIn() {
+        let email = loginTextFiled.text
+        let password = passwordTextFiled.text
+        
+        logInDelegate?.logIn(logIn: email, password: password, completion: { [self] autorizationData, autorizattionError, user in
+            if let autorizattionError {
+                alertManager.autorizationErrors(showIn: self, error: autorizattionError)
+                return
+            }
+            guard let user else {
+                alertManager.autorizationErrors(showIn: self, error: .invalidPassword)
+                return
+            }
+            coreDataManager.authorization(user: user)
+            coreDataManager.user = user
+            tabBarController?.tabBar.isHidden = false
+            coordinator.pushProfileViewController(user: user, isUser: true)
+        })
+    }
 }

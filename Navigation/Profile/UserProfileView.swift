@@ -9,28 +9,18 @@ import UIKit
 
 class UserProfileView: UIView {
     
-    init(delegate: ProfileDelegate, user: User, subscribers: Int, subscriptions: Int) {
-        self.delegate = delegate
-        self.user = user
-        super.init(frame: .zero)
-        setup(subscribers: subscribers, subscriptions: subscriptions)
-        setupUI()
-    }
-
-    @available(*, unavailable)
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
     private weak var delegate: ProfileDelegate?
     private var user: User
+    private var subscribers: [Subscriber]
+    private var subscriptions: [Subscription]
+    
     private var authorizedUser: User {
         return CoreDataManeger.defaulManager.user ?? User()
     }
+    
     private var isSubscribe: Bool {
         return false
     }
-    private var statusText: String = ""
 
     let statusTextField: UITextField = {
         let fText = UITextField()
@@ -88,27 +78,24 @@ class UserProfileView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-//    private lazy var layout: UICollectionViewFlowLayout = {
-//        let layout = UICollectionViewFlowLayout()
-//        layout.scrollDirection = .horizontal
-//        layout.sectionInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-//        return layout
-//    }()
-//
-//    private lazy var collectionView: UICollectionView = {
-//        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-//        collectionView.register(UserProfileCollectionViewCell.self, forCellWithReuseIdentifier: "CustomCell")
-//        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "DefaultCell")
-//        collectionView.delegate = self
-//        collectionView.dataSource = self
-//        collectionView.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .systemGray3)
-//        collectionView.translatesAutoresizingMaskIntoConstraints = false
-//        return collectionView
-//    }()
-//
 
     private lazy var subscribeButton = CustomButton(title: "Subscribe", titleColor: .white, bgColor: UIColor.createColor(lightMode: UIColor(red: 72/255, green: 133/255, blue: 204/255, alpha: 1), darkMode: .systemGray4), hidden: isSubscribe, action: subscribeButtonPressed)
+    
+    init(delegate: ProfileDelegate, user: User, subscribers: [Subscriber], subscriptions: [Subscription]) {
+        self.delegate = delegate
+        self.user = user
+        self.subscribers = subscribers
+        self.subscriptions = subscriptions
+        super.init(frame: .zero)
+        setup(subscribers: subscribers.count, subscriptions: subscriptions.count)
+        setupUI()
+        addTargets()
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if touches.first != nil {
@@ -127,31 +114,6 @@ class UserProfileView: UIView {
         addSubview(subscribersLabel)
         addSubview(subscriptionsLabel)
         setupConstraints()
-    }
-
-    func setup(subscribers: Int, subscriptions: Int) {
-        statusLabel.text = user.status
-        if statusLabel.text == nil {
-            statusLabel.text = NSLocalizedString("status-label-profileVC-localizable", comment: "")
-        }
-        fullNameLabel.text = user.fullName
-        avatarImageView.image = UIImage(data: user.avatar ?? Data())
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
-        avatarImageView.isUserInteractionEnabled = true
-        avatarImageView.addGestureRecognizer(tapGestureRecognizer)
-        subscribersLabel.text = "Подписчики: \(subscribers)"
-        subscriptionsLabel.text = "Подписки: \(subscriptions)"
-    }
-
-    @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
-        ImagePicker.defaultPicker.getImage(in: (self.window?.rootViewController)!) { imageData in
-            DispatchQueue.main.async {
-                if let imageData {
-                    CoreDataManeger.defaulManager.updateUserAvatar(user: self.user, imageData: imageData)
-                    self.avatarImageView.image = UIImage(data: imageData)
-                }
-            }
-        }
     }
     
     private func setupConstraints() {
@@ -196,21 +158,54 @@ class UserProfileView: UIView {
         }
     }
     
+    private func addTargets() {
+        let subscribersTap = UITapGestureRecognizer(target: self, action: #selector(subscribersLabelPressed))
+        subscribersLabel.isUserInteractionEnabled = true
+        subscribersLabel.addGestureRecognizer(subscribersTap)
+        
+        let subscriptionsTap = UITapGestureRecognizer(target: self, action: #selector(subscriptionsLabelPressed))
+        subscriptionsLabel.isUserInteractionEnabled = true
+        subscriptionsLabel.addGestureRecognizer(subscriptionsTap)
+    }
+
+    func setup(subscribers: Int, subscriptions: Int) {
+        statusLabel.text = user.status
+        if statusLabel.text == nil {
+            statusLabel.text = NSLocalizedString("status-label-profileVC-localizable", comment: "")
+        }
+        fullNameLabel.text = user.fullName
+        avatarImageView.image = UIImage(data: user.avatar ?? Data())
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
+        avatarImageView.isUserInteractionEnabled = true
+        avatarImageView.addGestureRecognizer(tapGestureRecognizer)
+        subscribersLabel.text = "Подписчики: \(subscribers)"
+        subscriptionsLabel.text = "Подписки: \(subscriptions)"
+    }
+
+    @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
+        ImagePicker.defaultPicker.getImage(in: (self.window?.rootViewController)!) { imageData in
+            DispatchQueue.main.async {
+                if let imageData {
+                    CoreDataManeger.defaulManager.updateUserAvatar(user: self.user, imageData: imageData)
+                    self.avatarImageView.image = UIImage(data: imageData)
+                }
+            }
+        }
+    }
+    
     @objc
     private func subscribeButtonPressed() {
         delegate?.subscribe(authorizedUser: authorizedUser, subscriptionUser: user)
     }
+    
+    @objc
+    private func subscribersLabelPressed() {
+        delegate?.pushUsersViewController(post: nil, subscribers: subscribers, subscriptions: nil)
+    }
+    
+    @objc
+    private func subscriptionsLabelPressed() {
+        delegate?.pushUsersViewController(post: nil, subscribers: nil, subscriptions: subscriptions)
+    }
 
 }
-
-//extension UserProfileView: UICollectionViewDataSource, UICollectionViewDelegate {
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        <#code#>
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        <#code#>
-//    }
-//
-//
-//}
